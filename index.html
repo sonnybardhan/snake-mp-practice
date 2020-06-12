@@ -19,12 +19,12 @@
 			justify-content: center;
 			align-items: center;
 			margin: 0;
-			background-color: rgb(255, 255, 255);
+			background-color: rgba(216, 244, 252, 0.562);
 			overflow: hidden;
 		}
 
 		#game-board {
-			background-color: rgba(47, 189, 214, 0.692);
+			background-color: rgb(255, 255, 255);
 			width: 100vmin;
 			height: 100vmin;
 			display: grid;
@@ -33,27 +33,28 @@
 		}
 
 		.snake {
-			background-color: rgba(215, 236, 176, 0.671);
-			border: 5px solid rgba(0, 0, 0, 0.356);
+			background-color: rgb(197, 197, 197);
+			border: 7px solid rgba(34, 34, 34, 0.473);
 			margin: .5px;
-			border-radius: 10px;
+			border-radius: 12px;
 		}
 
 		.snake-head {
-			border: 5px solid rgba(104, 173, 90, 0.774);
-			background-color:  rgba(104, 173, 90, 0.774);
+			border: 7px solid rgba(0, 0, 0, 0.356);
+			/* background-color: rgba(0, 0, 0, 0.356); */
+			background: black;
 		}
 
 		.food {
 			background-color: rgb(184, 146, 189);
-			border: 5px solid rgba(148, 98, 155, 0.356);
+			border: 7px solid rgba(148, 98, 155, 0.356);
 			margin: .5px;
-			border-radius: 10px;
+			border-radius: 12px;
 			z-index: 1;
 		}
 		.overlay {
 			position: absolute;
-			background-color: #fff;
+			background-color: rgba(255, 255, 255, 0.76);
 			top: 0;
 			left: 0;
 			height: 100vh;
