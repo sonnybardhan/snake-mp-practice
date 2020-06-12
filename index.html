@@ -8,7 +8,8 @@
 	<title>Snake-Vanilla</title>
 	<style>
 		* {
-			box-sizing: border-box;
+			/* box-sizing: border-box; */
+			margin: 0 auto;
 		}
 
 		body {
@@ -48,39 +49,52 @@
 			border: 5px solid rgba(148, 98, 155, 0.356);
 			margin: .5px;
 			border-radius: 10px;
+			z-index: 1;
 		}
 		.overlay {
 			position: absolute;
-			background-color: rgba(0, 0, 0, 0.74);
+			background-color: #fff;
 			top: 0;
 			left: 0;
 			height: 100vh;
 			width: 100vw;
-			z-index: 1;
+			z-index: 2;
 			display: flex;
 			justify-content: center;
 			align-items: center;
+			margin: 0;
+			
 		}
 		p {
 			display: flex;
 			height: 100vh;
+			width: 100vw;
 			justify-content: center;
 			align-items: center;
 			font-family: sans-serif;
-			font-size: 4em;
-			color: rgb(145, 145, 145);
+			font-size: 3rem;
+			color: rgb(75, 75, 75);
 		}
 		.hide {
 			display: none;
+		}
+		.stack {
+			flex-direction: column;
+			align-content: center;
 		}
 	</style>
 	<script src="game.js" defer type="module"></script>
 </head>
 
 <body>
+	<!-- <div class="overlay stack" id="crash-screen">
+		<p>GAME OVER. PRESS SPACE TO PLAY AGAIN</p>
+	</div> -->
+	
 	<div class="overlay" id="overlay">
 		<p>PRESS SPACE TO PLAY</p>
 	</div>
+
 	<div class="" id="game-board"></div>
 	
 </body>

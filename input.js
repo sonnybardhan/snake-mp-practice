@@ -1,4 +1,4 @@
-import { start } from './game.js';
+import { start, crashScreen } from './game.js';
 
 export let direction = { x: 0, y: 1 };
 export let lastInput = '';
