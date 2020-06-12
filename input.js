@@ -1,54 +1,49 @@
 import { start } from './game.js';
 
-export let direction = [ { x: 0, y: 1 }, { x: 0, y: 1 } ];
-// export let direction = { x: 0, y: 1 };
-// export let direction2 = { x: 0, y: -1 };
-
-export let lastInput = [ '', '' ];
-// export let lastInput = '';
-// export let lastInput2 = '';
+export let directions = [ { x: 0, y: 1 }, { x: 0, y: 1 } ];
+export let lastInputs = [ 'ArrowRight', 'd' ];
 
 window.addEventListener('keydown', ({ key }) => {
 	switch (key) {
 		case 'ArrowUp':
-			if (key === getReverse(lastInput[0]) || key === lastInput[0]) return;
-			direction[0] = { x: -1, y: 0 };
-			lastInput[0] = 'ArrowUp';
+			if (lastInputs[0] === 'ArrowDown') return;
+			directions[0] = { x: -1, y: 0 };
+			lastInputs[0] = 'ArrowUp';
 			break;
 		case 'ArrowDown':
-			if (key === getReverse(lastInput[0]) || key === lastInput[0]) return;
-			direction[0] = { x: 1, y: 0 };
-			lastInput[0] = 'ArrowDown';
+			if (lastInputs[0] === 'ArrowUp') return;
+			directions[0] = { x: 1, y: 0 };
+			lastInputs[0] = 'ArrowDown';
 			break;
 		case 'ArrowLeft':
-			if (key === getReverse(lastInput[0]) || key === lastInput[0]) return;
-			direction[0] = { x: 0, y: -1 };
-			lastInput[0] = 'ArrowLeft';
+			if (lastInputs[0] === 'ArrowRight') return;
+			directions[0] = { x: 0, y: -1 };
+			lastInputs[0] = 'ArrowLeft';
 			break;
 		case 'ArrowRight':
-			if (key === getReverse(lastInput[0]) || key === lastInput[0]) return;
-			direction[0] = { x: 0, y: 1 };
-			lastInput[0] = 'ArrowRight';
+			if (lastInputs[0] === 'ArrowLeft') return;
+			directions[0] = { x: 0, y: 1 };
+			lastInputs[0] = 'ArrowRight';
 			break;
 		case 'w':
-			if (key === getReverse(lastInput[1]) || key === lastInput[1]) return;
-			direction[1] = { x: -1, y: 0 };
-			lastInput[1] = 'w';
+			if (lastInputs[1] === 's') return;
+			directions[1] = { x: -1, y: 0 };
+			lastInputs[1] = 'w';
 			break;
 		case 's':
-			if (key === getReverse(lastInput[1]) || key === lastInput[1]) return;
-			direction[1] = { x: 1, y: 0 };
-			lastInput[1] = 's';
+			if (lastInputs[1] === 'w') return;
+			directions[1] = { x: 1, y: 0 };
+			lastInputs[1] = 's';
 			break;
 		case 'a':
-			if (key === getReverse(lastInput[1]) || key === lastInput[1]) return;
-			direction[1] = { x: 0, y: -1 };
-			lastInput[1] = 'a';
+			if (lastInputs[1] === 'd') return;
+			directions[1] = { x: 0, y: -1 };
+			lastInputs[1] = 'a';
 			break;
 		case 'd':
-			if (key === getReverse(lastInput[1]) || key === lastInput[1]) return;
-			direction[1] = { x: 0, y: 1 };
-			lastInput[1] = 'd';
+			if (lastInputs[1] === 'a') return;
+			directions[1] = { x: 0, y: 1 };
+			lastInputs[1] = 'd';
 			break;
 		case ' ':
 			start();
@@ -78,11 +73,6 @@ function getReverse(dir) {
 }
 
 export function inputReset() {
-	direction[0].x = 0;
-	direction[0].y = 1;
-	lastInput[0] = '';
-
-	direction[1].x = 0;
-	direction[1].y = 1;
-	lastInput[1] = '';
+	directions = [ { x: 0, y: 1 }, { x: 0, y: 1 } ];
+	lastInputs = [ '', '' ];
 }

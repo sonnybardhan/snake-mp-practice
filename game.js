@@ -2,20 +2,19 @@ import { SNAKE_SPEED, update as updateSnake, draw as drawSnake } from './snake.j
 
 import { update as updateFood, draw as drawFood } from './food.js';
 
-// export let gameOver = false;
 let paused = true;
 const gameBoard = document.getElementById('game-board');
 export const overlay = document.getElementById('overlay');
 export const crashScreen = document.getElementById('crash-screen');
 
-let lastRenderTime = 0;
+let lastRender = 0;
 
 function main(currentTime) {
 	if (paused) return;
 	requestAnimationFrame(main);
-	const deltaTime = (currentTime - lastRenderTime) / 1000;
-	if (deltaTime < 1 / SNAKE_SPEED) return;
-	lastRenderTime = currentTime;
+	const delta = (currentTime - lastRender) / 1000;
+	if (delta < 1 / SNAKE_SPEED) return;
+	lastRender = currentTime;
 	update();
 	draw();
 }

@@ -1,14 +1,11 @@
 import { lastConsumer } from './food.js';
-import { direction, inputReset } from './input.js';
+import { directions, inputReset } from './input.js';
 import { start } from './game.js';
-const SNAKE_SPEED = 2;
-
-const INIT_STATE = [ { x: 3, y: 4 }, { x: 3, y: 3 }, { x: 3, y: 2 } ];
-const INIT_STATE2 = [ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ];
-let snake = INIT_STATE;
-let snake2 = INIT_STATE2;
-
-const snakes = [ snake, snake2 ];
+const SNAKE_SPEED = 3;
+let snakes = [
+	[ { x: 3, y: 4 }, { x: 3, y: 3 }, { x: 3, y: 2 } ],
+	[ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ]
+];
 
 function draw(gameBoard) {
 	for (let snake of snakes) {
@@ -33,8 +30,8 @@ function update() {
 		}
 
 		const newHead = { ...snake[0] }; //first item in array is head
-		newHead.x += direction[i].x;
-		newHead.y += direction[i].y;
+		newHead.x += directions[i].x;
+		newHead.y += directions[i].y;
 		snake.unshift(newHead);
 
 		if (i === 0 && lastConsumer !== 0) {
@@ -59,9 +56,12 @@ function outOfBounds(snake) {
 }
 
 export function reset() {
-	snake[0] = INIT_STATE;
-	snake[1] = INIT_STATE2;
+	snakes = [
+		[ { x: 3, y: 4 }, { x: 3, y: 3 }, { x: 3, y: 2 } ],
+		[ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ]
+	];
+
 	inputReset();
 	start();
 }
-export { SNAKE_SPEED, update, draw, snakes, INIT_STATE, collided, outOfBounds };
+export { SNAKE_SPEED, update, draw, snakes, collided, outOfBounds };
