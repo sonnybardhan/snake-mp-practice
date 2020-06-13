@@ -14,7 +14,8 @@ body {
 	margin: 0;
 	/* padding: 3em; */
 	overflow: hidden;
-	background-color: rgba(255, 162, 167, 0.664);
+	/* background-color: rgba(255, 162, 167, 0.664); */
+	background-color: rgba(255, 162, 167, 0.233);
 	flex-direction: column;
 }
 
@@ -40,35 +41,40 @@ body {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-
+	/* align-content: center; */
+	/* margin: 0; */
 	font-size: 3rem;
-	/* background-color: aliceblue; */
-	padding: 3rem;
+	background-color: aliceblue;
+	padding: 2rem;
 	border-radius: .625rem;
+	display: none;
+	/* box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.178); */
 }
 
 .player-1 {
-	background-color: rgba(215, 236, 176, 0.671);
-	border: .3rem solid rgba(19, 88, 28, 0.493);
-	color: rgba(19, 88, 28, 0.808);
+	/* background-color: rgba(215, 236, 176, 0.671); */
+	/* border: .3rem solid rgba(19, 88, 28, 0.493); */
+	color: rgba(19, 88, 28, 0.623);
 }
 
 .player-2 {
-	background-color: rgb(255, 152, 67);
-	border: .3rem solid rgba(73, 33, 0, 0.466);
-	color: rgba(73, 33, 0, 0.822);
+	/* background-color: rgb(255, 152, 67); */
+	/* border: .3rem solid rgba(73, 33, 0, 0.466); */
+	color: rgba(73, 33, 0, 0.555);
 }
 
 #game-board {
 	background-color: rgb(193, 250, 255);
-	border: .625em solid rgba(62, 130, 138, 0.445);
-	width: 90vmin;
-	height: 90vmin;
+	/* border: .3rem solid rgba(62, 130, 138, 0.445); */
+	width: 75vmin;
+	height: 75vmin;
 	display: grid;
 	grid-template-columns: repeat(21, 1fr);
 	grid-template-rows: repeat(21, 1fr);
 	border-radius: .625rem;
 	margin: 0;
+	box-shadow: .5rem .5rem 1.5rem rgba(0, 0, 0, 0.185);
+
 }
 
 .snake-1 {
@@ -76,12 +82,16 @@ body {
 	border: .313em solid rgba(19, 88, 28, 0.493);
 	margin: .031em;
 	border-radius: .625em;
+	box-shadow: .25rem .25rem .5rem rgba(0, 0, 0, 0.418);
+
 }
 
 .snake-head-1 {
 	background-color: rgba(104, 173, 90, 0.774);
 	border: .313em solid rgba(19, 88, 28, 0.493);
 	animation: head .350s ease-in 1 forwards;
+	box-shadow: .25rem .25rem .5rem rgba(0, 0, 0, 0.418);
+
 }
 
 .snake-2 {
@@ -89,12 +99,16 @@ body {
 	border: .313em solid rgba(73, 33, 0, 0.466);
 	margin: .031em;
 	border-radius: .625em;
+	box-shadow: .25rem .25rem .5rem rgba(0, 0, 0, 0.418);
+
 }
 
 .snake-head-2 {
 	background-color: rgba(206, 93, 0, 0.904);
 	border: .313em solid rgba(73, 33, 0, 0.466);
 	animation: head .350s ease-in 1 forwards;
+	box-shadow: .25rem .25rem .5rem rgba(0, 0, 0, 0.418);
+
 }
 
 .snake-tail {
@@ -137,6 +151,8 @@ body {
 	margin: .031em;
 	border-radius: .625em;
 	z-index: 1;
+	box-shadow: .25rem .25rem .5rem rgba(0, 0, 0, 0.418);
+
 	animation: food .350s ease-in infinite alternate;
 }
 
@@ -157,7 +173,9 @@ body {
 
 .overlay {
 	position: absolute;
-	background-color: rgba(0, 0, 0, 0.750);
+	/* background-color: rgb(0, 0, 0); */
+	background-color: rgba(255, 162, 167);
+
 	top: 0;
 	left: 0;
 	height: 100vh;
@@ -178,7 +196,8 @@ body {
 	align-items: center;
 	align-content: center;
 	font-size: 3rem;
-	color: rgb(255, 255, 255);
+	/* color: rgb(255, 255, 255); */
+	color: rgb(193, 250, 255);
 	animation: p-animate 1s ease-in-out infinite alternate;
 }
 
