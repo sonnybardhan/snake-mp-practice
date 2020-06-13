@@ -1,9 +1,9 @@
 import { lastConsumer } from './food.js';
 import { directions, inputReset } from './input.js';
 import { start } from './game.js';
-const SNAKE_SPEED = 3;
+const SNAKE_SPEED = 4;
 let snakes = [
-	[ { x: 3, y: 4 }, { x: 3, y: 3 }, { x: 3, y: 2 } ],
+	[ { x: 4, y: 4 }, { x: 4, y: 3 }, { x: 4, y: 2 } ],
 	[ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ]
 ];
 
@@ -25,13 +25,16 @@ function draw(gameBoard) {
 function update() {
 	for (let i = 0; i < snakes.length; i++) {
 		let snake = snakes[i];
-		if (collided(snake) || outOfBounds(snake)) {
-			return reset();
-		}
 
 		const newHead = { ...snake[0] }; //first item in array is head
-		newHead.x += directions[i].x;
-		newHead.y += directions[i].y;
+
+		if (collided(snake) || outOfBounds(snake, directions[i])) {
+			return reset();
+		} else {
+			newHead.x += directions[i].x;
+			newHead.y += directions[i].y;
+		}
+
 		snake.unshift(newHead);
 
 		if (i === 0 && lastConsumer !== 0) {
@@ -42,17 +45,36 @@ function update() {
 	}
 }
 
+function outOfBounds(snake, direction) {
+	const newHead = snake[0];
+	if (newHead.x === 1 && direction.x === -1) {
+		return true;
+	} else if (newHead.x === 21 && direction.x === 1) {
+		return true;
+	}
+
+	if (newHead.y === 1 && direction.y === -1) {
+		return true;
+	} else if (newHead.y === 21 && direction.y === 1) {
+		return true;
+	}
+
+	return false;
+}
+
+// function collisionCheck(snake) {
+// 	const head = snake[0];
+// 	const rest = snake.slice(1);
+// 	return rest.some((segment) => {
+// 		return head.x === segment.x && head.y === segment.y;
+// 	});
+// }
 function collided(snake) {
 	const head = snake[0];
 	const rest = snake.slice(1);
 	return rest.some((segment) => {
 		return head.x === segment.x && head.y === segment.y;
 	});
-}
-
-function outOfBounds(snake) {
-	const head = snake[0];
-	return head.x < 1 || head.x > 21 || head.y < 1 || head.y > 21;
 }
 
 export function reset() {
