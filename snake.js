@@ -44,7 +44,7 @@ function collided() {
 
 function outOfBounds() {
 	const head = snake[0];
-	return head.x < 1 || head.x > 21 || head.y < 1 || head.y > 21;
+	return head.x < 1 || head.x > 25 || head.y < 1 || head.y > 25;
 }
 
 export function reset() {

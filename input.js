@@ -1,7 +1,7 @@
 import { start, crashScreen } from './game.js';
 
 export let direction = { x: 0, y: 1 };
-export let lastInput = '';
+export let lastInput = 'ArrowRight';
 
 window.addEventListener('keydown', ({ key }) => {
 	if (key === getReverse(lastInput) || key === lastInput) return;
