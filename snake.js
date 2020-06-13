@@ -28,7 +28,7 @@ function update() {
 
 		const newHead = { ...snake[0] }; //first item in array is head
 
-		if (collided(snake) || outOfBounds(snake, directions[i])) {
+		if (collided(snake, directions[i]) || outOfBounds(snake, directions[i])) {
 			return reset();
 		} else {
 			newHead.x += directions[i].x;
@@ -62,20 +62,24 @@ function outOfBounds(snake, direction) {
 	return false;
 }
 
-// function collisionCheck(snake) {
+function collided(snake, direction) {
+	const head = snake[0];
+	const rest = snake.slice(1);
+
+	const newX = head.x + direction.x;
+	const newY = head.y + direction.y;
+
+	return rest.some((segment) => {
+		return newX === segment.x && newY === segment.y;
+	});
+}
+// function collided(snake) {
 // 	const head = snake[0];
 // 	const rest = snake.slice(1);
 // 	return rest.some((segment) => {
 // 		return head.x === segment.x && head.y === segment.y;
 // 	});
 // }
-function collided(snake) {
-	const head = snake[0];
-	const rest = snake.slice(1);
-	return rest.some((segment) => {
-		return head.x === segment.x && head.y === segment.y;
-	});
-}
 
 export function reset() {
 	snakes = [
@@ -86,4 +90,4 @@ export function reset() {
 	inputReset();
 	start();
 }
-export { SNAKE_SPEED, update, draw, snakes, collided, outOfBounds };
+export { SNAKE_SPEED, update, draw, snakes };
