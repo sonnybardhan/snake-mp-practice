@@ -1,4 +1,4 @@
-import { snakes as snake } from './snake.js';
+import { snakes } from './snake.js';
 
 let food = randomPosition();
 export let lastConsumer = '';
@@ -27,11 +27,11 @@ function randomPosition() {
 }
 
 export function consumed() {
-	if (snake[0][0].x === food.x && snake[0][0].y === food.y) {
+	if (snakes[0][0].x === food.x && snakes[0][0].y === food.y) {
 		lastConsumer = 0;
 		return true;
 	}
-	if (snake[1][0].x === food.x && snake[1][0].y === food.y) {
+	if (snakes[1][0].x === food.x && snakes[1][0].y === food.y) {
 		lastConsumer = 1;
 		return true;
 	}

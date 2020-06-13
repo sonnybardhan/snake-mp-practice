@@ -8,15 +8,34 @@ let snakes = [
 ];
 
 function draw(gameBoard) {
-	for (let snake of snakes) {
+	for (let [ i, snake ] of snakes.entries()) {
 		snake.forEach(({ x, y }, index) => {
 			const snakeSegment = document.createElement('div');
 			snakeSegment.style.gridRowStart = x;
 			snakeSegment.style.gridColumnStart = y;
-			snakeSegment.classList.add('snake');
+
+			let head = false;
+
 			if (index === 0) {
-				snakeSegment.classList.add('snake-head');
+				head = true;
 			}
+
+			if (head) {
+				snakeSegment.classList.add('snake-head-1');
+			}
+
+			if (i === 0) {
+				snakeSegment.classList.add('snake-1');
+				if (head) {
+					snakeSegment.classList.add('snake-head-1');
+				}
+			} else {
+				snakeSegment.classList.add('snake-2');
+				if (head) {
+					snakeSegment.classList.add('snake-head-2');
+				}
+			}
+
 			gameBoard.appendChild(snakeSegment);
 		});
 	}

@@ -26,16 +26,28 @@ body {
 	grid-template-rows: repeat(21, 1fr);
 }
 
-.snake {
+.snake-1 {
 	background-color: rgba(215, 236, 176, 0.671);
 	border: 5px solid rgba(0, 0, 0, 0.356);
 	margin: .5px;
 	border-radius: 10px;
 }
 
-.snake-head {
+.snake-head-1 {
 	border: 5px solid rgba(104, 173, 90, 0.774);
 	background-color: rgba(104, 173, 90, 0.774);
+}
+
+.snake-2 {
+	background-color: rgb(255, 152, 67);
+	border: 5px solid rgb(73, 33, 0);
+	margin: .5px;
+	border-radius: 10px;
+}
+
+.snake-head-2 {
+	background-color: rgba(206, 93, 0, 0.904);
+	border: 5px solid rgb(73, 33, 0);
 }
 
 .food {
