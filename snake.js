@@ -1,7 +1,7 @@
 import { consumed } from './food.js';
 import { direction, inputReset } from './input.js';
 import { start } from './game.js';
-const SNAKE_SPEED = 8;
+const SNAKE_SPEED = 12;
 
 const INIT_STATE = [ { x: 3, y: 4 }, { x: 3, y: 3 }, { x: 3, y: 2 } ];
 let snake = [ { x: 3, y: 4 }, { x: 3, y: 3 }, { x: 3, y: 2 } ];
