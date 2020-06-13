@@ -12,13 +12,11 @@ body {
 	margin: 0;
 	overflow: hidden;
 	background-color: rgba(255, 162, 167, 0.664);
-	/* background-color: rgba(228, 11, 22, 0.664); */
 
 }
 
 #game-board {
 	background-color: rgb(193, 250, 255);
-
 	width: 100vmin;
 	height: 100vmin;
 	display: grid;
@@ -29,15 +27,12 @@ body {
 .snake-1 {
 	background-color: rgba(215, 236, 176, 0.671);
 	border: 5px solid rgba(19, 88, 28, 0.945);
-	/* background-color: rgba(64, 189, 39, 0.945); */
-
 	margin: .5px;
 	border-radius: 10px;
 }
 
 .snake-head-1 {
 	background-color: rgba(104, 173, 90, 0.774);
-	/* border: 5px solid rgba(104, 173, 90, 0.774); */
 	border: 5px solid rgba(19, 88, 28, 0.945);
 	animation: head .350s ease-in 1 forwards;
 }
@@ -97,27 +92,33 @@ body {
 	margin: .5px;
 	border-radius: 10px;
 	z-index: 1;
-	animation: food .4s ease-in infinite alternate;
+	animation: food .350s ease-in infinite alternate;
 }
 
 @keyframes food {
 	0% {
-		transform: scale(.75);
-	}
-
-	50% {
+		/* transform: scale(.75); */
 		transform: scale(1);
 	}
 
+	25%,
+	55% {
+		/* transform: scale(1); */
+		transform: scale(1.25);
+	}
+
 	100% {
-		transform: scale(.75);
+		/* transform: scale(.75); */
+		transform: scale(1);
 	}
 }
 
 .overlay {
 	position: absolute;
-	/* background-color: rgba(0, 0, 0, 0.61); */
-	background-color: rgba(255, 255, 255, 0.479);
+	/* background-color: rgba(255, 255, 255, 0.781); */
+	/* background-color: rgba(255, 255, 255); */
+	background-color: rgba(0, 0, 0, 0.750);
+
 	top: 0;
 	left: 0;
 	height: 100vh;
@@ -136,9 +137,27 @@ p {
 	width: 100vw;
 	justify-content: center;
 	align-items: center;
+	align-content: center;
 	font-family: sans-serif;
+	font-weight: 100;
 	font-size: 3rem;
-	color: rgb(75, 75, 75);
+	color: rgb(255, 255, 255);
+	/* background-color: rgba(0, 0, 0, 0.884); */
+	animation: p-animate 1s ease-in-out infinite alternate;
+}
+
+@keyframes p-animate {
+	0% {
+		transform: scale(1);
+	}
+
+	50% {
+		transform: scale(1.1);
+	}
+
+	100% {
+		transform: scale(1);
+	}
 }
 
 .hide {
@@ -149,15 +168,3 @@ p {
 	flex-direction: column;
 	align-content: center;
 }
-
-
-
-/* @keyframes tail {
-	0% {
-		opacity: 1;
-	}
-
-	100% {
-		opacity: 0;
-	}
-} */

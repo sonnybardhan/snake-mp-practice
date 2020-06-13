@@ -5,7 +5,7 @@ import { update as updateFood, draw as drawFood } from './food.js';
 let paused = true;
 const gameBoard = document.getElementById('game-board');
 export const overlay = document.getElementById('overlay');
-export const crashScreen = document.getElementById('crash-screen');
+// export const crashScreen = document.getElementById('crash-screen');
 
 let lastRender = 0;
 

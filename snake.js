@@ -92,13 +92,6 @@ function collided(snake, direction) {
 		return newX === segment.x && newY === segment.y;
 	});
 }
-// function collided(snake) {
-// 	const head = snake[0];
-// 	const rest = snake.slice(1);
-// 	return rest.some((segment) => {
-// 		return head.x === segment.x && head.y === segment.y;
-// 	});
-// }
 
 export function reset() {
 	snakes = [
