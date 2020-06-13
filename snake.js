@@ -1,7 +1,7 @@
 import { lastConsumer } from './food.js';
 import { directions, inputReset } from './input.js';
 import { start } from './game.js';
-const SNAKE_SPEED = 4;
+const SNAKE_SPEED = 6;
 let snakes = [
 	[ { x: 4, y: 4 }, { x: 4, y: 3 }, { x: 4, y: 2 } ],
 	[ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ]
@@ -20,10 +20,6 @@ function draw(gameBoard) {
 				head = true;
 			}
 
-			if (head) {
-				snakeSegment.classList.add('snake-head-1');
-			}
-
 			if (i === 0) {
 				snakeSegment.classList.add('snake-1');
 				if (head) {
@@ -34,6 +30,10 @@ function draw(gameBoard) {
 				if (head) {
 					snakeSegment.classList.add('snake-head-2');
 				}
+			}
+
+			if (index === snake.length - 1) {
+				snakeSegment.classList.add('snake-tail');
 			}
 
 			gameBoard.appendChild(snakeSegment);

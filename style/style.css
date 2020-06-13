@@ -28,14 +28,18 @@ body {
 
 .snake-1 {
 	background-color: rgba(215, 236, 176, 0.671);
-	border: 5px solid rgba(0, 0, 0, 0.356);
+	border: 5px solid rgba(19, 88, 28, 0.945);
+	/* background-color: rgba(64, 189, 39, 0.945); */
+
 	margin: .5px;
 	border-radius: 10px;
 }
 
 .snake-head-1 {
-	border: 5px solid rgba(104, 173, 90, 0.774);
 	background-color: rgba(104, 173, 90, 0.774);
+	/* border: 5px solid rgba(104, 173, 90, 0.774); */
+	border: 5px solid rgba(19, 88, 28, 0.945);
+	animation: head .350s ease-in 1 forwards;
 }
 
 .snake-2 {
@@ -48,14 +52,66 @@ body {
 .snake-head-2 {
 	background-color: rgba(206, 93, 0, 0.904);
 	border: 5px solid rgb(73, 33, 0);
+	animation: head .350s ease-in 1 forwards;
 }
+
+.snake-tail {
+	animation: tail .350s ease-in 1 forwards;
+}
+
+@keyframes tail {
+	0% {
+		opacity: 1;
+		transform: scale(1)
+	}
+
+	55% {
+		opacity: .75;
+		transform: scale(.75)
+	}
+
+	75% {
+		opacity: .5;
+		transform: scale(.75)
+	}
+}
+
+@keyframes head {
+	0% {
+		/* opacity: .25; */
+		transform: scale(1)
+	}
+
+	55% {
+		/* opacity: 1; */
+		transform: scale(1.25)
+	}
+}
+
+
+
 
 .food {
 	background-color: rgb(184, 146, 189);
-	border: 5px solid rgba(148, 98, 155, 0.356);
+	border: 5px solid rgba(115, 74, 121, 0.692);
 	margin: .5px;
 	border-radius: 10px;
 	z-index: 1;
+	animation: food .4s ease-in infinite alternate;
+}
+
+@keyframes food {
+	0% {
+		transform: scale(.75);
+	}
+
+	50% {
+		transform: scale(1);
+	}
+
+	100% {
+		transform: scale(.75);
+	}
 }
 
 .overlay {
@@ -93,3 +149,15 @@ p {
 	flex-direction: column;
 	align-content: center;
 }
+
+
+
+/* @keyframes tail {
+	0% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
+	}
+} */
