@@ -34,34 +34,65 @@ body {
 	width: 100%;
 	align-items: center;
 	align-content: space-around;
+	/* padding: 0; */
 }
 
 .scores {
+	height: 100%;
+	margin: 0;
+	/* width: 100%; */
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	align-self: flex-end;
-	/* align-content: flex-start; */
-	/* margin: 0; */
+	justify-content: space-between;
 	font-size: 1.5rem;
-	padding: 1.5rem;
-	/* border-radius: .25rem; */
-	/* display: none; */
-	/* box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.178); */
-	background-color: rgba(245, 248, 239, 0.548);
+
+	/* padding-left: .5rem;
+	padding-right: .5rem; */
+
+	/* background-color: rgba(245, 248, 239, 0.548); */
 	/* box-shadow: .2rem .2rem 3rem rgba(0, 0, 0, 0.185); */
 }
 
+.scores p {
+	text-align: center;
+	/* padding: .625em; */
+
+}
+
+.scores>* {
+	padding: 1.5rem;
+}
+
 .player-1 {
-	background-color: rgba(215, 236, 176, 0.452);
-	/* border: .3rem solid rgba(19, 88, 28, 0.493); */
-	color: rgba(19, 88, 28, 0.623);
+	margin: .625em;
+	border-radius: .625em;
+	color: rgba(19, 88, 28, 0.829);
+	border: .24em solid rgba(19, 88, 28, 0.493);
+	background-color: rgba(215, 236, 176, 0.671);
 }
 
 .player-2 {
-	background-color: rgba(255, 152, 67, 0.466);
-	/* border: .3rem solid rgba(73, 33, 0, 0.466); */
-	color: rgba(73, 33, 0, 0.555);
+	margin: .625em;
+	border-radius: .625em;
+	color: rgba(73, 33, 0, 0.863);
+	border: .24em solid rgba(73, 33, 0, 0.466);
+	background-color: rgb(255, 152, 67);
+}
+
+.player-3 {
+	margin: .625em;
+	border-radius: .625em;
+	color: rgb(43, 42, 42);
+	border: .24em solid rgba(58, 58, 58, 0.856);
+	background-color: rgba(255, 255, 255, 0.842);
+}
+
+.player-4 {
+	margin: .625em;
+	border-radius: .625em;
+	color: rgb(80, 76, 19);
+	border: .24em solid rgba(139, 132, 33, 0.897);
+	background-color: rgba(255, 242, 67, 0.822);
 }
 
 #game-board {
@@ -114,7 +145,6 @@ body {
 .snake-4 {
 	background-color: rgba(255, 242, 67, 0.822);
 	border: .313em solid rgba(139, 132, 33, 0.897);
-
 }
 
 .snake-head-4 {
