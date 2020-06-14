@@ -6,7 +6,7 @@ let paused = true;
 const gameBoard = document.getElementById('game-board');
 export const overlay = document.getElementById('overlay');
 // export const crashScreen = document.getElementById('crash-screen');
-
+export let numPlayers = 2;
 let lastRender = 0;
 
 function main(currentTime) {
@@ -22,8 +22,6 @@ function main(currentTime) {
 export function start() {
 	paused = !paused;
 	requestAnimationFrame(main);
-
-	// overlay.style.display = 'none';
 
 	if (paused) {
 		overlay.style.display = 'block';

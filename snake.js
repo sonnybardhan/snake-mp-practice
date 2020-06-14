@@ -5,13 +5,27 @@ const SPEED = 5;
 
 // let S1 = [ { x: 4, y: 4 }, { x: 4, y: 3 }, { x: 4, y: 2 } ];
 // let S2 = [ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ];
+// let S3 = [ { x: 4, y: 4 }, { x: 4, y: 3 }, { x: 4, y: 2 } ];
+// let S4 = [ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ];
+
+/*
+user enters number of players, build snake runs a loop to that number
+
+*/
+
+// const INIT_SNAKES = [
+// 	[ { x: 4, y: 4 }, { x: 4, y: 3 }, { x: 4, y: 2 } ],
+// 	[ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ]
+// ];
+
+// const INIT_SNAKES = [ [ { x: 4, y: 4 }, { x: 4, y: 3 } ], [ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ] ];
 
 const INIT_SNAKES = [
-	[ { x: 4, y: 4 }, { x: 4, y: 3 }, { x: 4, y: 2 } ],
+	[ { x: 4, y: 19 }, { x: 4, y: 20 }, { x: 4, y: 21 } ],
 	[ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ]
 ];
 
-let snakes = buildSnake();
+let snakes = populateSnakeArray();
 
 function draw(gameBoard) {
 	for (let [ i, snake ] of snakes.entries()) {
@@ -48,6 +62,7 @@ function draw(gameBoard) {
 }
 
 function update() {
+	// return;
 	for (let i = 0; i < snakes.length; i++) {
 		let snake = snakes[i];
 
@@ -100,12 +115,12 @@ function collided(snake, direction) {
 }
 
 export function reset() {
-	snakes = buildSnake();
+	snakes = populateSnakeArray();
 	inputReset();
 	start();
 }
 
-function buildSnake() {
+function populateSnakeArray() {
 	const newSnakes = [];
 
 	for (let snake of INIT_SNAKES) {

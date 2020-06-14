@@ -1,11 +1,26 @@
 import { start } from './game.js';
 
-const S1_DIR = { x: 0, y: 1 };
-const S2_DIR = { x: 0, y: 1 };
-const INIT_INPUTS = [ 'ArrowRight', 'd' ];
+// const S1_DIR = { x: 0, y: 1 };
+// const S2_DIR = { x: 0, y: 1 };
+const S1_DIR = { x: 0, y: -1 }; // left
+const S2_DIR = { x: 0, y: 1 }; //right
+const S3_DIR = { x: 1, y: 1 }; //down
+const S4_DIR = { x: -1, y: 1 }; //up
 
-export let directions = [ { ...S1_DIR }, { ...S2_DIR } ];
-export let lastInputs = [ ...INIT_INPUTS ];
+// const S1_DIR = { x: 0, y: -1 };
+// const S2_DIR = { x: 0, y: 1 };
+// const S1_DIR = 3;
+// const S2_DIR = 3;
+
+//follow clock directions
+
+// const INIT_INPUTS = [ 'ArrowRight', 'd' ];
+const INIT_INPUTS = [ 'ArrowLeft', 'd' ];
+const INIT_DIR = [ { ...S1_DIR }, { ...S2_DIR } ];
+
+// export let lastInputs = [ ...INIT_INPUTS ];
+export let directions = populateDirections();
+export let lastInputs = populateInputs();
 
 window.addEventListener('keydown', ({ key }) => {
 	switch (key) {
@@ -55,28 +70,32 @@ window.addEventListener('keydown', ({ key }) => {
 	}
 });
 
-function getReverse(dir) {
-	switch (dir) {
-		case 'ArrowUp':
-			return 'ArrowDown';
-		case 'ArrowDown':
-			return 'ArrowUp';
-		case 'ArrowLeft':
-			return 'ArrowRight';
-		case 'ArrowRight':
-			return 'ArrowLeft';
-		case 'w':
-			return 's';
-		case 's':
-			return 'w';
-		case 'a':
-			return 'd';
-		case 'd':
-			return 'a';
+function populateDirections() {
+	const newDirections = [];
+
+	for (let direction of INIT_DIR) {
+		newDirections.push({ ...direction });
 	}
+	// console.log('used pop directions');
+	return newDirections;
+}
+
+function populateInputs() {
+	const inputs = [];
+	for (let input of INIT_INPUTS) {
+		inputs.push(input);
+	}
+	console.log('used pop inputs');
+	return inputs;
 }
 
 export function inputReset() {
-	directions = [ { ...S1_DIR }, { ...S2_DIR } ];
-	lastInputs = [ ...INIT_INPUTS ];
+	directions = populateDirections();
+	// lastInputs = [...INIT_INPUTS];
+	lastInputs = populateInputs();
 }
+
+// export function inputReset() {
+// 	directions = [ { ...S1_DIR }, { ...S2_DIR } ];
+// 	lastInputs = [ ...INIT_INPUTS ];
+// }
