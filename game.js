@@ -1,4 +1,4 @@
-import { SNAKE_SPEED, update as updateSnake, draw as drawSnake } from './snake.js';
+import { SPEED, update as updateSnake, draw as drawSnake } from './snake.js';
 
 import { update as updateFood, draw as drawFood } from './food.js';
 
@@ -13,7 +13,7 @@ function main(currentTime) {
 	if (paused) return;
 	requestAnimationFrame(main);
 	const delta = (currentTime - lastRender) / 1000;
-	if (delta < 1 / SNAKE_SPEED) return;
+	if (delta < 1 / SPEED) return;
 	lastRender = currentTime;
 	update();
 	draw();
@@ -22,6 +22,9 @@ function main(currentTime) {
 export function start() {
 	paused = !paused;
 	requestAnimationFrame(main);
+
+	// overlay.style.display = 'none';
+
 	if (paused) {
 		overlay.style.display = 'block';
 	} else {

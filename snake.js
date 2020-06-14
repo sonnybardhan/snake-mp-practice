@@ -1,11 +1,17 @@
 import { lastConsumer } from './food.js';
 import { directions, inputReset } from './input.js';
 import { start } from './game.js';
-const SNAKE_SPEED = 6;
-let snakes = [
+const SPEED = 5;
+
+// let S1 = [ { x: 4, y: 4 }, { x: 4, y: 3 }, { x: 4, y: 2 } ];
+// let S2 = [ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ];
+
+const INIT_SNAKES = [
 	[ { x: 4, y: 4 }, { x: 4, y: 3 }, { x: 4, y: 2 } ],
 	[ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ]
 ];
+
+let snakes = buildSnake();
 
 function draw(gameBoard) {
 	for (let [ i, snake ] of snakes.entries()) {
@@ -94,12 +100,23 @@ function collided(snake, direction) {
 }
 
 export function reset() {
-	snakes = [
-		[ { x: 3, y: 4 }, { x: 3, y: 3 }, { x: 3, y: 2 } ],
-		[ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ]
-	];
-
+	snakes = buildSnake();
 	inputReset();
 	start();
 }
-export { SNAKE_SPEED, update, draw, snakes };
+
+function buildSnake() {
+	const newSnakes = [];
+
+	for (let snake of INIT_SNAKES) {
+		//[ { x: 3, y: 4 }, { x: 3, y: 3 }, { x: 3, y: 2 } ]
+		const newSnake = [];
+		for (let segment of snake) {
+			//{ x: 17, y: 4 }
+			newSnake.push({ ...segment });
+		}
+		newSnakes.push(newSnake);
+	}
+	return newSnakes;
+}
+export { SPEED, update, draw, snakes };

@@ -1,7 +1,11 @@
 import { start } from './game.js';
 
-export let directions = [ { x: 0, y: 1 }, { x: 0, y: 1 } ];
-export let lastInputs = [ 'ArrowRight', 'd' ];
+const S1_DIR = { x: 0, y: 1 };
+const S2_DIR = { x: 0, y: 1 };
+const INIT_INPUTS = [ 'ArrowRight', 'd' ];
+
+export let directions = [ { ...S1_DIR }, { ...S2_DIR } ];
+export let lastInputs = [ ...INIT_INPUTS ];
 
 window.addEventListener('keydown', ({ key }) => {
 	switch (key) {
@@ -73,6 +77,6 @@ function getReverse(dir) {
 }
 
 export function inputReset() {
-	directions = [ { x: 0, y: 1 }, { x: 0, y: 1 } ];
-	lastInputs = [ '', '' ];
+	directions = [ { ...S1_DIR }, { ...S2_DIR } ];
+	lastInputs = [ ...INIT_INPUTS ];
 }
