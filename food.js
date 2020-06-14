@@ -27,13 +27,23 @@ function randomPosition() {
 }
 
 export function consumed() {
-	if (snakes[0][0].x === food.x && snakes[0][0].y === food.y) {
-		lastConsumer = 0;
-		return true;
-	}
-	if (snakes[1][0].x === food.x && snakes[1][0].y === food.y) {
-		lastConsumer = 1;
-		return true;
+	for (let [ i, snake ] of snakes.entries()) {
+		if (snake[0].x === food.x && snake[0].y === food.y) {
+			lastConsumer = i;
+			return true;
+		}
 	}
 	return false;
 }
+
+// export function consumed() {
+// 	if (snakes[0][0].x === food.x && snakes[0][0].y === food.y) {
+// 		lastConsumer = 0;
+// 		return true;
+// 	}
+// 	if (snakes[1][0].x === food.x && snakes[1][0].y === food.y) {
+// 		lastConsumer = 1;
+// 		return true;
+// 	}
+// 	return false;
+// }

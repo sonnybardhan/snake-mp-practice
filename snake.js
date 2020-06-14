@@ -1,12 +1,12 @@
 import { lastConsumer } from './food.js';
-import { directions, inputReset } from './input.js';
+import { directions, inputReset, numPlayers } from './input.js';
 import { start } from './game.js';
 const SPEED = 5;
 
 // let S1 = [ { x: 4, y: 4 }, { x: 4, y: 3 }, { x: 4, y: 2 } ];
 // let S2 = [ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ];
-// let S3 = [ { x: 4, y: 4 }, { x: 4, y: 3 }, { x: 4, y: 2 } ];
-// let S4 = [ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ];
+let S3 = [ { x: 4, y: 4 }, { x: 4, y: 3 }, { x: 4, y: 2 } ];
+let S4 = [ { x: 17, y: 19 }, { x: 17, y: 20 }, { x: 17, y: 21 } ];
 
 /*
 user enters number of players, build snake runs a loop to that number
@@ -20,10 +20,29 @@ user enters number of players, build snake runs a loop to that number
 
 // const INIT_SNAKES = [ [ { x: 4, y: 4 }, { x: 4, y: 3 } ], [ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ] ];
 
+// const INIT_SNAKES = [
+// 	[ { x: 4, y: 19 }, { x: 4, y: 20 }, { x: 4, y: 21 } ], //{}
+// 	[ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ]
+// ];
+// const INIT_SNAKES = [
+// 	[ { x: 4, y: 19 }, { x: 4, y: 20 }, { x: 4, y: 21 } ],
+// 	[ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ],
+// 	[ { x: 4, y: 4 }, { x: 4, y: 3 }, { x: 4, y: 2 } ],
+// 	[ { x: 17, y: 19 }, { x: 17, y: 20 }, { x: 17, y: 21 } ]
+// ];
 const INIT_SNAKES = [
-	[ { x: 4, y: 19 }, { x: 4, y: 20 }, { x: 4, y: 21 } ],
-	[ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ]
+	[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ], //y: 1 right
+	[ { x: 3, y: 17 }, { x: 3, y: 18 }, { x: 3, y: 19 } ], //y: -1 left
+	[ { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 } ], //y: -1 left
+	[ { x: 17, y: 5 }, { x: 17, y: 4 }, { x: 17, y: 3 } ] //y:1 right
 ];
+
+// const S1_DIR = { x: 0, y: -1 }; // left
+// const S2_DIR = { x: 0, y: 1 }; //right
+// const S3_DIR = { x: 0, y: -1 }; //left
+// const S4_DIR = { x: 0, y: 1 }; //right
+
+// const INIT_INPUTS = ['ArrowLeft', 'd', 'ArrowLeft', 'd'];
 
 let snakes = populateSnakeArray();
 
@@ -45,6 +64,7 @@ function draw(gameBoard) {
 				if (head) {
 					snakeSegment.classList.add('snake-head-1');
 				}
+				// } else if( i === 1) {
 			} else {
 				snakeSegment.classList.add('snake-2');
 				if (head) {
@@ -69,6 +89,7 @@ function update() {
 		const newHead = { ...snake[0] }; //first item in array is head
 
 		if (collided(snake, directions[i]) || outOfBounds(snake, directions[i])) {
+			console.log(`snake ${i} collided`);
 			return reset();
 		} else {
 			newHead.x += directions[i].x;
@@ -81,6 +102,10 @@ function update() {
 			snake.pop(); //remove tail
 		} else if (i === 1 && lastConsumer !== 1) {
 			snake.pop(); //remove tail
+		} else if (i === 2 && lastConsumer !== 2) {
+			snake.pop(); //remove tail
+		} else if (i === 3 && lastConsumer !== 3) {
+			snake.pop(); //remove tail
 		}
 	}
 }
@@ -88,14 +113,18 @@ function update() {
 function outOfBounds(snake, direction) {
 	const newHead = snake[0];
 	if (newHead.x === 1 && direction.x === -1) {
+		console.log('OOB');
 		return true;
 	} else if (newHead.x === 21 && direction.x === 1) {
+		console.log('OOB');
 		return true;
 	}
 
 	if (newHead.y === 1 && direction.y === -1) {
+		console.log('OOB');
 		return true;
 	} else if (newHead.y === 21 && direction.y === 1) {
+		console.log('OOB');
 		return true;
 	}
 
@@ -109,9 +138,11 @@ function collided(snake, direction) {
 	const newX = head.x + direction.x;
 	const newY = head.y + direction.y;
 
-	return rest.some((segment) => {
+	let flag = rest.some((segment) => {
 		return newX === segment.x && newY === segment.y;
 	});
+	if (flag) console.log('Collision');
+	return flag;
 }
 
 export function reset() {
@@ -123,11 +154,13 @@ export function reset() {
 function populateSnakeArray() {
 	const newSnakes = [];
 
-	for (let snake of INIT_SNAKES) {
+	for (let i = 0; i < numPlayers; i++) {
+		// for (let snake of INIT_SNAKES) {
 		//[ { x: 3, y: 4 }, { x: 3, y: 3 }, { x: 3, y: 2 } ]
 		const newSnake = [];
+		const snake = INIT_SNAKES[i];
+
 		for (let segment of snake) {
-			//{ x: 17, y: 4 }
 			newSnake.push({ ...segment });
 		}
 		newSnakes.push(newSnake);

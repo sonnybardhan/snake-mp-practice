@@ -1,11 +1,17 @@
 import { start } from './game.js';
 
+export let numPlayers = 4;
+
 // const S1_DIR = { x: 0, y: 1 };
 // const S2_DIR = { x: 0, y: 1 };
-const S1_DIR = { x: 0, y: -1 }; // left
-const S2_DIR = { x: 0, y: 1 }; //right
-const S3_DIR = { x: 1, y: 1 }; //down
-const S4_DIR = { x: -1, y: 1 }; //up
+const S1_DIR = { x: 0, y: 1 }; // left
+const S2_DIR = { x: 0, y: -1 }; //right
+const S3_DIR = { x: 0, y: -1 }; //left
+const S4_DIR = { x: 0, y: 1 }; //right
+// const S1_DIR = { x: 0, y: -1 }; // left
+// const S2_DIR = { x: 0, y: 1 }; //right
+// const S3_DIR = { x: 0, y: -1 }; //left
+// const S4_DIR = { x: 0, y: 1 }; //right
 
 // const S1_DIR = { x: 0, y: -1 };
 // const S2_DIR = { x: 0, y: 1 };
@@ -15,10 +21,10 @@ const S4_DIR = { x: -1, y: 1 }; //up
 //follow clock directions
 
 // const INIT_INPUTS = [ 'ArrowRight', 'd' ];
-const INIT_INPUTS = [ 'ArrowLeft', 'd' ];
-const INIT_DIR = [ { ...S1_DIR }, { ...S2_DIR } ];
+// const INIT_INPUTS = [ 'ArrowLeft', 'd', 'ArrowLeft', 'd' ];
+const INIT_INPUTS = [ 'ArrowRight', 'a', 'a', 'ArrowRight' ];
+const INIT_DIR = [ { ...S1_DIR }, { ...S2_DIR }, { ...S3_DIR }, { ...S4_DIR } ];
 
-// export let lastInputs = [ ...INIT_INPUTS ];
 export let directions = populateDirections();
 export let lastInputs = populateInputs();
 
@@ -73,29 +79,23 @@ window.addEventListener('keydown', ({ key }) => {
 function populateDirections() {
 	const newDirections = [];
 
-	for (let direction of INIT_DIR) {
+	for (let i = 0; i < numPlayers; i++) {
+		const direction = INIT_DIR[i];
 		newDirections.push({ ...direction });
 	}
-	// console.log('used pop directions');
 	return newDirections;
 }
 
 function populateInputs() {
 	const inputs = [];
-	for (let input of INIT_INPUTS) {
+	for (let i = 0; i < numPlayers; i++) {
+		const input = INIT_INPUTS[i];
 		inputs.push(input);
 	}
-	console.log('used pop inputs');
 	return inputs;
 }
 
 export function inputReset() {
 	directions = populateDirections();
-	// lastInputs = [...INIT_INPUTS];
 	lastInputs = populateInputs();
 }
-
-// export function inputReset() {
-// 	directions = [ { ...S1_DIR }, { ...S2_DIR } ];
-// 	lastInputs = [ ...INIT_INPUTS ];
-// }
