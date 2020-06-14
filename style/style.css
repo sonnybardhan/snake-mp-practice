@@ -46,12 +46,10 @@ body {
 	font-size: 2rem;
 	padding: 2rem;
 	/* border-radius: .25rem; */
-	/* display: none; */
+	display: none;
 	/* box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.178); */
 	background-color: rgba(245, 248, 239, 0.548);
-
 	/* box-shadow: .2rem .2rem 3rem rgba(0, 0, 0, 0.185); */
-
 }
 
 .player-1 {
