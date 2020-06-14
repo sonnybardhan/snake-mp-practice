@@ -1,35 +1,13 @@
 import { lastConsumer } from './food.js';
 import { directions, inputReset, numPlayers } from './input.js';
 import { start } from './game.js';
-const SPEED = 5;
-
-// let S1 = [ { x: 4, y: 4 }, { x: 4, y: 3 }, { x: 4, y: 2 } ];
-// let S2 = [ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ];
-let S3 = [ { x: 4, y: 4 }, { x: 4, y: 3 }, { x: 4, y: 2 } ];
-let S4 = [ { x: 17, y: 19 }, { x: 17, y: 20 }, { x: 17, y: 21 } ];
+const SPEED = 12;
 
 /*
 user enters number of players, build snake runs a loop to that number
 
 */
 
-// const INIT_SNAKES = [
-// 	[ { x: 4, y: 4 }, { x: 4, y: 3 }, { x: 4, y: 2 } ],
-// 	[ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ]
-// ];
-
-// const INIT_SNAKES = [ [ { x: 4, y: 4 }, { x: 4, y: 3 } ], [ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ] ];
-
-// const INIT_SNAKES = [
-// 	[ { x: 4, y: 19 }, { x: 4, y: 20 }, { x: 4, y: 21 } ], //{}
-// 	[ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ]
-// ];
-// const INIT_SNAKES = [
-// 	[ { x: 4, y: 19 }, { x: 4, y: 20 }, { x: 4, y: 21 } ],
-// 	[ { x: 17, y: 4 }, { x: 17, y: 3 }, { x: 17, y: 2 } ],
-// 	[ { x: 4, y: 4 }, { x: 4, y: 3 }, { x: 4, y: 2 } ],
-// 	[ { x: 17, y: 19 }, { x: 17, y: 20 }, { x: 17, y: 21 } ]
-// ];
 const INIT_SNAKES = [
 	[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ], //y: 1 right
 	[ { x: 3, y: 17 }, { x: 3, y: 18 }, { x: 3, y: 19 } ], //y: -1 left
@@ -56,21 +34,10 @@ function draw(gameBoard) {
 			let head = false;
 
 			if (index === 0) {
-				head = true;
+				snakeSegment.classList.add(`snake-head-${i + 1}`);
 			}
 
-			if (i === 0) {
-				snakeSegment.classList.add('snake-1');
-				if (head) {
-					snakeSegment.classList.add('snake-head-1');
-				}
-				// } else if( i === 1) {
-			} else {
-				snakeSegment.classList.add('snake-2');
-				if (head) {
-					snakeSegment.classList.add('snake-head-2');
-				}
-			}
+			snakeSegment.classList.add('snake', `snake-${i + 1}`);
 
 			if (index === snake.length - 1) {
 				snakeSegment.classList.add('snake-tail');
@@ -89,7 +56,6 @@ function update() {
 		const newHead = { ...snake[0] }; //first item in array is head
 
 		if (collided(snake, directions[i]) || outOfBounds(snake, directions[i])) {
-			console.log(`snake ${i} collided`);
 			return reset();
 		} else {
 			newHead.x += directions[i].x;
@@ -113,18 +79,14 @@ function update() {
 function outOfBounds(snake, direction) {
 	const newHead = snake[0];
 	if (newHead.x === 1 && direction.x === -1) {
-		console.log('OOB');
 		return true;
 	} else if (newHead.x === 21 && direction.x === 1) {
-		console.log('OOB');
 		return true;
 	}
 
 	if (newHead.y === 1 && direction.y === -1) {
-		console.log('OOB');
 		return true;
 	} else if (newHead.y === 21 && direction.y === 1) {
-		console.log('OOB');
 		return true;
 	}
 
@@ -155,8 +117,6 @@ function populateSnakeArray() {
 	const newSnakes = [];
 
 	for (let i = 0; i < numPlayers; i++) {
-		// for (let snake of INIT_SNAKES) {
-		//[ { x: 3, y: 4 }, { x: 3, y: 3 }, { x: 3, y: 2 } ]
 		const newSnake = [];
 		const snake = INIT_SNAKES[i];
 

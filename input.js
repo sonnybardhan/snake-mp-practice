@@ -1,6 +1,6 @@
 import { start } from './game.js';
 
-export let numPlayers = 4;
+export let numPlayers = 1;
 
 // const S1_DIR = { x: 0, y: 1 };
 // const S2_DIR = { x: 0, y: 1 };

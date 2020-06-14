@@ -23,12 +23,12 @@ function main(currentTime) {
 export function start() {
 	paused = !paused;
 	requestAnimationFrame(main);
-	overlay.style.display = 'none';
+	// overlay.style.display = 'none';
 
 	if (paused) {
-		// overlay.style.display = 'block';
+		overlay.style.display = 'block';
 	} else {
-		// overlay.style.display = 'none';
+		overlay.style.display = 'none';
 	}
 }
 

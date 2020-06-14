@@ -71,40 +71,55 @@ body {
 	display: grid;
 	grid-template-columns: repeat(21, 1fr);
 	grid-template-rows: repeat(21, 1fr);
-	/* border-radius: .725rem; */
 	margin: 0;
 	box-shadow: .5rem .5rem 1.5rem rgba(0, 0, 0, 0.185);
 }
 
-.snake-1 {
-	background-color: rgba(215, 236, 176, 0.671);
-	border: .313em solid rgba(19, 88, 28, 0.493);
+.snake {
 	margin: .031em;
 	border-radius: .625em;
 	box-shadow: .25rem .25rem .5rem rgba(0, 0, 0, 0.418);
+}
+
+.snake-1 {
+	border: .313em solid rgba(19, 88, 28, 0.493);
+	background-color: rgba(215, 236, 176, 0.671);
 }
 
 .snake-head-1 {
 	background-color: rgba(104, 173, 90, 0.774);
-	border: .313em solid rgba(19, 88, 28, 0.493);
 	animation: head .350s ease-in 1 forwards;
-	box-shadow: .25rem .25rem .5rem rgba(0, 0, 0, 0.418);
 }
 
 .snake-2 {
-	background-color: rgb(255, 152, 67);
 	border: .313em solid rgba(73, 33, 0, 0.466);
-	margin: .031em;
-	border-radius: .625em;
-	box-shadow: .25rem .25rem .5rem rgba(0, 0, 0, 0.418);
+	background-color: rgb(255, 152, 67);
 }
 
 .snake-head-2 {
 	background-color: rgba(206, 93, 0, 0.904);
-	border: .313em solid rgba(73, 33, 0, 0.466);
 	animation: head .350s ease-in 1 forwards;
-	box-shadow: .25rem .25rem .5rem rgba(0, 0, 0, 0.418);
+}
 
+.snake-3 {
+	background-color: rgba(255, 255, 255, 0.842);
+	border: .313em solid rgba(58, 58, 58, 0.856);
+}
+
+.snake-head-3 {
+	background-color: rgba(124, 124, 124, 0.842);
+	animation: head .350s ease-in 1 forwards;
+}
+
+.snake-4 {
+	background-color: rgba(255, 242, 67, 0.822);
+	border: .313em solid rgba(139, 132, 33, 0.897);
+
+}
+
+.snake-head-4 {
+	background-color: rgba(80, 76, 28, 0.897);
+	animation: head .350s ease-in 1 forwards;
 }
 
 .snake-tail {
