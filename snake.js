@@ -1,7 +1,7 @@
 import { lastConsumer } from './food.js';
 import { directions, inputReset, numPlayers } from './input.js';
 import { start } from './game.js';
-const SPEED = 5;
+const SPEED = 6;
 
 /*
 user enters number of players, build snake runs a loop to that number
