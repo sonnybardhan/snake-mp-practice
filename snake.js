@@ -1,7 +1,7 @@
 import { lastConsumer } from './food.js';
 import { directions, inputReset, numPlayers } from './input.js';
 import { start } from './game.js';
-const SPEED = 12;
+const SPEED = 5;
 
 /*
 user enters number of players, build snake runs a loop to that number
@@ -10,9 +10,9 @@ user enters number of players, build snake runs a loop to that number
 
 const INIT_SNAKES = [
 	[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ], //y: 1 right
-	[ { x: 3, y: 17 }, { x: 3, y: 18 }, { x: 3, y: 19 } ], //y: -1 left
+	[ { x: 5, y: 17 }, { x: 5, y: 18 }, { x: 5, y: 19 } ], //y: -1 left
 	[ { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 } ], //y: -1 left
-	[ { x: 17, y: 5 }, { x: 17, y: 4 }, { x: 17, y: 3 } ] //y:1 right
+	[ { x: 15, y: 5 }, { x: 15, y: 4 }, { x: 15, y: 3 } ] //y:1 right
 ];
 
 // const S1_DIR = { x: 0, y: -1 }; // left
@@ -100,11 +100,9 @@ function collided(snake, direction) {
 	const newX = head.x + direction.x;
 	const newY = head.y + direction.y;
 
-	let flag = rest.some((segment) => {
+	return rest.some((segment) => {
 		return newX === segment.x && newY === segment.y;
 	});
-	if (flag) console.log('Collision');
-	return flag;
 }
 
 export function reset() {
@@ -117,6 +115,8 @@ function populateSnakeArray() {
 	const newSnakes = [];
 
 	for (let i = 0; i < numPlayers; i++) {
+		if (numPlayers === 2 && i === 1) i++; //to ensure diagnals are populated
+
 		const newSnake = [];
 		const snake = INIT_SNAKES[i];
 
