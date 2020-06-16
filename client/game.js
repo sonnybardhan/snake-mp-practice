@@ -40,7 +40,7 @@ ws.onmessage = (msg) => {
 		//this should implicitly 'join' the creator
 		//generate a time out
 	} else if (response.method === 'join') {
-		console.log('server sent a message: ', response);
+		console.log('server sent a message: player joined!', response);
 	} else if (response.method === 'play') {
 	} else if (response.method === 'error') {
 		console.log('There was an error!', response.msg);
@@ -48,9 +48,11 @@ ws.onmessage = (msg) => {
 };
 
 createBtn.addEventListener('click', () => {
+	playerName = nameInput.value;
 	const payload = {
 		method: 'create',
-		clientId
+		clientId,
+		playerName
 	};
 	ws.send(JSON.stringify(payload));
 });
@@ -119,19 +121,25 @@ function main(currentTime) {
 // 		overlay.style.display = 'none';
 // 	}
 // }
-export function start() {
+export function start(gameOver = false) {
 	paused = !paused;
 	requestAnimationFrame(main);
-	// overlay.style.display = 'none';
 
-	if (paused) {
-		landingScreen.style.zIndex = -1;
-		gameBoard.style.zIndex = 1;
-		waitScreen.style.zIndex = 4;
+	if (!gameOver) {
+		// overlay.style.display = 'none';
+		if (paused) {
+			landingScreen.style.zIndex = 1;
+			gameBoard.style.zIndex = 2;
+			waitScreen.style.zIndex = 3;
+		} else {
+			landingScreen.style.zIndex = -1;
+			waitScreen.style.zIndex = -2;
+			gameBoard.style.zIndex = 10;
+		}
 	} else {
-		landingScreen.style.zIndex = -1;
-		waitScreen.style.zIndex = -2;
-		gameBoard.style.zIndex = 10;
+		landingScreen.style.zIndex = 3;
+		gameBoard.style.zIndex = 2;
+		waitScreen.style.zIndex = 1;
 	}
 }
 

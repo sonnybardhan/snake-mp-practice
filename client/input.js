@@ -1,5 +1,5 @@
 import { start, backToLanding } from './game.js';
-
+// import { reset } from './snake';
 export let numPlayers = 2;
 
 // const S1_DIR = { x: 0, y: 1 };

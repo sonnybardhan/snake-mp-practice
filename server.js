@@ -35,6 +35,9 @@ wss.on('request', (req) => {
 		if (response.method === 'create') {
 			const clientId = response.clientId;
 			const gameId = 'GAME-' + createId();
+			let playerName = response.playerName;
+			let playerIndex = 0;
+
 			console.log(`client ${clientId} wants to create a new game`);
 
 			games[gameId] = {
@@ -43,12 +46,25 @@ wss.on('request', (req) => {
 				state: {}
 			};
 
-			// games[gameId].clients.push(clientId);
+			const game = games[gameId];
+
+			// games[gameId].clients.push(clientId);;
+
+			if (!playerName) {
+				playerName = 'Player-1';
+			}
+
+			game.clients.push({
+				clientId,
+				playerName
+			});
+			console.log('player name: [creator] ', playerName);
 
 			const payload = {
 				method: 'create',
-				game: games[gameId]
+				game
 			};
+
 			const con = clients[clientId].connection;
 			con.send(JSON.stringify(payload));
 		} else if (response.method === 'join') {
@@ -92,8 +108,9 @@ wss.on('request', (req) => {
 			}
 
 			if (!playerName) {
-				playerName = 'Player-' + (playerIndex + 1);
+				playerName = 'Player-' + (game.clients.length + 1);
 			}
+			console.log('player name: [joinee]', playerName);
 
 			game.clients.push({
 				clientId,
@@ -116,6 +133,9 @@ wss.on('request', (req) => {
 		//store clientID and game ID together in the clients object
 		// clients[clientId] = {connection, gameId}
 		clients[clientId] = null;
+
+		//when any client leaves check which game they were in
+		//remove from game
 
 		if (Object.keys(clients).length) {
 			clientLoop();
