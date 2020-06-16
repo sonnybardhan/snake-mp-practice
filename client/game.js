@@ -5,8 +5,9 @@ const gameIdInput = document.getElementById('game-id-input');
 const createBtn = document.getElementById('create-btn');
 const joinBtn = document.getElementById('join-btn');
 const landingScreen = document.getElementById('landing');
-const spaceBar = document.getElementById('space-bar');
+// const spaceBar = document.getElementById('space-bar');
 const waitScreen = document.getElementById('wait-screen');
+const waitMessageSpan = document.getElementById('wait-message-span');
 const gameIdSpan = document.getElementById('game-id-span');
 // const cancelBtn = document.getElementById('cancel-btn');
 // export const overlay = document.getElementById('overlay');
@@ -17,6 +18,7 @@ let clientId = null;
 let gameId = null;
 let playerName = null;
 let playerNum = null;
+let gameStatus = '';
 
 ws.onopen = (e) => console.log('connected to server');
 
@@ -31,8 +33,8 @@ ws.onmessage = (msg) => {
 		console.log('server sent a message: ', response);
 		gameId = response.game.id;
 		gameIdInput.value = gameId;
+
 		gameIdSpan.innerText = gameId;
-		// waitScreen.style.visibility = 'show';
 		landingScreen.style.zIndex = -1;
 		waitScreen.style.zIndex = 4;
 
@@ -41,6 +43,37 @@ ws.onmessage = (msg) => {
 		//generate a time out
 	} else if (response.method === 'join') {
 		console.log('server sent a message: player joined!', response);
+		console.log('num of players: ', response.game.clients.length);
+		const numPlayers = response.game.clients.length;
+
+		//from create method
+
+		if (numPlayers === 2) {
+			//show timer (optional)
+			//show game screen
+			gameId = response.game.id;
+			gameIdSpan.innerText = gameId;
+			landingScreen.style.zIndex = -1;
+			waitScreen.style.zIndex = 4;
+
+			waitMessageSpan.innerText = 'GAME STARTING ... ';
+
+			//set interval stuff
+			// let prevId;
+			let time = 3;
+			let id = setInterval(() => {
+				waitMessageSpan.innerText = `STARTING IN ${time--}`;
+				if (time < 0) {
+					clearInterval(id);
+					waitMessageSpan.innerText = 'PAUSED';
+					start();
+				}
+			}, 1000);
+
+			// setTimeout(() => {
+			// 	start();
+			// }, 3000);
+		}
 	} else if (response.method === 'play') {
 	} else if (response.method === 'error') {
 		console.log('There was an error!', response.msg);
@@ -132,9 +165,9 @@ export function start(gameOver = false) {
 			gameBoard.style.zIndex = 2;
 			waitScreen.style.zIndex = 3;
 		} else {
-			landingScreen.style.zIndex = -1;
-			waitScreen.style.zIndex = -2;
-			gameBoard.style.zIndex = 10;
+			landingScreen.style.zIndex = 2;
+			waitScreen.style.zIndex = 1;
+			gameBoard.style.zIndex = 3;
 		}
 	} else {
 		landingScreen.style.zIndex = 3;

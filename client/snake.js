@@ -108,7 +108,8 @@ function collided(snake, direction) {
 export function reset() {
 	snakes = populateSnakeArray();
 	inputReset();
-	start(true);
+	// start(true);
+	start();
 }
 
 function populateSnakeArray() {
