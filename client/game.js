@@ -1,3 +1,10 @@
+let HOST = 'ws://localhost:9090';
+const ws = new WebSocket(HOST);
+
+ws.onopen = (e) => console.log('connected to server');
+ws.onclose = (e) => console.log('disconnected from server');
+ws.onerror = (e) => console.log('Oop! ', e);
+
 import { SPEED, update as updateSnake, draw as drawSnake } from './snake.js';
 
 import { update as updateFood, draw as drawFood } from './food.js';
