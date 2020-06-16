@@ -36,6 +36,22 @@ body {
 	/* padding: 0; */
 }
 
+#landing {
+	position: absolute;
+	background-color: aquamarine;
+	top: 0;
+	left: 0;
+	height: 100vh;
+	width: 100vw;
+	z-index: 2;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	margin: 0;
+	flex-direction: column;
+
+}
+
 .scores {
 	height: 100%;
 	margin: 0;
@@ -226,12 +242,15 @@ body {
 	height: 100vh;
 	width: 100vw;
 	justify-content: center;
+	/* flex-direction: column; */
 	align-items: center;
 	align-content: center;
 	font-size: 3rem;
 	color: rgb(255, 255, 255);
 	animation: p-animate 1s ease-in-out infinite alternate;
 }
+
+#press-play {}
 
 @keyframes p-animate {
 	0% {
