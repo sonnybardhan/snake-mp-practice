@@ -52,6 +52,11 @@ body {
 
 }
 
+#space-bar {
+	animation: p-animate 1s ease-in-out infinite alternate;
+
+}
+
 .scores {
 	height: 100%;
 	margin: 0;
