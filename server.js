@@ -54,8 +54,11 @@ wss.on('request', (req) => {
 
 			game.clients.push({
 				clientId,
-				playerName
+				playerName,
+				score: 0
 			});
+
+			// game.state.foodPositions = randomPositionArray(4);
 
 			const payload = {
 				method: 'create',
@@ -110,11 +113,34 @@ wss.on('request', (req) => {
 
 			game.clients.push({
 				clientId,
-				playerName
+				playerName,
+				score: 0
 			});
+
+			let newPosition = randomPosition();
 
 			const payload = {
 				method: 'join',
+				game,
+				newPosition
+			};
+
+			game.clients.forEach((client) => {
+				clients[client.clientId].connection.send(JSON.stringify(payload));
+			});
+		} else if (response.method === 'consume') {
+			const clientId = response.clientId;
+			const gameId = response.gameId;
+			const game = games[gameId];
+
+			const client = game.clients.find((client) => client.clientId === clientId);
+			client.score += 10;
+			console.log('scorer: ', client.clientId, client.score);
+			const newPosition = randomPosition();
+			const payload = {
+				method: 'consume',
+				lastConsumer: clientId,
+				newPosition,
 				game
 			};
 
@@ -160,3 +186,18 @@ function clientLoop() {
 		}
 	}
 }
+
+function randomPosition() {
+	return {
+		x: (Math.random() * 21 + 1) | 0,
+		y: (Math.random() * 21 + 1) | 0
+	};
+}
+
+// function randomPositionArray(len = 3) {
+// 	const arr = [];
+// 	while (len--) {
+// 		arr.push(randomPosition());
+// 	}
+// 	return arr;
+// }

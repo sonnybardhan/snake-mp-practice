@@ -1,11 +1,20 @@
+import { ws, clientId, gameId } from './game.js';
 import { snakes } from './snake.js';
 
-let food = randomPosition();
+export let food = { x: 3, y: 8 };
+// let food = '';
+
 export let lastConsumer = '';
 
-export function update() {
+export async function update() {
 	if (consumed()) {
-		food = randomPosition();
+		const payload = {
+			method: 'consume',
+			clientId,
+			gameId
+		};
+
+		await ws.send(JSON.stringify(payload));
 	} else {
 		lastConsumer = '';
 	}
@@ -19,12 +28,12 @@ export function draw(gameBoard) {
 	gameBoard.appendChild(foodElement);
 }
 
-function randomPosition() {
-	return {
-		x: (Math.random() * 21 + 1) | 0,
-		y: (Math.random() * 21 + 1) | 0
-	};
-}
+// function randomPosition() {
+// 	return {
+// 		x: (Math.random() * 21 + 1) | 0,
+// 		y: (Math.random() * 21 + 1) | 0
+// 	};
+// }
 
 export function consumed() {
 	for (let [ i, snake ] of snakes.entries()) {

@@ -1,5 +1,8 @@
 let HOST = 'ws://localhost:9090';
 export const ws = new WebSocket(HOST);
+import { SPEED, update as updateSnake, draw as drawSnake } from './snake.js';
+import { update as updateFood, draw as drawFood, food } from './food.js';
+
 const nameInput = document.getElementById('name-input');
 const gameIdInput = document.getElementById('game-id-input');
 const createBtn = document.getElementById('create-btn');
@@ -14,9 +17,11 @@ const gameIdSpan = document.getElementById('game-id-span');
 // main game element
 const gameBoard = document.getElementById('game-board');
 
-let clientId = null;
-let gameId = null;
-let playerName = null;
+export let foodPosition = {};
+
+export let clientId = null;
+export let gameId = null;
+export let playerName = null;
 let playerNum = null;
 let gameStatus = '';
 
@@ -24,7 +29,6 @@ ws.onopen = (e) => console.log('connected to server');
 
 ws.onmessage = (msg) => {
 	const response = JSON.parse(msg.data);
-	// console.log(response);
 
 	if (response.method === 'connect') {
 		clientId = response.clientId;
@@ -46,11 +50,14 @@ ws.onmessage = (msg) => {
 		console.log('num of players: ', response.game.clients.length);
 		const numPlayers = response.game.clients.length;
 
-		//from create method
+		// foodPosition = { ...response.position };
+		// console.log(foodPosition);
 
+		food.x = response.newPosition.x;
+		food.y = response.newPosition.y;
+
+		console.log('new food position set on join: ', food);
 		if (numPlayers === 2) {
-			//show timer (optional)
-			//show game screen
 			gameId = response.game.id;
 			gameIdSpan.innerText = gameId;
 			landingScreen.style.zIndex = -1;
@@ -58,6 +65,7 @@ ws.onmessage = (msg) => {
 
 			waitMessageSpan.innerText = 'GAME STARTING ... ';
 
+			console.log('food position is: ', foodPosition);
 			//set interval stuff
 			// let prevId;
 			let time = 3;
@@ -68,13 +76,22 @@ ws.onmessage = (msg) => {
 					waitMessageSpan.innerText = 'PAUSED';
 					start();
 				}
-			}, 1000);
+			}, 200);
 
 			// setTimeout(() => {
 			// 	start();
 			// }, 3000);
 		}
 	} else if (response.method === 'play') {
+	} else if (response.method === 'consume') {
+		// console.log('consume message: ', response.newPosition);
+		// foodPosition = { ...response.newPosition };
+		// food = { ...response.newPosition };
+		food.x = response.newPosition.x;
+		food.y = response.newPosition.y;
+		console.log('Somebody scored! ', response.game.clients);
+		// update();
+		// drawFood(gameBoard);
 	} else if (response.method === 'error') {
 		console.log('There was an error!', response.msg);
 	}
@@ -96,6 +113,8 @@ joinBtn.addEventListener('click', () => {
 
 	if (!gameId) {
 		return console.log('Please enter a game ID');
+	} else {
+		joinBtn.disabled = true;
 	}
 
 	const payload = {
@@ -118,10 +137,6 @@ ws.onclose = (e) => console.log('disconnected from server');
 ws.onerror = (e) => console.log('Oop! ', e);
 
 //game logic=====================
-
-import { SPEED, update as updateSnake, draw as drawSnake } from './snake.js';
-
-import { update as updateFood, draw as drawFood } from './food.js';
 
 //elements from the start screen
 
