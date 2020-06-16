@@ -48,8 +48,6 @@ wss.on('request', (req) => {
 
 			const game = games[gameId];
 
-			// games[gameId].clients.push(clientId);;
-
 			if (!playerName) {
 				playerName = 'Player-1';
 			}
@@ -58,7 +56,6 @@ wss.on('request', (req) => {
 				clientId,
 				playerName
 			});
-			console.log('player name: [creator] ', playerName);
 
 			const payload = {
 				method: 'create',
@@ -110,7 +107,6 @@ wss.on('request', (req) => {
 			if (!playerName) {
 				playerName = 'Player-' + (game.clients.length + 1);
 			}
-			console.log('player name: [joinee]', playerName);
 
 			game.clients.push({
 				clientId,
