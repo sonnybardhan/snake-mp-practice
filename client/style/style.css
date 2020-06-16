@@ -52,6 +52,36 @@ body {
 
 }
 
+#wait-screen {
+	position: absolute;
+	/* background-color: rgb(220, 226, 191); */
+	background-color: rgb(255, 185, 189);
+	top: 0;
+	left: 0;
+	height: 100vh;
+	width: 100vw;
+	/* z-index: 4; */
+	display: flex;
+	justify-content: space-around;
+	/* align-items: flex-end; */
+	margin: 0;
+	flex-direction: column;
+	/* display: none; */
+}
+
+
+.game-id {
+	display: flex;
+	height: 100vh;
+	width: 100vw;
+	justify-content: space-evenly;
+	flex-direction: column;
+	align-items: center;
+	/* align-content: space-around; */
+	font-size: 3rem;
+	color: rgb(73, 73, 73);
+}
+
 #space-bar {
 	animation: p-animate 1s ease-in-out infinite alternate;
 
@@ -254,6 +284,8 @@ body {
 	color: rgb(255, 255, 255);
 	animation: p-animate 1s ease-in-out infinite alternate;
 }
+
+
 
 #press-play {}
 

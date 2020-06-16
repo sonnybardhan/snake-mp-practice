@@ -26,7 +26,7 @@ wss.on('request', (req) => {
 		method: 'connect',
 		clientId
 	};
-
+	// clientLoop();
 	connection.send(JSON.stringify(payload));
 
 	connection.on('message', (msg) => {
@@ -51,10 +51,6 @@ wss.on('request', (req) => {
 			};
 			const con = clients[clientId].connection;
 			con.send(JSON.stringify(payload));
-
-			// for (let [ i, client ] of Object.keys(clients).entries()) {
-			// 	console.log(i, client);
-			// }
 		} else if (response.method === 'join') {
 			//should have an client ID
 			const clientId = response.clientId;
@@ -119,6 +115,14 @@ wss.on('request', (req) => {
 		//remove client from game and update
 		//store clientID and game ID together in the clients object
 		// clients[clientId] = {connection, gameId}
+		clients[clientId] = null;
+
+		if (Object.keys(clients).length) {
+			clientLoop();
+		} else {
+			console.log('No clients online.');
+		}
+
 		console.log(`client: ${clientId} disconnected.`);
 	});
 });
@@ -129,4 +133,14 @@ function createId(len = 6, chars = 'abcdefghijklmnopqrstuvxyz0123456789') {
 		id += chars[(Math.random() * chars.length) | 0];
 	}
 	return id;
+}
+
+function clientLoop() {
+	for (let [ i, client ] of Object.keys(clients).entries()) {
+		if (clients[client]) {
+			console.log(i, client, '[connection method]');
+		} else {
+			console.log(client, ' disconnected.');
+		}
+	}
 }

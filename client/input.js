@@ -1,4 +1,4 @@
-import { start } from './game.js';
+import { start, backToLanding } from './game.js';
 
 export let numPlayers = 2;
 
@@ -29,6 +29,7 @@ export let directions = populateDirections();
 export let lastInputs = populateInputs();
 
 window.addEventListener('keydown', ({ key }) => {
+	// console.log(key);
 	switch (key) {
 		case 'ArrowUp':
 			if (lastInputs[0] === 'ArrowDown') return;
@@ -72,6 +73,9 @@ window.addEventListener('keydown', ({ key }) => {
 			break;
 		case ' ':
 			start();
+			break;
+		case 'Escape':
+			backToLanding();
 			break;
 	}
 });
