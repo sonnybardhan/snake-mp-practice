@@ -7,7 +7,7 @@ const S1_DIR = { x: 0, y: 1 }; // left
 const S2_DIR = { x: 0, y: -1 }; //right
 const S3_DIR = { x: 0, y: -1 }; //left
 const S4_DIR = { x: 0, y: 1 }; //right
-const INIT_INPUTS = [ 'ArrowRight', 'a', 'a', 'ArrowRight' ];
+const INIT_INPUTS = [ 'ArrowRight', 'ArrowLeft', 'ArrowLeft', 'ArrowRight' ];
 const INIT_DIR = [ { ...S1_DIR }, { ...S2_DIR }, { ...S3_DIR }, { ...S4_DIR } ];
 
 export let directions = populateDirections();

@@ -67,13 +67,11 @@ ws.onmessage = (msg) => {
 		const me = response.game.clients.find((client) => client.clientId === clientId);
 		playerNum = me.playerNum;
 		playerIndex = playerNum - 1;
-		console.log('joiners player index and num set', playerIndex, playerNum);
+		// console.log('joiners player index and num set', playerIndex, playerNum);
 		// }
 
 		food.x = response.newPosition.x;
 		food.y = response.newPosition.y;
-		console.log('food position set at: ', food);
-		console.log('response: ', response);
 
 		// if (numPlayers.count === 2) { to make it dynamic set 2 to input value by creator
 		// if (response.game.clients.length === numPlayers.count) {
@@ -128,7 +126,7 @@ ws.onmessage = (msg) => {
 	} else if (response.method === 'move') {
 		// console.log('opponent moved: ', response);
 
-		console.log('oppnent last inputs: ', response.lastInput);
+		// console.log('oppnent last inputs: ', response.lastInput);
 
 		const opponentIndex = response.playerNum - 1;
 
