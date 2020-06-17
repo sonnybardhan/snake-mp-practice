@@ -1,7 +1,6 @@
 let HOST = 'ws://localhost:9090';
 export const ws = new WebSocket(HOST);
 import { SPEED, update as updateSnake, draw as drawSnake, snakes } from './snake.js';
-// import { SPEED, newUpdate as updateSnake, draw as drawSnake } from './snake.js';
 import { update as updateFood, draw as drawFood, food, lastConsumer } from './food.js';
 import { directions, lastInputs } from './input.js';
 
@@ -96,31 +95,15 @@ ws.onmessage = (msg) => {
 	} else if (response.method === 'move') {
 		// console.log('opponent moved: ', response);
 		const opponentIndex = response.playerNum - 1;
-		// console.log('index of player that moved: ', opponentIndex);
-		// console.log('opp co-ods: ', response.direction);
+
 		directions[opponentIndex].x = response.direction.x;
 		directions[opponentIndex].y = response.direction.y;
 
-		//relay snake body
-		console.log('opponent snake: ', response.snake);
-
 		const oppSnake = snakes[opponentIndex];
 		const newSnake = response.snake;
-
-		// if(oppSnake.length !== newSnake.length){
-		// 	const diff = newSnake.length - oppSnake.length;
-		// 	for(let i = 0; i<diff; i++){
-		// 		oppSnake.push({});
-		// 	}
-		// }
-
 		for (let i = 0; i < newSnake.length; i++) {
 			oppSnake[i] = { ...newSnake[i] };
 		}
-		console.log('Updates snake!', oppSnake);
-		// oppSnake = [ ...updatedSnake ];
-		// console.log('opponents snake len: ', oppSnake.length);
-		// console.log('updateSnake len: ', updatedSnake.length);
 	} else if (response.method === 'error') {
 		console.log('There was an error!', response.msg);
 	}
@@ -167,14 +150,7 @@ ws.onerror = (e) => console.log('Oop! ', e);
 
 //game logic=====================
 
-//elements from the start screen
-
-//ignore this during development
-
 let paused = true;
-
-//in game elements
-
 let lastRender = 0;
 
 function main(currentTime) {

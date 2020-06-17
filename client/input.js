@@ -16,28 +16,28 @@ window.addEventListener('keydown', ({ key }) => {
 	// console.log(key);
 	switch (key) {
 		case 'ArrowUp':
-			if (lastInputs[playerNum - 1] === 'ArrowDown') return;
-			directions[playerNum - 1] = { x: -1, y: 0 };
-			lastInputs[playerNum - 1] = 'ArrowUp';
-			send(clientId, gameId, directions[playerNum - 1], lastInputs[playerNum - 1], playerNum);
+			if (lastInputs[playerIndex] === 'ArrowDown') return;
+			directions[playerIndex] = { x: -1, y: 0 };
+			lastInputs[playerIndex] = 'ArrowUp';
+			send(clientId, gameId, directions[playerIndex], lastInputs[playerIndex], playerNum);
 			break;
 		case 'ArrowDown':
-			if (lastInputs[playerNum - 1] === 'ArrowUp') return;
-			directions[playerNum - 1] = { x: 1, y: 0 };
-			lastInputs[playerNum - 1] = 'ArrowDown';
-			send(clientId, gameId, directions[playerNum - 1], lastInputs[playerNum - 1], playerNum);
+			if (lastInputs[playerIndex] === 'ArrowUp') return;
+			directions[playerIndex] = { x: 1, y: 0 };
+			lastInputs[playerIndex] = 'ArrowDown';
+			send(clientId, gameId, directions[playerIndex], lastInputs[playerIndex], playerNum);
 			break;
 		case 'ArrowLeft':
-			if (lastInputs[playerNum - 1] === 'ArrowRight') return;
-			directions[playerNum - 1] = { x: 0, y: -1 };
-			lastInputs[playerNum - 1] = 'ArrowLeft';
-			send(clientId, gameId, directions[playerNum - 1], lastInputs[playerNum - 1], playerNum);
+			if (lastInputs[playerIndex] === 'ArrowRight') return;
+			directions[playerIndex] = { x: 0, y: -1 };
+			lastInputs[playerIndex] = 'ArrowLeft';
+			send(clientId, gameId, directions[playerIndex], lastInputs[playerIndex], playerNum);
 			break;
 		case 'ArrowRight':
-			if (lastInputs[playerNum - 1] === 'ArrowLeft') return;
-			directions[playerNum - 1] = { x: 0, y: 1 };
-			lastInputs[playerNum - 1] = 'ArrowRight';
-			send(clientId, gameId, directions[playerNum - 1], lastInputs[playerNum - 1], playerNum);
+			if (lastInputs[playerIndex] === 'ArrowLeft') return;
+			directions[playerIndex] = { x: 0, y: 1 };
+			lastInputs[playerIndex] = 'ArrowRight';
+			send(clientId, gameId, directions[playerIndex], lastInputs[playerIndex], playerNum);
 			break;
 		case ' ':
 			start();
@@ -73,7 +73,6 @@ export function inputReset() {
 }
 
 function send(clientId, gameId, direction, lastInput, playerNum) {
-	// console.log(snakes[playerIndex]);
 	const payload = {
 		method: 'move',
 		clientId,

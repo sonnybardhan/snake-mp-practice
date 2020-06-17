@@ -20,7 +20,7 @@ wss.on('request', (req) => {
 
 	console.log('client made a request ... ');
 	//on client's initial request
-	const clientId = 'PLAYER-' + createId();
+	const clientId = createId();
 	clients[clientId] = { connection };
 	const payload = {
 		method: 'connect',
@@ -34,7 +34,7 @@ wss.on('request', (req) => {
 
 		if (response.method === 'create') {
 			const clientId = response.clientId;
-			const gameId = createId() + createId();
+			const gameId = createId(8);
 			let playerName = response.playerName;
 			// let playerIndex = 0;
 
