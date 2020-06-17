@@ -1,6 +1,7 @@
-import { start, ws, clientId, gameId, playerNum, playerIndex, homeScreen, game } from './game.js';
+import { start, ws, clientId, gameId, playerNum, playerIndex, game } from './game.js';
 import { snakes, reset } from './snake.js';
-export let numPlayers = 2;
+export let numPlayers = { count: 2 };
+// export let numPlayers = 2;
 
 const S1_DIR = { x: 0, y: 1 }; // left
 const S2_DIR = { x: 0, y: -1 }; //right
@@ -40,6 +41,8 @@ window.addEventListener('keydown', ({ key }) => {
 			send(clientId, gameId, directions[playerIndex], lastInputs[playerIndex], playerNum);
 			break;
 		case ' ':
+			console.log('game: ', game);
+			console.log('numplayers: ', numPlayers);
 			start();
 			break;
 		case 'Escape':
@@ -52,7 +55,8 @@ window.addEventListener('keydown', ({ key }) => {
 function populateDirections() {
 	const newDirections = [];
 
-	for (let i = 0; i < numPlayers; i++) {
+	for (let i = 0; i < numPlayers.count; i++) {
+		// for (let i = 0; i < numPlayers; i++) {
 		const direction = INIT_DIR[i];
 		newDirections.push({ ...direction });
 	}
@@ -61,7 +65,8 @@ function populateDirections() {
 
 function populateInputs() {
 	const inputs = [];
-	for (let i = 0; i < numPlayers; i++) {
+	for (let i = 0; i < numPlayers.count; i++) {
+		// for (let i = 0; i < numPlayers; i++) {
 		const input = INIT_INPUTS[i];
 		inputs.push(input);
 	}

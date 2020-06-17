@@ -1,8 +1,8 @@
 let HOST = 'ws://localhost:9090';
 export const ws = new WebSocket(HOST);
-import { SPEED, update as updateSnake, draw as drawSnake, snakes } from './snake.js';
+import { SPEED, update as updateSnake, draw as drawSnake, snakes, reset } from './snake.js';
 import { update as updateFood, draw as drawFood, food, lastConsumer } from './food.js';
-import { directions, lastInputs } from './input.js';
+import { directions, numPlayers } from './input.js';
 
 const nameInput = document.getElementById('name-input');
 const gameIdInput = document.getElementById('game-id-input');
@@ -42,11 +42,14 @@ ws.onmessage = (msg) => {
 	} else if (response.method === 'create') {
 		console.log('server sent a message: ', response);
 		gameId = response.game.id;
+
 		gameIdInput.value = gameId;
 
-		gameIdSpan.innerText = gameId;
-		landingScreen.style.zIndex = -1;
-		waitScreen.style.zIndex = 4;
+		// gameIdSpan.innerText = gameId;
+		// landingScreen.style.zIndex = -1;
+		// waitScreen.style.zIndex = 4;
+
+		waitingScreen('WAITING FOR OPPONENTS ... ', gameId, '[ESC] to quit');
 		// console.log('gameId: ', gameId);
 		console.log('Creators player index and num set', playerIndex, playerNum);
 		playerNum = 1;
@@ -55,8 +58,11 @@ ws.onmessage = (msg) => {
 	} else if (response.method === 'join') {
 		// console.log('server sent a message: player joined!', response);
 		// console.log('num of players: ', response.game.clients.length);
-		const numPlayers = response.game.clients.length;
 
+		// const numPlayers = response.game.clients.length;
+		numPlayers.count = response.game.clients.length;
+		console.log('resetting numplayers.count on join: ', numPlayers.count);
+		console.log('num of players: ', response.game.clients.length);
 		// if (!playerNum) {
 		const me = response.game.clients.find((client) => client.clientId === clientId);
 		playerNum = me.playerNum;
@@ -66,26 +72,50 @@ ws.onmessage = (msg) => {
 
 		food.x = response.newPosition.x;
 		food.y = response.newPosition.y;
+		console.log('food position set at: ', food);
+		console.log('response: ', response);
 
-		if (numPlayers === 2) {
+		// if (numPlayers.count === 2) { to make it dynamic set 2 to input value by creator
+		// if (response.game.clients.length === numPlayers.count) {
+		if (response.game.clients.length === 2) {
+			//starts the moment there are 2 players
+
 			gameId = response.game.id;
-			gameIdSpan.innerText = gameId;
-			landingScreen.style.zIndex = -1;
-			waitScreen.style.zIndex = 4;
-			waitMessageSpan.innerText = 'GAME STARTING ... ';
+
+			// gameIdSpan.innerText = gameId;
+
+			waitingScreen('GAME STARTING ... ', gameId, '[ESC] to quit');
+
+			// landingScreen.style.zIndex = -1;
+			// waitScreen.style.zIndex = 4;
+			// waitMessageSpan.innerText = 'GAME STARTING ... ';
 
 			// console.log('food position is: ', foodPosition);
 			//set interval stuff
 			// let prevId;
 			let time = 3;
 			let id = setInterval(() => {
-				waitMessageSpan.innerText = `STARTING IN ${time--}`;
+				// waitMessageSpan.innerText = `STARTING IN ${time--}`;
+				waitingScreen(`STARTING IN ${time--}`, '', '[ESC] to quit');
+
 				if (time < 0) {
 					clearInterval(id);
-					waitMessageSpan.innerText = 'PAUSED';
+					// waitMessageSpan.innerText = 'PAUSED';
+					// waitingScreen();
+					playScreen();
 					start();
 				}
 			}, 200);
+			// let id = setInterval(() => {
+			// 	waitMessageSpan.innerText = `STARTING IN ${time--}`;
+			// 	// waitMessageSpan()
+
+			// 	if (time < 0) {
+			// 		clearInterval(id);
+			// 		waitMessageSpan.innerText = 'PAUSED';
+			// 		start();
+			// 	}
+			// }, 200);
 		}
 	} else if (response.method === 'play') {
 	} else if (response.method === 'consume') {
@@ -97,6 +127,9 @@ ws.onmessage = (msg) => {
 		console.log(`last consumer: ${response.lastConsumer.id}`);
 	} else if (response.method === 'move') {
 		// console.log('opponent moved: ', response);
+
+		console.log('oppnent last inputs: ', response.lastInput);
+
 		const opponentIndex = response.playerNum - 1;
 
 		directions[opponentIndex].x = response.direction.x;
@@ -109,6 +142,7 @@ ws.onmessage = (msg) => {
 		}
 	} else if (response.method === 'error') {
 		console.log('There was an error!', response.msg);
+		reset();
 	}
 };
 
@@ -240,7 +274,10 @@ export function stopScreen() {
 	landingScreen.style.zIndex = 2;
 	waitScreen.style.zIndex = 1;
 }
-export function waitingScreen() {
+export function waitingScreen(banner = '', gameId = '', esc = '') {
+	waitMessageSpan.innerText = banner;
+	gameIdSpan.innerText = gameId;
+	escapeMessageSpan.innerText = esc;
 	waitScreen.style.zIndex = 3;
 	gameBoard.style.zIndex = 2;
 	landingScreen.style.zIndex = 1;

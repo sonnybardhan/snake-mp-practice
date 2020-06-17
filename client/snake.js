@@ -42,7 +42,16 @@ function update() {
 
 		const newHead = { ...snake[0] }; //first item in array is head
 
-		if (collided(snake, directions[i]) || outOfBounds(snake, directions[i])) {
+		// if (collided(snake, directions[i]) || outOfBounds(snake, directions[i])) {
+		// 	console.log(`crash`);
+		// 	return reset();
+		// }
+
+		if (collided(snake, directions[i])) {
+			console.log('collision');
+			return reset();
+		} else if (outOfBounds(snake, directions[i])) {
+			console.log('out of bounds');
 			return reset();
 		} else {
 			newHead.x += directions[i].x;
@@ -106,9 +115,13 @@ function outOfBounds(snake, direction) {
 function collided(snake, direction) {
 	const head = snake[0];
 	const rest = snake.slice(1);
+	console.log('head: ', head);
+	console.log('rest: ', rest);
 
 	const newX = head.x + direction.x;
 	const newY = head.y + direction.y;
+
+	console.log(newX, newY);
 
 	return rest.some((segment) => {
 		return newX === segment.x && newY === segment.y;
@@ -126,8 +139,8 @@ export function reset() {
 function populateSnakeArray() {
 	const newSnakes = [];
 
-	for (let i = 0; i < numPlayers; i++) {
-		if (numPlayers === 2 && i === 1) i++; //to ensure diagnals are populated
+	for (let i = 0; i < numPlayers.count; i++) {
+		if (numPlayers.count === 2 && i === 1) i++; //to ensure diagnals are populated
 
 		const newSnake = [];
 		const snake = INIT_SNAKES[i];
