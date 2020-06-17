@@ -190,6 +190,7 @@ export function start() {
 			break;
 		case 'stop':
 			// stopScreen();
+			console.log('Stop does nothing');
 			break;
 		case 'wait':
 			// waitScreen();
@@ -220,7 +221,7 @@ export function start() {
 			// defaultScreen();
 			break;
 	}
-	requestAnimationFrame(main);
+	requestAnimationFrame(main); //is this the best place to put it? try returning
 }
 
 function update() {
