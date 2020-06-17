@@ -6,7 +6,7 @@ export let food = { x: 3, y: 8 };
 
 export let lastConsumer = '';
 
-export async function update() {
+export function update() {
 	if (consumed()) {
 		const payload = {
 			method: 'consume',
@@ -14,7 +14,7 @@ export async function update() {
 			gameId
 		};
 
-		await ws.send(JSON.stringify(payload));
+		ws.send(JSON.stringify(payload));
 	} else {
 		lastConsumer = '';
 	}

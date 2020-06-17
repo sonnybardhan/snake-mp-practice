@@ -3,24 +3,12 @@ import { directions, inputReset, numPlayers } from './input.js';
 import { start } from './game.js';
 const SPEED = 2;
 
-/*
-user enters number of players, build snake runs a loop to that number
-
-*/
-
 const INIT_SNAKES = [
 	[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ], //y: 1 right
 	[ { x: 5, y: 17 }, { x: 5, y: 18 }, { x: 5, y: 19 } ], //y: -1 left
 	[ { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 } ], //y: -1 left
 	[ { x: 15, y: 5 }, { x: 15, y: 4 }, { x: 15, y: 3 } ] //y:1 right
 ];
-
-// const S1_DIR = { x: 0, y: -1 }; // left
-// const S2_DIR = { x: 0, y: 1 }; //right
-// const S3_DIR = { x: 0, y: -1 }; //left
-// const S4_DIR = { x: 0, y: 1 }; //right
-
-// const INIT_INPUTS = ['ArrowLeft', 'd', 'ArrowLeft', 'd'];
 
 let snakes = populateSnakeArray();
 

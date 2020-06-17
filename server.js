@@ -36,7 +36,7 @@ wss.on('request', (req) => {
 			const clientId = response.clientId;
 			const gameId = 'GAME-' + createId();
 			let playerName = response.playerName;
-			let playerIndex = 0;
+			// let playerIndex = 0;
 
 			console.log(`client ${clientId} wants to create a new game`);
 
@@ -55,6 +55,7 @@ wss.on('request', (req) => {
 			game.clients.push({
 				clientId,
 				playerName,
+				playerNum: 1,
 				score: 0
 			});
 
@@ -107,14 +108,17 @@ wss.on('request', (req) => {
 				return con.send(JSON.stringify(payload));
 			}
 
+			const playerNum = game.clients.length + 1;
+
 			if (!playerName) {
-				playerName = 'Player-' + (game.clients.length + 1);
+				playerName = 'Player-' + playerNum;
 			}
 
 			game.clients.push({
 				clientId,
 				playerName,
-				score: 0
+				score: 0,
+				playerNum
 			});
 
 			let newPosition = randomPosition();
@@ -146,6 +150,26 @@ wss.on('request', (req) => {
 
 			game.clients.forEach((client) => {
 				clients[client.clientId].connection.send(JSON.stringify(payload));
+			});
+		} else if (response.method === 'move') {
+			const clientId = response.clientId;
+			const gameId = response.gameId;
+			const game = games[gameId];
+			const direction = response.direction;
+			const lastInput = response.lastInput;
+
+			// console.log(`client ${clientId} moved ${lastInput}. New heading: x: ${direction.x} y: ${direction.y}`);
+			const payload = {
+				method: 'move',
+				clientId,
+				direction,
+				lastInput
+			};
+			//send to all but sender
+			game.clients.forEach((client) => {
+				if (client.clientId !== clientId) {
+					clients[client.clientId].connection.send(JSON.stringify(payload));
+				}
 			});
 		}
 	});
