@@ -34,7 +34,7 @@ wss.on('request', (req) => {
 
 		if (response.method === 'create') {
 			const clientId = response.clientId;
-			const gameId = 'GAME-' + createId();
+			const gameId = createId() + createId();
 			let playerName = response.playerName;
 			// let playerIndex = 0;
 
@@ -154,6 +154,7 @@ wss.on('request', (req) => {
 		} else if (response.method === 'move') {
 			const clientId = response.clientId;
 			const gameId = response.gameId;
+			const playerNum = response.playerNum;
 			const game = games[gameId];
 			const direction = response.direction;
 			const lastInput = response.lastInput;
@@ -162,9 +163,12 @@ wss.on('request', (req) => {
 			const payload = {
 				method: 'move',
 				clientId,
+				playerNum,
 				direction,
 				lastInput
+				//send snake body
 			};
+
 			//send to all but sender
 			game.clients.forEach((client) => {
 				if (client.clientId !== clientId) {

@@ -1,7 +1,7 @@
 let HOST = 'ws://localhost:9090';
 export const ws = new WebSocket(HOST);
 import { SPEED, update as updateSnake, draw as drawSnake } from './snake.js';
-import { update as updateFood, draw as drawFood, food } from './food.js';
+import { update as updateFood, draw as drawFood, food, lastConsumer } from './food.js';
 import { directions, lastInputs } from './input.js';
 
 const nameInput = document.getElementById('name-input');
@@ -44,22 +44,24 @@ ws.onmessage = (msg) => {
 		waitScreen.style.zIndex = 4;
 		console.log('gameId: ', gameId);
 		playerNum = 1;
-		//this should implicitly 'join' the creator
+
 		//generate a time out
 	} else if (response.method === 'join') {
 		console.log('server sent a message: player joined!', response);
 		console.log('num of players: ', response.game.clients.length);
 		const numPlayers = response.game.clients.length;
 
-		const me = response.game.clients.find((client) => client.clientId === clientId);
-		console.log('my number: ', me.playerNum);
-		// foodPosition = { ...response.position };
-		// console.log(foodPosition);
+		if (!playerNum) {
+			const me = response.game.clients.find((client) => client.clientId === clientId);
+			playerNum = me.playerNum;
+			console.log('Player num created! my number: ', me.playerNum);
+		} else {
+			console.log('Playernum exists: ', playerNum);
+		}
 
 		food.x = response.newPosition.x;
 		food.y = response.newPosition.y;
 
-		// console.log('new food position set on join: ', food);
 		if (numPlayers === 2) {
 			gameId = response.game.id;
 			gameIdSpan.innerText = gameId;
@@ -97,6 +99,15 @@ ws.onmessage = (msg) => {
 		// drawFood(gameBoard);
 	} else if (response.method === 'move') {
 		// console.log('opponent moved: ', response);
+		const opponentIndex = response.playerNum - 1;
+		// console.log('index of player that moved: ', opponentIndex);
+		// console.log('opp co-ods: ', response.direction);
+		directions[opponentIndex].x = response.direction.x;
+		directions[opponentIndex].y = response.direction.y;
+
+		//relay snake body
+
+		// direction[playerNum-1] = response.newPosition;
 	} else if (response.method === 'error') {
 		console.log('There was an error!', response.msg);
 	}

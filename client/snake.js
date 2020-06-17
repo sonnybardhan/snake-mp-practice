@@ -1,7 +1,7 @@
 import { lastConsumer } from './food.js';
 import { directions, inputReset, numPlayers } from './input.js';
 import { start } from './game.js';
-const SPEED = 2;
+const SPEED = 1;
 
 const INIT_SNAKES = [
 	[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ], //y: 1 right
@@ -19,7 +19,7 @@ function draw(gameBoard) {
 			snakeSegment.style.gridRowStart = x;
 			snakeSegment.style.gridColumnStart = y;
 
-			let head = false;
+			// let head = false;
 
 			if (index === 0) {
 				snakeSegment.classList.add(`snake-head-${i + 1}`);
@@ -62,6 +62,8 @@ function update() {
 			snake.pop(); //remove tail
 		}
 	}
+	//send snake position ignore opponent move
+	console.log();
 }
 
 function outOfBounds(snake, direction) {

@@ -1,6 +1,6 @@
-import { start, backToLanding, ws, clientId, gameId } from './game.js';
+import { start, backToLanding, ws, clientId, gameId, playerNum } from './game.js';
 // import { reset } from './snake';
-export let numPlayers = 1;
+export let numPlayers = 2;
 
 const S1_DIR = { x: 0, y: 1 }; // left
 const S2_DIR = { x: 0, y: -1 }; //right
@@ -16,29 +16,55 @@ window.addEventListener('keydown', ({ key }) => {
 	// console.log(key);
 	switch (key) {
 		case 'ArrowUp':
-			if (lastInputs[0] === 'ArrowDown') return;
-			directions[0] = { x: -1, y: 0 };
-			lastInputs[0] = 'ArrowUp';
-			send(clientId, gameId, directions[0], lastInputs[0]);
+			if (lastInputs[playerNum - 1] === 'ArrowDown') return;
+			directions[playerNum - 1] = { x: -1, y: 0 };
+			lastInputs[playerNum - 1] = 'ArrowUp';
+			send(clientId, gameId, directions[playerNum - 1], lastInputs[playerNum - 1], playerNum);
 			break;
 		case 'ArrowDown':
-			if (lastInputs[0] === 'ArrowUp') return;
-			directions[0] = { x: 1, y: 0 };
-			lastInputs[0] = 'ArrowDown';
-			send(clientId, gameId, directions[0], lastInputs[0]);
+			if (lastInputs[playerNum - 1] === 'ArrowUp') return;
+			directions[playerNum - 1] = { x: 1, y: 0 };
+			lastInputs[playerNum - 1] = 'ArrowDown';
+			send(clientId, gameId, directions[playerNum - 1], lastInputs[playerNum - 1], playerNum);
 			break;
 		case 'ArrowLeft':
-			if (lastInputs[0] === 'ArrowRight') return;
-			directions[0] = { x: 0, y: -1 };
-			lastInputs[0] = 'ArrowLeft';
-			send(clientId, gameId, directions[0], lastInputs[0]);
+			if (lastInputs[playerNum - 1] === 'ArrowRight') return;
+			directions[playerNum - 1] = { x: 0, y: -1 };
+			lastInputs[playerNum - 1] = 'ArrowLeft';
+			send(clientId, gameId, directions[playerNum - 1], lastInputs[playerNum - 1], playerNum);
 			break;
 		case 'ArrowRight':
-			if (lastInputs[0] === 'ArrowLeft') return;
-			directions[0] = { x: 0, y: 1 };
-			lastInputs[0] = 'ArrowRight';
-			send(clientId, gameId, directions[0], lastInputs[0]);
+			if (lastInputs[playerNum - 1] === 'ArrowLeft') return;
+			directions[playerNum - 1] = { x: 0, y: 1 };
+			lastInputs[playerNum - 1] = 'ArrowRight';
+			send(clientId, gameId, directions[playerNum - 1], lastInputs[playerNum - 1], playerNum);
 			break;
+
+		// case 'ArrowUp':
+		// 	if (lastInputs[0] === 'ArrowDown') return;
+		// 	directions[0] = { x: -1, y: 0 };
+		// 	lastInputs[0] = 'ArrowUp';
+		// 	send(clientId, gameId, directions[0], lastInputs[0], playerNum);
+		// 	break;
+		// case 'ArrowDown':
+		// 	if (lastInputs[0] === 'ArrowUp') return;
+		// 	directions[0] = { x: 1, y: 0 };
+		// 	lastInputs[0] = 'ArrowDown';
+		// 	send(clientId, gameId, directions[0], lastInputs[0], playerNum);
+		// 	break;
+		// case 'ArrowLeft':
+		// 	if (lastInputs[0] === 'ArrowRight') return;
+		// 	directions[0] = { x: 0, y: -1 };
+		// 	lastInputs[0] = 'ArrowLeft';
+		// 	send(clientId, gameId, directions[0], lastInputs[0], playerNum);
+		// 	break;
+		// case 'ArrowRight':
+		// 	if (lastInputs[0] === 'ArrowLeft') return;
+		// 	directions[0] = { x: 0, y: 1 };
+		// 	lastInputs[0] = 'ArrowRight';
+		// 	send(clientId, gameId, directions[0], lastInputs[0], playerNum);
+		// 	break;
+
 		// case 'w':
 		// 	if (lastInputs[1] === 's') return;
 		// 	directions[1] = { x: -1, y: 0 };
@@ -63,6 +89,7 @@ window.addEventListener('keydown', ({ key }) => {
 		// 	lastInputs[1] = 'd';
 		// 	send(clientId, gameId, directions[1], lastInputs[1]);
 		// break;
+
 		case ' ':
 			start();
 			break;
@@ -96,13 +123,14 @@ export function inputReset() {
 	lastInputs = populateInputs();
 }
 
-function send(clientId, gameId, direction, lastInput) {
+function send(clientId, gameId, direction, lastInput, playerNum) {
 	const payload = {
 		method: 'move',
 		clientId,
 		gameId,
 		direction,
-		lastInput
+		lastInput,
+		playerNum
 	};
 	ws.send(JSON.stringify(payload));
 }
