@@ -1,6 +1,6 @@
 import { lastConsumer } from './food.js';
 import { directions, inputReset, numPlayers } from './input.js';
-import { start, playerNum, playerIndex, game, homeScreen } from './game.js';
+import { start, playerNum, playerIndex, game, homeScreen, ws, clientId, gameId } from './game.js';
 
 const SPEED = 1;
 
@@ -37,13 +37,14 @@ function draw(gameBoard) {
 
 function update() {
 	// return;
+
 	for (let i = 0; i < snakes.length; i++) {
 		let snake = snakes[i];
 
 		const newHead = { ...snake[0] }; //first item in array is head
 
 		if (collided(snake, directions[i]) || outOfBounds(snake, directions[i])) {
-			console.log(`crash`);
+			// console.log(`crash`);
 			return reset();
 		} else {
 			newHead.x += directions[i].x;
@@ -60,32 +61,46 @@ function update() {
 			snake.pop(); //remove tail
 		} else if (i === 3 && lastConsumer.id !== 3) {
 			snake.pop(); //remove tail
+		} else {
+			if (i === playerIndex && game.mode === 'multi') {
+				// console.log('snake grew! send signal');
+				// console.log(snake.length, snake);
+				const payload = {
+					method: 'grow',
+					clientId,
+					playerIndex,
+					gameId,
+					snake
+				};
+
+				ws.send(JSON.stringify(payload));
+			}
 		}
 	}
 	//send snake position ignore opponent move
 	// console.log();
 }
 
-function newUpdate() {
-	console.log('player index: ', playerIndex);
-	let snake = snakes[playerIndex];
-	const newHead = { ...snake[0] };
+// function newUpdate() {
+// 	console.log('player index: ', playerIndex);
+// 	let snake = snakes[playerIndex];
+// 	const newHead = { ...snake[0] };
 
-	if (collided(snake, directions[playerIndex]) || outOfBounds(snake, directions[playerIndex])) {
-		return reset();
-	} else {
-		newHead.x += directions[playerIndex].x;
-		newHead.y += directions[playerIndex].y;
-	}
+// 	if (collided(snake, directions[playerIndex]) || outOfBounds(snake, directions[playerIndex])) {
+// 		return reset();
+// 	} else {
+// 		newHead.x += directions[playerIndex].x;
+// 		newHead.y += directions[playerIndex].y;
+// 	}
 
-	newHead.x += directions[playerIndex].x;
-	newHead.y += directions[playerIndex].y;
-	snake.unshift(newHead);
+// 	newHead.x += directions[playerIndex].x;
+// 	newHead.y += directions[playerIndex].y;
+// 	snake.unshift(newHead);
 
-	if (playerNum !== lastConsumer) {
-		snake.pop();
-	}
-}
+// 	if (playerNum !== lastConsumer) {
+// 		snake.pop();
+// 	}
+// }
 
 function outOfBounds(snake, direction) {
 	const newHead = snake[0];
@@ -124,9 +139,9 @@ export function reset() {
 	game.mode = 'single';
 }
 
-function populateSnakeArray() {
+export function populateSnakeArray() {
 	const newSnakes = [];
-	console.log('numplayers count: ', numPlayers);
+	// console.log('numplayers count in popSnake array func: ', numPlayers.count);
 	for (let i = 0; i < numPlayers.count; i++) {
 		if (numPlayers.count === 2 && i === 1) i++; //to ensure diagnals are populated
 
@@ -141,3 +156,4 @@ function populateSnakeArray() {
 	return newSnakes;
 }
 export { SPEED, update, draw, snakes };
+// export { SPEED, draw, snakes, newUpdate };

@@ -20,29 +20,31 @@ window.addEventListener('keydown', ({ key }) => {
 			if (lastInputs[playerIndex] === 'ArrowDown') return;
 			directions[playerIndex] = { x: -1, y: 0 };
 			lastInputs[playerIndex] = 'ArrowUp';
-			send(clientId, gameId, directions[playerIndex], lastInputs[playerIndex], playerNum);
+			send(clientId, gameId, directions[playerIndex], lastInputs[playerIndex], playerIndex);
 			break;
 		case 'ArrowDown':
 			if (lastInputs[playerIndex] === 'ArrowUp') return;
 			directions[playerIndex] = { x: 1, y: 0 };
 			lastInputs[playerIndex] = 'ArrowDown';
-			send(clientId, gameId, directions[playerIndex], lastInputs[playerIndex], playerNum);
+			send(clientId, gameId, directions[playerIndex], lastInputs[playerIndex], playerIndex);
 			break;
 		case 'ArrowLeft':
 			if (lastInputs[playerIndex] === 'ArrowRight') return;
 			directions[playerIndex] = { x: 0, y: -1 };
 			lastInputs[playerIndex] = 'ArrowLeft';
-			send(clientId, gameId, directions[playerIndex], lastInputs[playerIndex], playerNum);
+			send(clientId, gameId, directions[playerIndex], lastInputs[playerIndex], playerIndex);
 			break;
 		case 'ArrowRight':
 			if (lastInputs[playerIndex] === 'ArrowLeft') return;
 			directions[playerIndex] = { x: 0, y: 1 };
 			lastInputs[playerIndex] = 'ArrowRight';
-			send(clientId, gameId, directions[playerIndex], lastInputs[playerIndex], playerNum);
+			send(clientId, gameId, directions[playerIndex], lastInputs[playerIndex], playerIndex);
 			break;
 		case ' ':
-			console.log('game: ', game);
-			console.log('numplayers: ', numPlayers);
+			if (game.mode === 'single' && game.status === 'landing') {
+				snakes.splice(1);
+			}
+
 			start();
 			break;
 		case 'Escape':
@@ -51,6 +53,42 @@ window.addEventListener('keydown', ({ key }) => {
 			break;
 	}
 });
+// window.addEventListener('keydown', ({ key }) => {
+// 	// console.log(key);
+// 	switch (key) {
+// 		case 'ArrowUp':
+// 			if (lastInputs[playerIndex] === 'ArrowDown') return;
+// 			directions[playerIndex] = { x: -1, y: 0 };
+// 			lastInputs[playerIndex] = 'ArrowUp';
+// 			send(clientId, gameId, directions[playerIndex], lastInputs[playerIndex], playerNum);
+// 			break;
+// 		case 'ArrowDown':
+// 			if (lastInputs[playerIndex] === 'ArrowUp') return;
+// 			directions[playerIndex] = { x: 1, y: 0 };
+// 			lastInputs[playerIndex] = 'ArrowDown';
+// 			send(clientId, gameId, directions[playerIndex], lastInputs[playerIndex], playerNum);
+// 			break;
+// 		case 'ArrowLeft':
+// 			if (lastInputs[playerIndex] === 'ArrowRight') return;
+// 			directions[playerIndex] = { x: 0, y: -1 };
+// 			lastInputs[playerIndex] = 'ArrowLeft';
+// 			send(clientId, gameId, directions[playerIndex], lastInputs[playerIndex], playerNum);
+// 			break;
+// 		case 'ArrowRight':
+// 			if (lastInputs[playerIndex] === 'ArrowLeft') return;
+// 			directions[playerIndex] = { x: 0, y: 1 };
+// 			lastInputs[playerIndex] = 'ArrowRight';
+// 			send(clientId, gameId, directions[playerIndex], lastInputs[playerIndex], playerNum);
+// 			break;
+// 		case ' ':
+// 			start();
+// 			break;
+// 		case 'Escape':
+// 			reset();
+// 			//check for game mode multiplayer, if so, send message to disconnect client
+// 			break;
+// 	}
+// });
 
 function populateDirections() {
 	const newDirections = [];
@@ -78,15 +116,29 @@ export function inputReset() {
 	lastInputs = populateInputs();
 }
 
-function send(clientId, gameId, direction, lastInput, playerNum) {
-	const payload = {
-		method: 'move',
-		clientId,
-		gameId,
-		direction,
-		lastInput,
-		playerNum,
-		snake: snakes[playerIndex]
-	};
-	ws.send(JSON.stringify(payload));
+function send(clientId, gameId, direction, lastInput, playerIndex) {
+	if (game.mode === 'multi') {
+		const payload = {
+			method: 'move',
+			clientId,
+			gameId,
+			direction,
+			lastInput,
+			playerIndex,
+			snake: snakes[playerIndex]
+		};
+		ws.send(JSON.stringify(payload));
+	}
 }
+// function send(clientId, gameId, direction, lastInput, playerNum) {
+// 	const payload = {
+// 		method: 'move',
+// 		clientId,
+// 		gameId,
+// 		direction,
+// 		lastInput,
+// 		playerNum,
+// 		snake: snakes[playerIndex]
+// 	};
+// 	ws.send(JSON.stringify(payload));
+// }

@@ -26,17 +26,19 @@ export let lastConsumer = { id: null };
 export function update() {
 	if (newConsumed() && game.mode === 'multi') {
 		lastConsumer.id = playerIndex;
-		console.log('new update works - ', lastConsumer.id);
+		// console.log('new update works - ', lastConsumer.id);
 		const payload = {
 			method: 'consume',
 			clientId,
 			gameId,
 			lastConsumer
+			// snake: snakes[playerIndex]
 		};
 
 		ws.send(JSON.stringify(payload));
 	} else if (newConsumed() && game.mode === 'single') {
 		lastConsumer.id = playerIndex;
+		food = randomPosition();
 	} else {
 		lastConsumer.id = null;
 	}
@@ -80,7 +82,10 @@ export function draw(gameBoard) {
 // }
 
 export function newConsumed() {
-	let snake = snakes[playerIndex];
+	let i = game.mode === 'single' ? 0 : playerIndex;
+
+	// let snake = snakes[playerIndex];
+	let snake = snakes[i];
 	if (snake[0].x === food.x && snake[0].y === food.y) {
 		return true;
 	}
@@ -97,3 +102,10 @@ export function newConsumed() {
 // 	}
 // 	return false;
 // }
+
+function randomPosition() {
+	return {
+		x: (Math.random() * 21 + 1) | 0,
+		y: (Math.random() * 21 + 1) | 0
+	};
+}

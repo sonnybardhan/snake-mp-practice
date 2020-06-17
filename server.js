@@ -96,6 +96,13 @@ wss.on('request', (req) => {
 				};
 				return con.send(JSON.stringify(payload));
 			}
+			// if (game.clients.length >= 2) {
+			// 	const payload = {
+			// 		method: 'error',
+			// 		msg: 'Sorry max players reached'
+			// 	};
+			// 	return con.send(JSON.stringify(payload));
+			// }
 
 			//check if player is already in game
 			playerIndex = game.clients.indexOf(clientId);
@@ -145,8 +152,8 @@ wss.on('request', (req) => {
 			const payload = {
 				method: 'consume',
 				lastConsumer,
-				newPosition,
-				game
+				newPosition
+				// game
 			};
 
 			console.log('last consumer', lastConsumer);
@@ -154,10 +161,29 @@ wss.on('request', (req) => {
 			game.clients.forEach((client) => {
 				clients[client.clientId].connection.send(JSON.stringify(payload));
 			});
+		} else if (response.method === 'grow') {
+			const clientId = response.clientId;
+			const gameId = response.gameId;
+			const playerIndex = response.playerIndex;
+			const game = games[gameId];
+			const snake = response.snake;
+
+			const payload = {
+				method: 'grow',
+				// clientId,
+				playerIndex,
+				snake
+			};
+
+			game.clients.forEach((client) => {
+				if (client.clientId !== clientId) {
+					clients[client.clientId].connection.send(JSON.stringify(payload));
+				}
+			});
 		} else if (response.method === 'move') {
 			const clientId = response.clientId;
 			const gameId = response.gameId;
-			const playerNum = response.playerNum;
+			const playerIndex = response.playerIndex;
 			const game = games[gameId];
 			const snake = response.snake;
 			const direction = response.direction;
@@ -166,10 +192,10 @@ wss.on('request', (req) => {
 			// console.log(`client ${clientId} moved ${lastInput}. New heading: x: ${direction.x} y: ${direction.y}`);
 			const payload = {
 				method: 'move',
-				clientId,
-				playerNum,
+				// clientId, //not needed
+				playerIndex,
 				direction,
-				lastInput,
+				// lastInput, //not needed
 				snake
 				//send snake body
 			};

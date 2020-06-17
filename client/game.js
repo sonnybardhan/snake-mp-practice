@@ -1,6 +1,7 @@
 let HOST = 'ws://localhost:9090';
 export const ws = new WebSocket(HOST);
 import { SPEED, update as updateSnake, draw as drawSnake, snakes, reset } from './snake.js';
+// import { SPEED, newUpdate as updateSnake, draw as drawSnake, snakes, reset } from './snake.js';
 import { update as updateFood, draw as drawFood, food, lastConsumer } from './food.js';
 import { directions, numPlayers } from './input.js';
 
@@ -16,7 +17,6 @@ const gameIdSpan = document.getElementById('game-id-span');
 const escapeMessageSpan = document.getElementById('escape-message-span');
 // const cancelBtn = document.getElementById('cancel-btn');
 // export const overlay = document.getElementById('overlay');
-// main game element
 const gameBoard = document.getElementById('game-board');
 
 export let foodPosition = {};
@@ -62,7 +62,12 @@ ws.onmessage = (msg) => {
 		// const numPlayers = response.game.clients.length;
 		numPlayers.count = response.game.clients.length;
 		console.log('resetting numplayers.count on join: ', numPlayers.count);
-		console.log('num of players: ', response.game.clients.length);
+
+		console.log('num of players post join: ', numPlayers.count);
+
+		// populateSnakeArray();
+		// console.log('re-populating snake array on rejoin: ', snakes);
+
 		// if (!playerNum) {
 		const me = response.game.clients.find((client) => client.clientId === clientId);
 		playerNum = me.playerNum;
@@ -122,13 +127,20 @@ ws.onmessage = (msg) => {
 		lastConsumer.id = response.lastConsumer.id;
 		// const test = 'player ' + response.lastConsumer;
 
-		console.log(`last consumer: ${response.lastConsumer.id}`);
+		// const opponentIndex = response.lastConsumer.id;
+		// const oppSnake = snakes[opponentIndex];
+		// const newSnake = response.snake;
+		// for (let i = 0; i < newSnake.length; i++) {
+		// 	oppSnake[i] = { ...newSnake[i] };
+		// }
+		// console.log('re-laid opp snake on consume: ', oppSnake);
+		// console.log(`last consumer: ${response.lastConsumer.id}`);
 	} else if (response.method === 'move') {
 		// console.log('opponent moved: ', response);
 
 		// console.log('oppnent last inputs: ', response.lastInput);
 
-		const opponentIndex = response.playerNum - 1;
+		const opponentIndex = response.playerIndex;
 
 		directions[opponentIndex].x = response.direction.x;
 		directions[opponentIndex].y = response.direction.y;
@@ -138,6 +150,15 @@ ws.onmessage = (msg) => {
 		for (let i = 0; i < newSnake.length; i++) {
 			oppSnake[i] = { ...newSnake[i] };
 		}
+	} else if (response.method === 'grow') {
+		const opponentIndex = response.playerIndex;
+		const oppSnake = snakes[opponentIndex];
+		const newSnake = response.snake;
+		for (let i = 0; i < newSnake.length; i++) {
+			oppSnake[i] = { ...newSnake[i] };
+		}
+		console.log('re-laid opp snake GROW: ', oppSnake);
+		console.log(`opponents number: grew -> player-${opponentIndex + 1}`);
 	} else if (response.method === 'error') {
 		console.log('There was an error!', response.msg);
 		reset();
@@ -257,14 +278,14 @@ export function start() {
 }
 
 function update() {
-	updateSnake();
 	updateFood();
+	updateSnake();
 }
 
 function draw() {
 	gameBoard.innerHTML = '';
-	drawSnake(gameBoard);
 	drawFood(gameBoard);
+	drawSnake(gameBoard);
 }
 
 export function stopScreen() {
