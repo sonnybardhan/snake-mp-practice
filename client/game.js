@@ -13,6 +13,7 @@ const landingScreen = document.getElementById('landing');
 const waitScreen = document.getElementById('wait-screen');
 const waitMessageSpan = document.getElementById('wait-message-span');
 const gameIdSpan = document.getElementById('game-id-span');
+const escapeMessageSpan = document.getElementById('escape-message-span');
 // const cancelBtn = document.getElementById('cancel-btn');
 // export const overlay = document.getElementById('overlay');
 // main game element
@@ -25,8 +26,10 @@ export let gameId = null;
 export let playerName = null;
 export let playerNum = 1;
 export let playerIndex = 0;
-// let gameStatus = '';
-// let inPlay = false;
+
+//stop, wait, starting, play, pause, gameOver
+export let game = { status: 'landing', mode: 'single' };
+// export let inPlay = false;
 
 ws.onopen = (e) => console.log('connected to server');
 
@@ -117,6 +120,7 @@ createBtn.addEventListener('click', () => {
 		playerName
 	};
 	ws.send(JSON.stringify(payload));
+	game.mode = 'multi';
 });
 
 joinBtn.addEventListener('click', () => {
@@ -140,21 +144,22 @@ joinBtn.addEventListener('click', () => {
 
 // cancelBtn.addEventListener('click', () => {
 // });
-export function backToLanding() {
-	landingScreen.style.zIndex = 4;
-	waitScreen.style.zIndex = -1;
-}
+// export function backToLanding() {
+// 	landingScreen.style.zIndex = 4;
+// 	waitScreen.style.zIndex = -1;
+// }
 
 ws.onclose = (e) => console.log('disconnected from server');
 ws.onerror = (e) => console.log('Oop! ', e);
 
 //game logic=====================
 
-let paused = true;
+// let paused = true;
 let lastRender = 0;
 
 function main(currentTime) {
-	if (paused) return;
+	// if (paused) return;
+	if (game.status !== 'play') return;
 	requestAnimationFrame(main);
 	const delta = (currentTime - lastRender) / 1000;
 	if (delta < 1 / SPEED) return;
@@ -174,27 +179,61 @@ function main(currentTime) {
 // 		overlay.style.display = 'none';
 // 	}
 // }
-export function start(gameOver = false) {
-	paused = !paused;
-	requestAnimationFrame(main);
 
-	if (!gameOver) {
-		// overlay.style.display = 'none';
-		if (paused) {
-			landingScreen.style.zIndex = 1;
-			gameBoard.style.zIndex = 2;
-			waitScreen.style.zIndex = 3;
-		} else {
-			landingScreen.style.zIndex = 2;
-			waitScreen.style.zIndex = 1;
-			gameBoard.style.zIndex = 3;
-		}
-	} else {
-		landingScreen.style.zIndex = 3;
-		gameBoard.style.zIndex = 2;
-		waitScreen.style.zIndex = 1;
+//trial
+export function start() {
+	switch (game.status) {
+		case 'landing':
+			game.status = 'play';
+			playScreen();
+			break;
+		case 'stop':
+			// stopScreen();
+			break;
+		case 'wait':
+			// waitScreen();
+			break;
+		case 'starting':
+			// startingScreen();
+			break;
+		case 'play':
+			game.status = 'pause';
+			pauseScreen();
+			break;
+		case 'pause':
+			game.status = 'play';
+			playScreen();
+			break;
+		case 'gameOver':
+			// gameOverScreen();
+			break;
+		default:
+			// defaultScreen();
+			break;
 	}
+	requestAnimationFrame(main);
 }
+// export function start(gameOver = false) {
+// 	paused = !paused;
+// 	requestAnimationFrame(main);
+
+// 	if (!gameOver) {
+// 		// overlay.style.display = 'none';
+// 		if (paused) {
+// 			landingScreen.style.zIndex = 1;
+// 			gameBoard.style.zIndex = 2;
+// 			waitScreen.style.zIndex = 3;
+// 		} else {
+// 			landingScreen.style.zIndex = 2;
+// 			waitScreen.style.zIndex = 1;
+// 			gameBoard.style.zIndex = 3;
+// 		}
+// 	} else {
+// 		landingScreen.style.zIndex = 3;
+// 		gameBoard.style.zIndex = 2;
+// 		waitScreen.style.zIndex = 1;
+// 	}
+// }
 
 function update() {
 	updateSnake();
@@ -205,4 +244,44 @@ function draw() {
 	gameBoard.innerHTML = '';
 	drawSnake(gameBoard);
 	drawFood(gameBoard);
+}
+
+export function stopScreen() {
+	gameBoard.style.zIndex = 3;
+	landingScreen.style.zIndex = 2;
+	waitScreen.style.zIndex = 1;
+}
+export function waitingScreen() {
+	waitScreen.style.zIndex = 3;
+	gameBoard.style.zIndex = 2;
+	landingScreen.style.zIndex = 1;
+}
+export function startingScreen() {
+	waitScreen.style.zIndex = 3;
+	gameBoard.style.zIndex = 2;
+	landingScreen.style.zIndex = 1;
+}
+export function playScreen() {
+	waitMessageSpan.innerText = ``;
+	escapeMessageSpan.innerText = ``;
+	gameBoard.style.zIndex = 3;
+	waitScreen.style.zIndex = 2;
+	landingScreen.style.zIndex = 1;
+}
+export function pauseScreen() {
+	waitMessageSpan.innerText = `[SPACE] to resume`;
+	escapeMessageSpan.innerText = `[ESC] to quit`;
+	waitScreen.style.zIndex = 3;
+	gameBoard.style.zIndex = 2;
+	landingScreen.style.zIndex = 1;
+}
+export function homeScreen() {
+	landingScreen.style.zIndex = 3;
+	waitScreen.style.zIndex = 2;
+	gameBoard.style.zIndex = 1;
+}
+export function defaultScreen() {
+	landingScreen.style.zIndex = 3;
+	waitScreen.style.zIndex = 2;
+	gameBoard.style.zIndex = 1;
 }

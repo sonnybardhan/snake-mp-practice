@@ -1,6 +1,7 @@
 import { lastConsumer } from './food.js';
 import { directions, inputReset, numPlayers } from './input.js';
-import { start, playerNum, playerIndex } from './game.js';
+import { start, playerNum, playerIndex, game, homeScreen } from './game.js';
+
 const SPEED = 1;
 
 const INIT_SNAKES = [
@@ -118,6 +119,8 @@ export function reset() {
 	snakes = populateSnakeArray();
 	inputReset();
 	// start(true);
+	game.status = 'stop';
+	homeScreen();
 	start();
 }
 

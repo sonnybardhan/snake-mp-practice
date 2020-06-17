@@ -1,4 +1,4 @@
-import { start, backToLanding, ws, clientId, gameId, playerNum, playerIndex } from './game.js';
+import { start, ws, clientId, gameId, playerNum, playerIndex, homeScreen, game } from './game.js';
 import { snakes } from './snake.js';
 export let numPlayers = 2;
 
@@ -43,7 +43,9 @@ window.addEventListener('keydown', ({ key }) => {
 			start();
 			break;
 		case 'Escape':
-			backToLanding();
+			homeScreen();
+			game.mode = 'single';
+			game.status = 'landing';
 			break;
 	}
 });

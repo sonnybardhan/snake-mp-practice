@@ -1,4 +1,4 @@
-import { ws, clientId, gameId, playerNum, playerIndex } from './game.js';
+import { ws, clientId, gameId, playerIndex } from './game.js';
 import { snakes } from './snake.js';
 
 export let food = { x: 3, y: 8 };
