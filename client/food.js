@@ -1,22 +1,27 @@
-import { ws, clientId, gameId } from './game.js';
+import { ws, clientId, gameId, playerNum, playerIndex } from './game.js';
 import { snakes } from './snake.js';
 
 export let food = { x: 3, y: 8 };
 // let food = '';
 
-export let lastConsumer = '';
+// export let lastConsumer = '';
+export let lastConsumer = { id: null };
 
 export function update() {
-	if (consumed()) {
+	if (newConsumed()) {
+		// if (consumed()) {
 		const payload = {
 			method: 'consume',
 			clientId,
-			gameId
+			gameId,
+			lastConsumer
 		};
 
 		ws.send(JSON.stringify(payload));
+		// lastConsumer = playerIndex;
 	} else {
-		lastConsumer = '';
+		// lastConsumer = '';
+		lastConsumer.id = null;
 	}
 }
 
@@ -28,19 +33,30 @@ export function draw(gameBoard) {
 	gameBoard.appendChild(foodElement);
 }
 
-// function randomPosition() {
-// 	return {
-// 		x: (Math.random() * 21 + 1) | 0,
-// 		y: (Math.random() * 21 + 1) | 0
-// 	};
-// }
-
 export function consumed() {
+	// console.log('consumed called');
 	for (let [ i, snake ] of snakes.entries()) {
+		console.log(snakes[0]);
+		console.log(snakes[1]);
 		if (snake[0].x === food.x && snake[0].y === food.y) {
+			console.log('consumed by: ', i);
+			console.log('playerIndex: ', playerIndex);
 			lastConsumer = i;
+			// lastConsumer = playerIndex;
 			return true;
 		}
+	}
+	return false;
+}
+
+export function newConsumed() {
+	// console.log('newConsumed func: ', playerIndex, playerNum);
+
+	let snake = snakes[playerIndex];
+
+	if (snake[0].x === food.x && snake[0].y === food.y) {
+		lastConsumer.id = playerIndex;
+		return true;
 	}
 	return false;
 }

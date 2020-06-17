@@ -1,6 +1,6 @@
 import { lastConsumer } from './food.js';
 import { directions, inputReset, numPlayers } from './input.js';
-import { start } from './game.js';
+import { start, playerNum, playerIndex } from './game.js';
 const SPEED = 1;
 
 const INIT_SNAKES = [
@@ -18,8 +18,6 @@ function draw(gameBoard) {
 			const snakeSegment = document.createElement('div');
 			snakeSegment.style.gridRowStart = x;
 			snakeSegment.style.gridColumnStart = y;
-
-			// let head = false;
 
 			if (index === 0) {
 				snakeSegment.classList.add(`snake-head-${i + 1}`);
@@ -52,18 +50,39 @@ function update() {
 
 		snake.unshift(newHead);
 
-		if (i === 0 && lastConsumer !== 0) {
+		if (i === 0 && lastConsumer.id !== 0) {
 			snake.pop(); //remove tail
-		} else if (i === 1 && lastConsumer !== 1) {
+		} else if (i === 1 && lastConsumer.id !== 1) {
 			snake.pop(); //remove tail
-		} else if (i === 2 && lastConsumer !== 2) {
+		} else if (i === 2 && lastConsumer.id !== 2) {
 			snake.pop(); //remove tail
-		} else if (i === 3 && lastConsumer !== 3) {
+		} else if (i === 3 && lastConsumer.id !== 3) {
 			snake.pop(); //remove tail
 		}
 	}
 	//send snake position ignore opponent move
 	console.log();
+}
+
+function newUpdate() {
+	console.log('player index: ', playerIndex);
+	let snake = snakes[playerIndex];
+	const newHead = { ...snake[0] };
+
+	if (collided(snake, directions[playerIndex]) || outOfBounds(snake, directions[playerIndex])) {
+		return reset();
+	} else {
+		newHead.x += directions[playerIndex].x;
+		newHead.y += directions[playerIndex].y;
+	}
+
+	newHead.x += directions[playerIndex].x;
+	newHead.y += directions[playerIndex].y;
+	snake.unshift(newHead);
+
+	if (playerNum !== lastConsumer) {
+		snake.pop();
+	}
 }
 
 function outOfBounds(snake, direction) {

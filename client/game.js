@@ -1,6 +1,7 @@
 let HOST = 'ws://localhost:9090';
 export const ws = new WebSocket(HOST);
 import { SPEED, update as updateSnake, draw as drawSnake } from './snake.js';
+// import { SPEED, newUpdate as updateSnake, draw as drawSnake } from './snake.js';
 import { update as updateFood, draw as drawFood, food, lastConsumer } from './food.js';
 import { directions, lastInputs } from './input.js';
 
@@ -23,7 +24,8 @@ export let foodPosition = {};
 export let clientId = null;
 export let gameId = null;
 export let playerName = null;
-export let playerNum = null;
+export let playerNum = 1;
+export let playerIndex = 0;
 let gameStatus = '';
 
 ws.onopen = (e) => console.log('connected to server');
@@ -42,22 +44,22 @@ ws.onmessage = (msg) => {
 		gameIdSpan.innerText = gameId;
 		landingScreen.style.zIndex = -1;
 		waitScreen.style.zIndex = 4;
-		console.log('gameId: ', gameId);
+		// console.log('gameId: ', gameId);
+		console.log('Creators player index and num set', playerIndex, playerNum);
 		playerNum = 1;
-
+		playerIndex = 0;
 		//generate a time out
 	} else if (response.method === 'join') {
-		console.log('server sent a message: player joined!', response);
-		console.log('num of players: ', response.game.clients.length);
+		// console.log('server sent a message: player joined!', response);
+		// console.log('num of players: ', response.game.clients.length);
 		const numPlayers = response.game.clients.length;
 
-		if (!playerNum) {
-			const me = response.game.clients.find((client) => client.clientId === clientId);
-			playerNum = me.playerNum;
-			console.log('Player num created! my number: ', me.playerNum);
-		} else {
-			console.log('Playernum exists: ', playerNum);
-		}
+		// if (!playerNum) {
+		const me = response.game.clients.find((client) => client.clientId === clientId);
+		playerNum = me.playerNum;
+		playerIndex = playerNum - 1;
+		console.log('joiners player index and num set', playerIndex, playerNum);
+		// }
 
 		food.x = response.newPosition.x;
 		food.y = response.newPosition.y;
@@ -67,10 +69,9 @@ ws.onmessage = (msg) => {
 			gameIdSpan.innerText = gameId;
 			landingScreen.style.zIndex = -1;
 			waitScreen.style.zIndex = 4;
-
 			waitMessageSpan.innerText = 'GAME STARTING ... ';
 
-			console.log('food position is: ', foodPosition);
+			// console.log('food position is: ', foodPosition);
 			//set interval stuff
 			// let prevId;
 			let time = 3;
@@ -82,21 +83,15 @@ ws.onmessage = (msg) => {
 					start();
 				}
 			}, 200);
-
-			// setTimeout(() => {
-			// 	start();
-			// }, 3000);
 		}
 	} else if (response.method === 'play') {
 	} else if (response.method === 'consume') {
-		// console.log('consume message: ', response.newPosition);
-		// foodPosition = { ...response.newPosition };
-		// food = { ...response.newPosition };
 		food.x = response.newPosition.x;
 		food.y = response.newPosition.y;
-		console.log('Somebody scored! ', response.game.clients);
-		// update();
-		// drawFood(gameBoard);
+		lastConsumer.id = response.lastConsumer.id;
+		// const test = 'player ' + response.lastConsumer;
+
+		console.log(`last consumer: ${response.lastConsumer.id}`);
 	} else if (response.method === 'move') {
 		// console.log('opponent moved: ', response);
 		const opponentIndex = response.playerNum - 1;
@@ -106,8 +101,6 @@ ws.onmessage = (msg) => {
 		directions[opponentIndex].y = response.direction.y;
 
 		//relay snake body
-
-		// direction[playerNum-1] = response.newPosition;
 	} else if (response.method === 'error') {
 		console.log('There was an error!', response.msg);
 	}
@@ -208,12 +201,12 @@ export function start(gameOver = false) {
 }
 
 function update() {
-	updateFood();
 	updateSnake();
+	updateFood();
 }
 
 function draw() {
 	gameBoard.innerHTML = '';
-	drawFood(gameBoard);
 	drawSnake(gameBoard);
+	drawFood(gameBoard);
 }

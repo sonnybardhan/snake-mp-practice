@@ -39,57 +39,6 @@ window.addEventListener('keydown', ({ key }) => {
 			lastInputs[playerNum - 1] = 'ArrowRight';
 			send(clientId, gameId, directions[playerNum - 1], lastInputs[playerNum - 1], playerNum);
 			break;
-
-		// case 'ArrowUp':
-		// 	if (lastInputs[0] === 'ArrowDown') return;
-		// 	directions[0] = { x: -1, y: 0 };
-		// 	lastInputs[0] = 'ArrowUp';
-		// 	send(clientId, gameId, directions[0], lastInputs[0], playerNum);
-		// 	break;
-		// case 'ArrowDown':
-		// 	if (lastInputs[0] === 'ArrowUp') return;
-		// 	directions[0] = { x: 1, y: 0 };
-		// 	lastInputs[0] = 'ArrowDown';
-		// 	send(clientId, gameId, directions[0], lastInputs[0], playerNum);
-		// 	break;
-		// case 'ArrowLeft':
-		// 	if (lastInputs[0] === 'ArrowRight') return;
-		// 	directions[0] = { x: 0, y: -1 };
-		// 	lastInputs[0] = 'ArrowLeft';
-		// 	send(clientId, gameId, directions[0], lastInputs[0], playerNum);
-		// 	break;
-		// case 'ArrowRight':
-		// 	if (lastInputs[0] === 'ArrowLeft') return;
-		// 	directions[0] = { x: 0, y: 1 };
-		// 	lastInputs[0] = 'ArrowRight';
-		// 	send(clientId, gameId, directions[0], lastInputs[0], playerNum);
-		// 	break;
-
-		// case 'w':
-		// 	if (lastInputs[1] === 's') return;
-		// 	directions[1] = { x: -1, y: 0 };
-		// 	lastInputs[1] = 'w';
-		// 	send(clientId, gameId, directions[1], lastInputs[1]);
-		// 	break;
-		// case 's':
-		// 	if (lastInputs[1] === 'w') return;
-		// 	directions[1] = { x: 1, y: 0 };
-		// 	lastInputs[1] = 's';
-		// 	send(clientId, gameId, directions[1], lastInputs[1]);
-		// 	break;
-		// case 'a':
-		// 	if (lastInputs[1] === 'd') return;
-		// 	directions[1] = { x: 0, y: -1 };
-		// 	lastInputs[1] = 'a';
-		// 	send(clientId, gameId, directions[1], lastInputs[1]);
-		// 	break;
-		// case 'd':
-		// 	if (lastInputs[1] === 'a') return;
-		// 	directions[1] = { x: 0, y: 1 };
-		// 	lastInputs[1] = 'd';
-		// 	send(clientId, gameId, directions[1], lastInputs[1]);
-		// break;
-
 		case ' ':
 			start();
 			break;

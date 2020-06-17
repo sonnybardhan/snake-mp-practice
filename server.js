@@ -136,6 +136,7 @@ wss.on('request', (req) => {
 			const clientId = response.clientId;
 			const gameId = response.gameId;
 			const game = games[gameId];
+			const lastConsumer = response.lastConsumer;
 
 			const client = game.clients.find((client) => client.clientId === clientId);
 			client.score += 10;
@@ -143,10 +144,12 @@ wss.on('request', (req) => {
 			const newPosition = randomPosition();
 			const payload = {
 				method: 'consume',
-				lastConsumer: clientId,
+				lastConsumer,
 				newPosition,
 				game
 			};
+
+			console.log('last consumer', lastConsumer);
 
 			game.clients.forEach((client) => {
 				clients[client.clientId].connection.send(JSON.stringify(payload));
