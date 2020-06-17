@@ -118,10 +118,9 @@ function collided(snake, direction) {
 export function reset() {
 	snakes = populateSnakeArray();
 	inputReset();
-	// start(true);
-	game.status = 'stop';
 	homeScreen();
-	start();
+	game.status = 'landing';
+	game.mode = 'single';
 }
 
 function populateSnakeArray() {

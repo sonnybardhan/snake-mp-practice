@@ -140,6 +140,7 @@ joinBtn.addEventListener('click', () => {
 		playerName
 	};
 	ws.send(JSON.stringify(payload));
+	game.mode = 'multi';
 });
 
 // cancelBtn.addEventListener('click', () => {
@@ -150,7 +151,7 @@ joinBtn.addEventListener('click', () => {
 // }
 
 ws.onclose = (e) => console.log('disconnected from server');
-ws.onerror = (e) => console.log('Oop! ', e);
+ws.onerror = (e) => console.log('Oops! ', e); //reset everything here for single player
 
 //game logic=====================
 
@@ -197,8 +198,16 @@ export function start() {
 			// startingScreen();
 			break;
 		case 'play':
-			game.status = 'pause';
-			pauseScreen();
+			if (game.mode === 'single') {
+				game.status = 'pause';
+				pauseScreen();
+			} else {
+				waitMessageSpan.innerText = `No pausing during multiplayer`;
+				const id = setTimeout(() => {
+					waitMessageSpan.innerText = ``;
+					clearInterval(id);
+				}, 500);
+			}
 			break;
 		case 'pause':
 			game.status = 'play';
@@ -213,27 +222,6 @@ export function start() {
 	}
 	requestAnimationFrame(main);
 }
-// export function start(gameOver = false) {
-// 	paused = !paused;
-// 	requestAnimationFrame(main);
-
-// 	if (!gameOver) {
-// 		// overlay.style.display = 'none';
-// 		if (paused) {
-// 			landingScreen.style.zIndex = 1;
-// 			gameBoard.style.zIndex = 2;
-// 			waitScreen.style.zIndex = 3;
-// 		} else {
-// 			landingScreen.style.zIndex = 2;
-// 			waitScreen.style.zIndex = 1;
-// 			gameBoard.style.zIndex = 3;
-// 		}
-// 	} else {
-// 		landingScreen.style.zIndex = 3;
-// 		gameBoard.style.zIndex = 2;
-// 		waitScreen.style.zIndex = 1;
-// 	}
-// }
 
 function update() {
 	updateSnake();

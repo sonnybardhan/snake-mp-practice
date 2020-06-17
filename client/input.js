@@ -1,5 +1,5 @@
 import { start, ws, clientId, gameId, playerNum, playerIndex, homeScreen, game } from './game.js';
-import { snakes } from './snake.js';
+import { snakes, reset } from './snake.js';
 export let numPlayers = 2;
 
 const S1_DIR = { x: 0, y: 1 }; // left
@@ -43,9 +43,8 @@ window.addEventListener('keydown', ({ key }) => {
 			start();
 			break;
 		case 'Escape':
-			homeScreen();
-			game.mode = 'single';
-			game.status = 'landing';
+			reset();
+			//check for game mode multiplayer, if so, send message to disconnect client
 			break;
 	}
 });
