@@ -159,6 +159,7 @@ wss.on('request', (req) => {
 			const gameId = response.gameId;
 			const playerNum = response.playerNum;
 			const game = games[gameId];
+			const snake = response.snake;
 			const direction = response.direction;
 			const lastInput = response.lastInput;
 
@@ -168,7 +169,8 @@ wss.on('request', (req) => {
 				clientId,
 				playerNum,
 				direction,
-				lastInput
+				lastInput,
+				snake
 				//send snake body
 			};
 

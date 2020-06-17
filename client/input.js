@@ -1,5 +1,5 @@
-import { start, backToLanding, ws, clientId, gameId, playerNum } from './game.js';
-// import { reset } from './snake';
+import { start, backToLanding, ws, clientId, gameId, playerNum, playerIndex } from './game.js';
+import { snakes } from './snake.js';
 export let numPlayers = 2;
 
 const S1_DIR = { x: 0, y: 1 }; // left
@@ -73,13 +73,15 @@ export function inputReset() {
 }
 
 function send(clientId, gameId, direction, lastInput, playerNum) {
+	// console.log(snakes[playerIndex]);
 	const payload = {
 		method: 'move',
 		clientId,
 		gameId,
 		direction,
 		lastInput,
-		playerNum
+		playerNum,
+		snake: snakes[playerIndex]
 	};
 	ws.send(JSON.stringify(payload));
 }
