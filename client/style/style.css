@@ -3,16 +3,18 @@
 		background-color: pink;
 	}
 } */
+@import url('https://fonts.googleapis.com/css2?family=Monoton&display=swap');
 
 * {
 	box-sizing: border-box;
 	margin: 0 auto;
-	font-family: sans-serif;
 	font-weight: 100;
+	/* display: flex; */
 }
 
 
 body {
+	font-family: sans-serif;
 	height: 100vh;
 	width: 100vw;
 	display: flex;
@@ -140,10 +142,11 @@ body {
 }
 
 .main-banner {
+	font-family: 'Monoton', sans-serif;
 	height: 100%;
 	display: flex;
 	align-items: center;
-	font-size: 3em;
+	font-size: 5em;
 	/* color: rgb(57, 57, 57); */
 	width: 100%;
 }
@@ -221,6 +224,40 @@ body {
 	/* display: none; */
 }
 
+#crash-screen {
+	position: absolute;
+	background-color: rgb(62, 62, 62);
+	/* top: 0;
+	left: 0; */
+	margin: 0;
+	height: 90vh;
+	width: 90vw;
+	z-index: -10;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	font-family: Monoton;
+	color: yellowgreen;
+	/* text-shadow: .2em .2em red, .4em .4em yellow; */
+	font-size: 5rem;
+
+	/* display: none; */
+}
+
+#game-over-result-display {
+	font-style: sans-serif;
+	color: rgb(75, 156, 218);
+	font-size: 2.5rem;
+}
+
+/* #game-over-msg {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+} */
 
 .game-id {
 	display: flex;
@@ -279,6 +316,14 @@ body {
 .scores>* {
 	padding: 1.5rem;
 }
+
+/* .player-1 {
+	margin: .625em;
+	border-radius: .625em;
+	color: rgba(0, 0, 0, 0.829);
+	border: .24em solid rgba(255, 255, 255, 0.249);
+	background-color: rgba(255, 255, 255, 0.174);
+} */
 
 .player-1 {
 	margin: .625em;

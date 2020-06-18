@@ -204,6 +204,22 @@ wss.on('request', (req) => {
 					clients[client.clientId].connection.send(JSON.stringify(payload));
 				}
 			});
+		} else if (response.method === 'quit') {
+			const clientId = response.clientId;
+			const gameId = response.gameId;
+			const playerIndex = response.playerIndex;
+			const game = games[gameId];
+
+			const payload = {
+				method: 'quit',
+				playerIndex
+			};
+
+			game.clients.forEach((client) => {
+				if (client.clientId !== clientId) {
+					clients[client.clientId].connection.send(JSON.stringify(payload));
+				}
+			});
 		}
 	});
 

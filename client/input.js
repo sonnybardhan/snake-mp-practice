@@ -1,6 +1,6 @@
 // import { start, ws, clientId, gameId, playerNum, playerIndex, game, p1Div, scores1DisplayDiv } from './game.js';
 import { start, ws, clientId, gameId, playerIndex, game, p1Div } from './game.js';
-import { snakes, reset, setSPEED, hideScoresDisplays } from './snake.js';
+import { snakes, reset, setSPEED, hideScoresDisplays, gameOver } from './snake.js';
 export let numPlayers = { count: 2 };
 
 //dummy code for now////////////////////
@@ -56,6 +56,13 @@ window.addEventListener('keydown', ({ key }) => {
 			start();
 			break;
 		case 'Escape':
+			if (game.status === 'play' && game.mode === 'multi') {
+				// reset();
+				//send signal to server
+				quitMessage();
+				game.status = 'landing';
+				gameOver('You quit');
+			}
 			reset();
 			//check for game mode multiplayer, if so, send message to disconnect client
 			break;
@@ -107,4 +114,14 @@ function send(clientId, gameId, direction, lastInput, playerIndex) {
 		};
 		ws.send(JSON.stringify(payload));
 	}
+}
+
+function quitMessage() {
+	const payload = {
+		method: 'quit',
+		clientId,
+		playerIndex,
+		gameId
+	};
+	ws.send(JSON.stringify(payload));
 }

@@ -1,6 +1,6 @@
 let HOST = 'ws://localhost:9090';
 export const ws = new WebSocket(HOST);
-import { SPEED, update as updateSnake, draw as drawSnake, snakes, reset, setSPEED } from './snake.js';
+import { SPEED, update as updateSnake, draw as drawSnake, snakes, reset, setSPEED, gameOver } from './snake.js';
 import { update as updateFood, draw as drawFood, food, lastConsumer, updateScoresDisplay } from './food.js';
 import { directions, numPlayers } from './input.js';
 
@@ -17,6 +17,9 @@ export const playerCountInput = document.getElementById('player-count-input');
 export const speedDisplay = document.getElementById('speed-display');
 export const playerCountDisplay = document.getElementById('player-count-display');
 const gameBoard = document.getElementById('game-board');
+export const crashScreen = document.getElementById('crash-screen');
+// export const gameOverMsg = document.getElementById('game-over-msg');
+export const gameOverResultDisplay = document.getElementById('game-over-result-display');
 
 // export const scores1DisplayDiv = document.getElementById('scores1-display-div');
 // export const scores2DisplayDiv = document.getElementById('scores2-display-div');
@@ -202,9 +205,21 @@ ws.onmessage = (msg) => {
 		// console.log(`opponents number: grew -> player-${opponentIndex + 1}`);
 	} else if (response.method === 'crash') {
 		//display winner
-		const opponentIndex = response.playerIndex;
-		console.log(`[Opponent] player-${response.playerIndex + 1} crashed`);
-		reset();
+		// const opponentIndex = response.playerIndex;
+		// console.log(`[Opponent] player-${response.playerIndex + 1} crashed`);
+
+		//check if at least 2 players are remaining
+		const msg = `You win. Player${response.playerIndex + 1} crashed`;
+
+		// reset();
+
+		gameOver(msg);
+	} else if (response.method === 'quit') {
+		const msg = `You win. Player${response.playerIndex + 1} quit`;
+		//check if at least 2 players are remaining
+
+		game.status = 'landing';
+		gameOver(msg);
 	} else if (response.method === 'error') {
 		console.log('There was an error!', response.msg);
 		reset();
