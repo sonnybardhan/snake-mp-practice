@@ -2,7 +2,7 @@ import { lastConsumer } from './food.js';
 import { directions, inputReset, numPlayers } from './input.js';
 import { start, playerNum, playerIndex, game, homeScreen, ws, clientId, gameId } from './game.js';
 
-const SPEED = 1;
+const SPEED = 15;
 
 const INIT_SNAKES = [
 	[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ], //y: 1 right
@@ -156,4 +156,3 @@ export function populateSnakeArray() {
 	return newSnakes;
 }
 export { SPEED, update, draw, snakes };
-// export { SPEED, draw, snakes, newUpdate };
