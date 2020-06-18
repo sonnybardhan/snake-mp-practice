@@ -15,7 +15,15 @@ import {
 	setPlayerIndex,
 	speedDisplay,
 	resetPlayerScore,
-	resetAllScores
+	resetAllScores,
+	p1ScoreDisplay,
+	p2ScoreDisplay,
+	p3ScoreDisplay,
+	p4ScoreDisplay,
+	p1Div,
+	p2Div,
+	p3Div,
+	p4Div
 } from './game.js';
 
 // const SPEED = 11;
@@ -223,6 +231,22 @@ export function reset() {
 	setPlayerIndex(0);
 	resetPlayerScore();
 	resetAllScores();
+	resetScoresDisplay();
+	hideScoresDisplays();
+}
+
+export function resetScoresDisplay() {
+	p1ScoreDisplay.innerText = 0;
+	p2ScoreDisplay.innerText = 0;
+	p3ScoreDisplay.innerText = 0;
+	p4ScoreDisplay.innerText = 0;
+}
+
+export function hideScoresDisplays() {
+	p1Div.style.display = 'none';
+	p2Div.style.display = 'none';
+	p3Div.style.display = 'none';
+	p4Div.style.display = 'none';
 }
 
 export function populateSnakeArray() {

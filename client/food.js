@@ -1,4 +1,17 @@
-import { ws, clientId, gameId, playerIndex, game, addToScore, playerScore, scores } from './game.js';
+import {
+	ws,
+	clientId,
+	gameId,
+	playerIndex,
+	game,
+	addToScore,
+	playerScore,
+	scores,
+	p1ScoreDisplay,
+	p2ScoreDisplay,
+	p3ScoreDisplay,
+	p4ScoreDisplay
+} from './game.js';
 import { snakes } from './snake.js';
 
 export let food = { x: 3, y: 8 };
@@ -10,7 +23,7 @@ export function update() {
 		lastConsumer.id = playerIndex;
 		addToScore(10);
 		scores[playerIndex] = playerScore;
-
+		updateScoresDisplay(playerIndex, playerScore);
 		const payload = {
 			method: 'consume',
 			clientId,
@@ -23,8 +36,28 @@ export function update() {
 		lastConsumer.id = playerIndex;
 		food = randomPosition();
 		addToScore(10);
+		p1ScoreDisplay.innerText = playerScore;
 	} else {
 		lastConsumer.id = null;
+	}
+}
+
+export function updateScoresDisplay(index, value) {
+	switch (index) {
+		case 0:
+			p1ScoreDisplay.innerText = value;
+			break;
+		case 1:
+			p2ScoreDisplay.innerText = value;
+			break;
+		case 2:
+			p3ScoreDisplay.innerText = value;
+			break;
+		case 3:
+			p4ScoreDisplay.innerText = value;
+			break;
+		default:
+			break;
 	}
 }
 

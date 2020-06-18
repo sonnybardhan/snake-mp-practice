@@ -247,12 +247,28 @@ body {
 	flex-direction: column;
 	justify-content: space-between;
 	font-size: 1.5rem;
-	display: none;
+	z-index: 2;
+	/* display: none; */
 	/* padding-left: .5rem;
 	padding-right: .5rem; */
 
 	/* background-color: rgba(245, 248, 239, 0.548); */
 	/* box-shadow: .2rem .2rem 3rem rgba(0, 0, 0, 0.185); */
+}
+
+#scores1-display-div {
+	/* display: none; */
+}
+
+#scores2-display-div {
+	/* display: none; */
+}
+
+#p1-display-div,
+#p2-display-div,
+#p3-display-div,
+#p4-display-div {
+	display: none;
 }
 
 .scores p {

@@ -1,7 +1,7 @@
 let HOST = 'ws://localhost:9090';
 export const ws = new WebSocket(HOST);
 import { SPEED, update as updateSnake, draw as drawSnake, snakes, reset, setSPEED } from './snake.js';
-import { update as updateFood, draw as drawFood, food, lastConsumer } from './food.js';
+import { update as updateFood, draw as drawFood, food, lastConsumer, updateScoresDisplay } from './food.js';
 import { directions, numPlayers } from './input.js';
 
 export const gameIdInput = document.getElementById('game-id-input');
@@ -18,6 +18,20 @@ export const speedDisplay = document.getElementById('speed-display');
 export const playerCountDisplay = document.getElementById('player-count-display');
 const gameBoard = document.getElementById('game-board');
 
+// export const scores1DisplayDiv = document.getElementById('scores1-display-div');
+// export const scores2DisplayDiv = document.getElementById('scores2-display-div');
+
+export const p1ScoreDisplay = document.getElementById('player-1');
+export const p2ScoreDisplay = document.getElementById('player-2');
+export const p3ScoreDisplay = document.getElementById('player-3');
+export const p4ScoreDisplay = document.getElementById('player-4');
+
+export const p1Div = document.getElementById('p1-display-div');
+export const p2Div = document.getElementById('p2-display-div');
+export const p3Div = document.getElementById('p3-display-div');
+export const p4Div = document.getElementById('p4-display-div');
+export const pDivArray = [ p1Div, p2Div, p3Div, p4Div ];
+
 export let foodPosition = {};
 export let clientId = null;
 export let gameId = null;
@@ -28,6 +42,17 @@ export let playerScore = 0;
 export let scores = { 0: 0, 1: 0, 2: 0, 3: 0 };
 
 export const INIT_SCORES = { 0: 0, 1: 0, 2: 0, 3: 0 };
+
+export function displayScreens(playerCount) {
+	// for (let i = 0; i < playerCount; i++) {
+	for (let i = 0; i < pDivArray.length; i++) {
+		if (i < playerCount) {
+			pDivArray[i].style.display = 'block';
+		} else {
+			pDivArray[i].style.display = 'none';
+		}
+	}
+}
 
 export function resetPlayerScore() {
 	playerScore = 0;
@@ -127,6 +152,9 @@ ws.onmessage = (msg) => {
 					clearInterval(id);
 					// waitMessageSpan.innerText = 'PAUSED';
 					// waitingScreen();
+					// scores1DisplayDiv.style.display = 'block';
+					// scores2DisplayDiv.style.display = 'block';
+					displayScreens(2); //make this dynamic to playerCount
 					playScreen();
 					start();
 				}
@@ -148,7 +176,10 @@ ws.onmessage = (msg) => {
 		food.y = response.newPosition.y;
 		lastConsumer.id = response.lastConsumer.id;
 		scores[lastConsumer.id] = response.playerScore;
-		console.log('score update: ', scores);
+		// console.log('score update: ', scores);
+		console.log(lastConsumer.id, response.playerScore);
+
+		updateScoresDisplay(lastConsumer.id, response.playerScore);
 	} else if (response.method === 'move') {
 		const opponentIndex = response.playerIndex;
 
@@ -167,8 +198,8 @@ ws.onmessage = (msg) => {
 		for (let i = 0; i < newSnake.length; i++) {
 			oppSnake[i] = { ...newSnake[i] };
 		}
-		console.log('re-laid opp snake GROW: ', oppSnake);
-		console.log(`opponents number: grew -> player-${opponentIndex + 1}`);
+		// console.log('re-laid opp snake GROW: ', oppSnake);
+		// console.log(`opponents number: grew -> player-${opponentIndex + 1}`);
 	} else if (response.method === 'crash') {
 		//display winner
 		const opponentIndex = response.playerIndex;

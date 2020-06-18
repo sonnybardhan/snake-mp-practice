@@ -1,5 +1,6 @@
-import { start, ws, clientId, gameId, playerNum, playerIndex, game } from './game.js';
-import { snakes, reset, setSPEED } from './snake.js';
+// import { start, ws, clientId, gameId, playerNum, playerIndex, game, p1Div, scores1DisplayDiv } from './game.js';
+import { start, ws, clientId, gameId, playerIndex, game, p1Div } from './game.js';
+import { snakes, reset, setSPEED, hideScoresDisplays } from './snake.js';
 export let numPlayers = { count: 2 };
 
 //dummy code for now////////////////////
@@ -49,9 +50,9 @@ window.addEventListener('keydown', ({ key }) => {
 			break;
 		case ' ':
 			if (game.mode === 'single' && game.status === 'landing') {
-				snakes.splice(1);
+				initSinglePlayer();
 			}
-
+			// scores1DisplayDiv.style.display = 'block';
 			start();
 			break;
 		case 'Escape':
@@ -63,8 +64,8 @@ window.addEventListener('keydown', ({ key }) => {
 
 function initSinglePlayer() {
 	snakes.splice(1);
-
-	// setSPEED()
+	hideScoresDisplays();
+	p1Div.style.display = 'block';
 }
 
 function populateDirections() {
