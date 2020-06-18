@@ -21,8 +21,17 @@ const INIT_DIR = [ { ...S1_DIR }, { ...S2_DIR }, { ...S3_DIR }, { ...S4_DIR } ];
 export let directions = populateDirections();
 export let lastInputs = populateInputs();
 
+let prevTime = 0;
+let currentTime = 0;
+
 window.addEventListener('keydown', ({ key }) => {
 	// console.log('registering key: ', key);
+	currentTime = +new Date();
+	const diff = currentTime - prevTime;
+	prevTime = currentTime;
+
+	if (diff < 75) return;
+
 	switch (key) {
 		case 'ArrowUp':
 			if (lastInputs[playerIndex] === 'ArrowDown') return;
