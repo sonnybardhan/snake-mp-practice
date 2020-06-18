@@ -43,6 +43,7 @@ export let playerIndex = 0;
 export let playerSpeedInput = 10;
 export let playerScore = 0;
 export let scores = { 0: 0, 1: 0, 2: 0, 3: 0 };
+export let multiPlayerCount = 2;
 
 export const INIT_SCORES = { 0: 0, 1: 0, 2: 0, 3: 0 };
 
@@ -72,6 +73,10 @@ export function addToScore(value) {
 export function setPlayerIndex(value) {
 	playerIndex = value;
 }
+
+export function setMultiPlayerCount(value) {
+	multiPlayerCount = value;
+}
 //stop, wait, starting, play, pause, gameOver
 
 speedInput.addEventListener('change', (e) => {
@@ -82,6 +87,9 @@ speedInput.addEventListener('change', (e) => {
 });
 
 playerCountInput.addEventListener('change', (e) => {
+	console.log(`playerCount input (prev)= ${multiPlayerCount}`);
+	multiPlayerCount = e.target.value;
+	console.log(`playerCount input = ${multiPlayerCount}`);
 	playerCountDisplay.innerText = e.target.value;
 	playerCountInput.blur();
 });
@@ -97,18 +105,17 @@ ws.onmessage = (msg) => {
 		clientId = response.clientId;
 		console.log(`client ${clientId} successfully added`);
 	} else if (response.method === 'create') {
-		console.log('server sent a message: ', response);
+		console.log('server sent a message');
 		gameId = response.game.id;
 
 		gameIdInput.value = gameId;
 
-		// gameIdSpan.innerText = gameId;
-		// landingScreen.style.zIndex = -1;
-		// waitScreen.style.zIndex = 4;
+		// multiPlayerCount = response.game.multiPlayerCount;
+		//install timer here
 
 		waitingScreen('WAITING FOR OPPONENTS ... ', gameId, '[ESC] to quit');
-		// console.log('gameId: ', gameId);
-		console.log('Creators player index and num set', playerIndex, playerNum);
+		// console.log('Creators player index and num set', playerIndex, playerNum);
+		// console.log(`The number of players a request has been made for `, response.game.multiPlayerCount);
 		playerNum = 1;
 		playerIndex = 0;
 		//generate a time out
@@ -117,10 +124,15 @@ ws.onmessage = (msg) => {
 		// console.log('num of players: ', response.game.clients.length);
 
 		// const numPlayers = response.game.clients.length;
+
+		//this makes NO SENSE
 		numPlayers.count = response.game.clients.length;
+
 		console.log('resetting numplayers.count on join: ', numPlayers.count);
 
 		// console.log('num of players post join: ', numPlayers.count);
+
+		multiPlayerCount = response.game.multiPlayerCount;
 
 		// populateSnakeArray();
 		// console.log('re-populating snake array on rejoin: ', snakes);
@@ -138,13 +150,13 @@ ws.onmessage = (msg) => {
 		console.log('creator has set speed to: ', response.game.speed);
 		setSPEED(response.game.speed);
 		// if (numPlayers.count === 2) { to make it dynamic set 2 to input value by creator
-		// if (response.game.clients.length === response.numPlayers) {
+		// if (response.game.clients.length === response.playerCount) {
+		gameId = response.game.id;
+
 		if (response.game.clients.length === 2) {
 			//starts the moment there are 2 players
 
-			gameId = response.game.id;
-
-			waitingScreen('GAME STARTING ... ', gameId, '[ESC] to quit');
+			// waitingScreen('GAME STARTING ... ', gameId, '[ESC] to quit');
 
 			let time = 3;
 			let id = setInterval(() => {
@@ -172,6 +184,7 @@ ws.onmessage = (msg) => {
 			// 		start();
 			// 	}
 			// }, 200);
+		} else {
 		}
 	} else if (response.method === 'play') {
 	} else if (response.method === 'consume') {
@@ -228,10 +241,12 @@ ws.onmessage = (msg) => {
 
 createBtn.addEventListener('click', () => {
 	// playerName = nameInput.value;
+	// const playerCount = playerCountInput.value;
+
 	const payload = {
 		method: 'create',
 		clientId,
-		// playerName,
+		multiPlayerCount,
 		speed: SPEED
 	};
 	ws.send(JSON.stringify(payload));

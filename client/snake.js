@@ -33,7 +33,7 @@ import {
 let SPEED = 2;
 
 export function setSPEED(value) {
-	if (value > 0 && value < 30) {
+	if (value > 0 && value <= 30) {
 		SPEED = value;
 	}
 }
