@@ -1,9 +1,16 @@
+/* @media screen and (max-width: 600px) {
+	#landing {
+		background-color: pink;
+	}
+} */
+
 * {
 	box-sizing: border-box;
 	margin: 0 auto;
 	font-family: sans-serif;
 	font-weight: 100;
 }
+
 
 body {
 	height: 100vh;
@@ -58,6 +65,7 @@ body {
 #speed-input,
 #player-count-input {
 	/* margin: .15em; */
+
 	width: 100%;
 	transition: all .3s ease-in-out;
 }
@@ -66,7 +74,7 @@ body {
 #player-count-input {
 	margin: .2em;
 	height: 2em;
-	/* flex: 100%; */
+	/* width: 100%; */
 }
 
 #speed-input:focus,
@@ -109,13 +117,57 @@ body {
 	transform: scale(1.06);
 }
 
+.main-banner {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	font-size: 2em;
+	/* color: rgb(57, 57, 57); */
+	width: 100%;
+	/* background-color: rgba(87, 87, 87, 0.126); */
+
+}
+
+.landing-banner {
+	display: flex;
+	height: 100vh;
+	width: 100vw;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	font-size: 2.5rem;
+	/* color: rgb(57, 57, 57); */
+	animation: p-animate 1s ease-in-out infinite alternate;
+}
+
 #input-div {
 	width: 30vw;
+	height: 100%;
+	width: 40%;
+	/* padding: 1.5em 2em 1.5em 2em; */
+	padding: 2em;
+	margin-bottom: 5em;
+	background-color: rgba(0, 0, 0, 0.112);
+	border-radius: .625em;
 }
 
 #landing {
 	position: absolute;
-	background-color: aquamarine;
+	/* background-color: aquamarine; */
+	color: rgb(255, 255, 255);
+
+	/* background-color: rgb(51, 74, 108); */
+	/* background-color: rgb(81, 81, 81); */
+
+	background-color: rgb(100, 199, 235);
+
+	/* background-color: rgb(146, 208, 199); */
+
+	/* background: rgb(180, 180, 180);
+	background: linear-gradient(357deg, rgba(180, 180, 180, 1) 19%, rgba(166, 166, 166, 1) 46%, rgb(145, 145, 145) 80%);
+ */
+
+	/* background-color: rgb(30, 30, 30); */
 	top: 0;
 	left: 0;
 	height: 100vh;
@@ -131,8 +183,12 @@ body {
 
 #wait-screen {
 	position: absolute;
-	/* background-color: rgb(220, 226, 191); */
-	background-color: rgb(255, 185, 189);
+	background-color: rgb(100, 199, 235);
+
+	/* background: rgb(118, 145, 167); */
+	/* background: linear-gradient(0deg, rgb(150, 179, 203) 19%, rgb(119, 161, 201) 46%, rgb(166, 194, 210) 80%); */
+
+	/* background-color: rgb(255, 185, 189); */
 	top: 0;
 	left: 0;
 	height: 100vh;
@@ -354,17 +410,13 @@ body {
 	height: 100vh;
 	width: 100vw;
 	justify-content: center;
-	/* flex-direction: column; */
 	align-items: center;
 	align-content: center;
-	font-size: 3rem;
+	font-size: 2.5rem;
 	color: rgb(255, 255, 255);
 	animation: p-animate 1s ease-in-out infinite alternate;
 }
 
-
-
-#press-play {}
 
 @keyframes p-animate {
 	0% {
