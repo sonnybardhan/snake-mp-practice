@@ -1,16 +1,13 @@
 let HOST = 'ws://localhost:9090';
 export const ws = new WebSocket(HOST);
 import { SPEED, update as updateSnake, draw as drawSnake, snakes, reset, setSPEED } from './snake.js';
-// import { SPEED, newUpdate as updateSnake, draw as drawSnake, snakes, reset } from './snake.js';
 import { update as updateFood, draw as drawFood, food, lastConsumer } from './food.js';
 import { directions, numPlayers } from './input.js';
 
-// export const nameInput = document.getElementById('name-input');
 export const gameIdInput = document.getElementById('game-id-input');
 export const createBtn = document.getElementById('create-btn');
 export const joinBtn = document.getElementById('join-btn');
 const landingScreen = document.getElementById('landing');
-// const spaceBar = document.getElementById('space-bar');
 const waitScreen = document.getElementById('wait-screen');
 const waitMessageSpan = document.getElementById('wait-message-span');
 const gameIdSpan = document.getElementById('game-id-span');
@@ -19,18 +16,30 @@ export const speedInput = document.getElementById('speed-input');
 export const playerCountInput = document.getElementById('player-count-input');
 export const speedDisplay = document.getElementById('speed-display');
 export const playerCountDisplay = document.getElementById('player-count-display');
-// const cancelBtn = document.getElementById('cancel-btn');
-// export const overlay = document.getElementById('overlay');
 const gameBoard = document.getElementById('game-board');
 
 export let foodPosition = {};
-
 export let clientId = null;
 export let gameId = null;
-// export let playerName = null;
 export let playerNum = 1;
 export let playerIndex = 0;
 export let playerSpeedInput = 10;
+export let playerScore = 0;
+export let scores = { 0: 0, 1: 0, 2: 0, 3: 0 };
+
+export const INIT_SCORES = { 0: 0, 1: 0, 2: 0, 3: 0 };
+
+export function resetPlayerScore() {
+	playerScore = 0;
+}
+
+export function resetAllScores() {
+	scores = { ...INIT_SCORES };
+}
+
+export function addToScore(value) {
+	playerScore += value;
+}
 
 export function setPlayerIndex(value) {
 	playerIndex = value;
@@ -46,13 +55,10 @@ speedInput.addEventListener('change', (e) => {
 
 playerCountInput.addEventListener('change', (e) => {
 	playerCountDisplay.innerText = e.target.value;
-	console.log('playercount changing');
 	playerCountInput.blur();
-	// console.log('player count changed: ', playerSpeedInput);
 });
 
 export let game = { status: 'landing', mode: 'single' };
-// export let inPlay = false;
 
 ws.onopen = (e) => console.log('connected to server');
 
@@ -141,21 +147,9 @@ ws.onmessage = (msg) => {
 		food.x = response.newPosition.x;
 		food.y = response.newPosition.y;
 		lastConsumer.id = response.lastConsumer.id;
-		// const test = 'player ' + response.lastConsumer;
-
-		// const opponentIndex = response.lastConsumer.id;
-		// const oppSnake = snakes[opponentIndex];
-		// const newSnake = response.snake;
-		// for (let i = 0; i < newSnake.length; i++) {
-		// 	oppSnake[i] = { ...newSnake[i] };
-		// }
-		// console.log('re-laid opp snake on consume: ', oppSnake);
-		// console.log(`last consumer: ${response.lastConsumer.id}`);
+		scores[lastConsumer.id] = response.playerScore;
+		console.log('score update: ', scores);
 	} else if (response.method === 'move') {
-		// console.log('opponent moved: ', response);
-
-		// console.log('oppnent last inputs: ', response.lastInput);
-
 		const opponentIndex = response.playerIndex;
 
 		directions[opponentIndex].x = response.direction.x;
@@ -218,19 +212,11 @@ joinBtn.addEventListener('click', () => {
 	game.mode = 'multi';
 });
 
-// cancelBtn.addEventListener('click', () => {
-// });
-// export function backToLanding() {
-// 	landingScreen.style.zIndex = 4;
-// 	waitScreen.style.zIndex = -1;
-// }
-
 ws.onclose = (e) => console.log('disconnected from server');
 ws.onerror = (e) => console.log('Oops! ', e); //reset everything here for single player
 
 //game logic=====================
 
-// let paused = true;
 let lastRender = 0;
 
 function main(currentTime) {
@@ -244,19 +230,6 @@ function main(currentTime) {
 	draw();
 }
 
-// export function start() {
-// 	paused = !paused;
-// 	requestAnimationFrame(main);
-// 	// overlay.style.display = 'none';
-
-// 	if (paused) {
-// 		overlay.style.display = 'block';
-// 	} else {
-// 		overlay.style.display = 'none';
-// 	}
-// }
-
-//trial
 export function start() {
 	switch (game.status) {
 		case 'landing':

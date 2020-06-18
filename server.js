@@ -26,7 +26,7 @@ wss.on('request', (req) => {
 		method: 'connect',
 		clientId
 	};
-	// clientLoop();
+
 	connection.send(JSON.stringify(payload));
 
 	connection.on('message', (msg) => {
@@ -50,18 +50,12 @@ wss.on('request', (req) => {
 
 			const game = games[gameId];
 
-			// if (!playerName) {
-			// 	playerName = 'Player-1';
-			// }
-
 			game.clients.push({
 				clientId,
 				// playerName,
 				playerNum: 1,
 				score: 0
 			});
-
-			// game.state.foodPositions = randomPositionArray(4);
 
 			const payload = {
 				method: 'create',
@@ -71,15 +65,11 @@ wss.on('request', (req) => {
 			const con = clients[clientId].connection;
 			con.send(JSON.stringify(payload));
 		} else if (response.method === 'join') {
-			//should have an client ID
 			const clientId = response.clientId;
-			//should have game ID and error handling
 			const gameId = response.gameId;
-			// let playerName = response.playerName;
 			let playerIndex = null;
 			const game = games[gameId];
 			const con = clients[clientId].connection;
-			// con.send(JSON.stringify(payload));
 
 			//check for valid id
 			if (!game) {
@@ -98,13 +88,6 @@ wss.on('request', (req) => {
 				};
 				return con.send(JSON.stringify(payload));
 			}
-			// if (game.clients.length >= 2) {
-			// 	const payload = {
-			// 		method: 'error',
-			// 		msg: 'Sorry max players reached'
-			// 	};
-			// 	return con.send(JSON.stringify(payload));
-			// }
 
 			//check if player is already in game
 			playerIndex = game.clients.indexOf(clientId);
@@ -119,13 +102,8 @@ wss.on('request', (req) => {
 
 			const playerNum = game.clients.length + 1;
 
-			// if (!playerName) {
-			// 	playerName = 'Player-' + playerNum;
-			// }
-
 			game.clients.push({
 				clientId,
-				// playerName,
 				score: 0,
 				playerNum
 			});
@@ -146,19 +124,21 @@ wss.on('request', (req) => {
 			const gameId = response.gameId;
 			const game = games[gameId];
 			const lastConsumer = response.lastConsumer;
+			const playerScore = response.playerScore;
 
 			const client = game.clients.find((client) => client.clientId === clientId);
-			client.score += 10;
-			console.log('scorer: ', client.clientId, client.score);
+			client.score = playerScore;
+
+			// console.log('scorer: ', client.clientId, client.score);
 			const newPosition = randomPosition();
 			const payload = {
 				method: 'consume',
 				lastConsumer,
-				newPosition
-				// game
+				newPosition,
+				playerScore
 			};
 
-			console.log('last consumer', lastConsumer);
+			console.log('last consumer, score', lastConsumer, playerScore);
 
 			game.clients.forEach((client) => {
 				clients[client.clientId].connection.send(JSON.stringify(payload));
