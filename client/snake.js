@@ -21,9 +21,6 @@ let SPEED = 11;
 export function setSPEED(value) {
 	if (value > 0 && value < 30) {
 		SPEED = value;
-		console.log('new speed is: ', SPEED);
-	} else {
-		console.log('speed input is out of range');
 	}
 }
 
@@ -66,9 +63,19 @@ function update() {
 
 		const newHead = { ...snake[0] }; //first item in array is head
 
-		// if (collided(snake, directions[i]) || outOfBounds(snake, directions[i])) {
-		if (collided(snake, directions[i]) || outOfBounds(snake, directions[i]) || collision(snake, directions[i])) {
+		if (collided(snake, directions[i]) || outOfBounds(snake, directions[i])) {
+			// if (collided(snake, directions[i]) || outOfBounds(snake, directions[i]) || collision(snake, directions[i])) {
 			// console.log(`crash`);
+			if (game.mode === 'multi') {
+				const payload = {
+					method: 'crash',
+					clientId,
+					playerIndex,
+					gameId
+				};
+				ws.send(JSON.stringify(payload));
+			}
+
 			return reset();
 		} else {
 			newHead.x += directions[i].x;
@@ -143,41 +150,91 @@ function outOfBounds(snake, direction) {
 
 function collided(snake, direction) {
 	const head = snake[0];
-	const rest = snake.slice(1);
 
 	const newX = head.x + direction.x;
 	const newY = head.y + direction.y;
 
-	return rest.some((segment) => {
+	const allSegments = [ ...snake.slice(1) ];
+
+	if (game.mode === 'multi') {
+		allSegments.push(...snakes.filter((_, index) => index !== playerIndex).flat());
+	}
+
+	return allSegments.some((segment) => {
 		return newX === segment.x && newY === segment.y;
 	});
 }
+// function collided(snake, direction) {
+// 	const head = snake[0];
+// 	const rest = snake.slice(1);
+
+// 	const newX = head.x + direction.x;
+// 	const newY = head.y + direction.y;
+
+// 	return rest.some((segment) => {
+// 		return newX === segment.x && newY === segment.y;
+// 	});
+// }
 
 function collision(snake, direction) {
 	if (game.mode === 'single') {
 		console.log('ignore for single player');
 		return false;
-	}
+	} else {
+		const head = snake[0];
+		const rest = snake.slice(1);
 
-	const head = snake[0];
-	const otherSnakes = snakes.filter((snake, index) => index !== playerIndex);
+		const allSegments = [];
+		allSnakes.push(...rest);
+		// const otherSnakes = snakes.filter((snake, index) => index !== playerIndex);
 
-	const newX = head.x + direction.x;
-	const newY = head.y + direction.y;
-
-	let didCollide = false;
-
-	for (let otherSnake of otherSnakes) {
-		didCollide = otherSnake.some((segment) => {
-			return newX === segment.x && newY === segment.y;
-		});
-		if (didCollide) {
-			console.log('snakes collided');
-			return true;
+		if (game.mode === 'multi') {
+			allSnakes.push(...snakes.filter((_, index) => index !== playerIndex).flat());
 		}
+
+		const newX = head.x + direction.x;
+		const newY = head.y + direction.y;
+
+		let didCollide = false;
+
+		for (let otherSnake of otherSnakes) {
+			didCollide = otherSnake.some((segment) => {
+				return newX === segment.x && newY === segment.y;
+			});
+			if (didCollide) {
+				console.log('snakes collided');
+				return true;
+			}
+		}
+		return false;
 	}
-	return false;
 }
+
+// function collision(snake, direction) {
+// 	if (game.mode === 'single') {
+// 		console.log('ignore for single player');
+// 		return false;
+// 	}
+
+// 	const head = snake[0];
+// 	const otherSnakes = snakes.filter((snake, index) => index !== playerIndex);
+
+// 	const newX = head.x + direction.x;
+// 	const newY = head.y + direction.y;
+
+// 	let didCollide = false;
+
+// 	for (let otherSnake of otherSnakes) {
+// 		didCollide = otherSnake.some((segment) => {
+// 			return newX === segment.x && newY === segment.y;
+// 		});
+// 		if (didCollide) {
+// 			console.log('snakes collided');
+// 			return true;
+// 		}
+// 	}
+// 	return false;
+// }
 
 export function reset() {
 	snakes = populateSnakeArray();

@@ -31,7 +31,6 @@ export let playerSpeedInput = 10;
 
 export function setPlayerIndex(value) {
 	playerIndex = value;
-	console.log('playerIndex changed: ', playerIndex);
 }
 //stop, wait, starting, play, pause, gameOver
 
@@ -165,6 +164,11 @@ ws.onmessage = (msg) => {
 		}
 		console.log('re-laid opp snake GROW: ', oppSnake);
 		console.log(`opponents number: grew -> player-${opponentIndex + 1}`);
+	} else if (response.method === 'crash') {
+		//display winner
+		const opponentIndex = response.playerIndex;
+		console.log(`[Opponent] player-${response.playerIndex + 1} crashed`);
+		reset();
 	} else if (response.method === 'error') {
 		console.log('There was an error!', response.msg);
 		reset();
