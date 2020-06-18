@@ -1,7 +1,14 @@
 import { start, ws, clientId, gameId, playerNum, playerIndex, game } from './game.js';
-import { snakes, reset } from './snake.js';
+import { snakes, reset, setSPEED } from './snake.js';
 export let numPlayers = { count: 2 };
-// export let numPlayers = 2;
+
+//dummy code for now////////////////////
+// export let playerCount = 2;
+// export function setPlayerCount(value) {
+// 	playerCount = value;
+// 	console.log('playerCount changed: ', playerCount);
+// }
+////////////////////////////////////////
 
 const S1_DIR = { x: 0, y: 1 }; // left
 const S2_DIR = { x: 0, y: -1 }; //right
@@ -14,7 +21,7 @@ export let directions = populateDirections();
 export let lastInputs = populateInputs();
 
 window.addEventListener('keydown', ({ key }) => {
-	// console.log(key);
+	// console.log('registering key: ', key);
 	switch (key) {
 		case 'ArrowUp':
 			if (lastInputs[playerIndex] === 'ArrowDown') return;
@@ -89,6 +96,12 @@ window.addEventListener('keydown', ({ key }) => {
 // 			break;
 // 	}
 // });
+
+function initSinglePlayer() {
+	snakes.splice(1);
+
+	// setSPEED()
+}
 
 function populateDirections() {
 	const newDirections = [];

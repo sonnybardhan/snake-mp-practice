@@ -1,8 +1,31 @@
 import { lastConsumer } from './food.js';
 import { directions, inputReset, numPlayers } from './input.js';
-import { start, playerNum, playerIndex, game, homeScreen, ws, clientId, gameId } from './game.js';
+import {
+	start,
+	playerNum,
+	playerIndex,
+	game,
+	homeScreen,
+	ws,
+	clientId,
+	gameId,
+	gameIdInput,
+	joinBtn,
+	speedInput,
+	setPlayerIndex
+} from './game.js';
 
-const SPEED = 15;
+// const SPEED = 11;
+let SPEED = 11;
+
+export function setSPEED(value) {
+	if (value > 0 && value < 30) {
+		SPEED = value;
+		console.log('new speed is: ', SPEED);
+	} else {
+		console.log('speed input is out of range');
+	}
+}
 
 const INIT_SNAKES = [
 	[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ], //y: 1 right
@@ -135,8 +158,15 @@ export function reset() {
 	snakes = populateSnakeArray();
 	inputReset();
 	homeScreen();
+	//reset speed
+	//clear input fields
+	setSPEED(10);
+	speedInput.value = SPEED;
+	gameIdInput.value = '';
+	joinBtn.disabled = false;
 	game.status = 'landing';
 	game.mode = 'single';
+	setPlayerIndex(0);
 }
 
 export function populateSnakeArray() {

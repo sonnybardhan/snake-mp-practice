@@ -1,20 +1,21 @@
 let HOST = 'ws://localhost:9090';
 export const ws = new WebSocket(HOST);
-import { SPEED, update as updateSnake, draw as drawSnake, snakes, reset } from './snake.js';
+import { SPEED, update as updateSnake, draw as drawSnake, snakes, reset, setSPEED } from './snake.js';
 // import { SPEED, newUpdate as updateSnake, draw as drawSnake, snakes, reset } from './snake.js';
 import { update as updateFood, draw as drawFood, food, lastConsumer } from './food.js';
 import { directions, numPlayers } from './input.js';
 
-const nameInput = document.getElementById('name-input');
-const gameIdInput = document.getElementById('game-id-input');
-const createBtn = document.getElementById('create-btn');
-const joinBtn = document.getElementById('join-btn');
+export const nameInput = document.getElementById('name-input');
+export const gameIdInput = document.getElementById('game-id-input');
+export const createBtn = document.getElementById('create-btn');
+export const joinBtn = document.getElementById('join-btn');
 const landingScreen = document.getElementById('landing');
 // const spaceBar = document.getElementById('space-bar');
 const waitScreen = document.getElementById('wait-screen');
 const waitMessageSpan = document.getElementById('wait-message-span');
 const gameIdSpan = document.getElementById('game-id-span');
 const escapeMessageSpan = document.getElementById('escape-message-span');
+export const speedInput = document.getElementById('speed-input');
 // const cancelBtn = document.getElementById('cancel-btn');
 // export const overlay = document.getElementById('overlay');
 const gameBoard = document.getElementById('game-board');
@@ -26,8 +27,20 @@ export let gameId = null;
 export let playerName = null;
 export let playerNum = 1;
 export let playerIndex = 0;
+export let playerSpeedInput = 10;
 
+export function setPlayerIndex(value) {
+	playerIndex = value;
+	console.log('playerIndex changed: ', playerIndex);
+}
 //stop, wait, starting, play, pause, gameOver
+
+speedInput.addEventListener('change', (e) => {
+	playerSpeedInput = e.target.value;
+	setSPEED(playerSpeedInput);
+	// console.log('playerSpeedInput changed: ', playerSpeedInput);
+});
+
 export let game = { status: 'landing', mode: 'single' };
 // export let inPlay = false;
 
@@ -78,6 +91,8 @@ ws.onmessage = (msg) => {
 		food.x = response.newPosition.x;
 		food.y = response.newPosition.y;
 
+		console.log('creator has set speed to: ', response.game.speed);
+		setSPEED(response.game.speed);
 		// if (numPlayers.count === 2) { to make it dynamic set 2 to input value by creator
 		// if (response.game.clients.length === numPlayers.count) {
 		if (response.game.clients.length === 2) {
@@ -85,17 +100,8 @@ ws.onmessage = (msg) => {
 
 			gameId = response.game.id;
 
-			// gameIdSpan.innerText = gameId;
-
 			waitingScreen('GAME STARTING ... ', gameId, '[ESC] to quit');
 
-			// landingScreen.style.zIndex = -1;
-			// waitScreen.style.zIndex = 4;
-			// waitMessageSpan.innerText = 'GAME STARTING ... ';
-
-			// console.log('food position is: ', foodPosition);
-			//set interval stuff
-			// let prevId;
 			let time = 3;
 			let id = setInterval(() => {
 				// waitMessageSpan.innerText = `STARTING IN ${time--}`;
@@ -170,7 +176,8 @@ createBtn.addEventListener('click', () => {
 	const payload = {
 		method: 'create',
 		clientId,
-		playerName
+		playerName,
+		speed: SPEED
 	};
 	ws.send(JSON.stringify(payload));
 	game.mode = 'multi';

@@ -36,6 +36,19 @@ body {
 	/* padding: 0; */
 }
 
+#speed-input {
+	/* height: 40px;
+	/* width: 40px; */
+
+}
+
+#input-div * {
+	width: 100%;
+	/* padding: .5em; */
+
+	margin: 2px;
+}
+
 #landing {
 	position: absolute;
 	background-color: aquamarine;

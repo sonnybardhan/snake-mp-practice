@@ -36,6 +36,7 @@ wss.on('request', (req) => {
 			const clientId = response.clientId;
 			const gameId = createId(8);
 			let playerName = response.playerName;
+			const speed = response.speed;
 			// let playerIndex = 0;
 
 			console.log(`client ${clientId} wants to create a new game`);
@@ -43,7 +44,8 @@ wss.on('request', (req) => {
 			games[gameId] = {
 				id: gameId,
 				clients: [],
-				state: {}
+				state: {},
+				speed
 			};
 
 			const game = games[gameId];
@@ -83,7 +85,7 @@ wss.on('request', (req) => {
 			if (!game) {
 				const payload = {
 					method: 'error',
-					msg: 'Invalid game ID'
+					msg: '[server]: Invalid game ID'
 				};
 				return con.send(JSON.stringify(payload));
 			}
