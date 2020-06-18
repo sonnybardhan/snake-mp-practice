@@ -56,7 +56,7 @@ body {
 	outline: none;
 	padding: .4em;
 	font-size: 1.2em;
-	margin: .15em;
+	/* margin: .15em; */
 	margin-top: 2em;
 
 }
@@ -65,9 +65,10 @@ body {
 #speed-input,
 #player-count-input {
 	/* margin: .15em; */
-
+	outline: none;
 	width: 100%;
 	transition: all .3s ease-in-out;
+	border: none;
 }
 
 #speed-input,
@@ -94,38 +95,57 @@ body {
 	width: 20%;
 }
 
+#speed-input:hover,
+#player-count-input:hover {
+	cursor: pointer;
+}
+
 #game-id-input:hover,
 #speed-input:hover,
 #player-count-input:hover {
-	transform: scale(1.07);
+	/* transform: scale(1.01); */
+}
+
+#game-id-input:focus,
+#speed-input:focus,
+#player-count-input:focus {
+	outline: none;
 }
 
 #create-btn,
 #join-btn {
-	margin: .15em;
+	/* margin: .15em; */
+	margin-top: .25em;
 	font-size: 1.2em;
 	color: white;
 	padding: .5em;
-	background-color: rgb(64, 109, 206);
+	background-color: rgb(108, 119, 142);
+	/* background-color: rgb(67, 67, 67); */
 	border: none;
 	width: 100%;
 	transition: all .3s ease-in-out;
+	/* border-bottom-right-radius: 10%; */
+
+}
+
+#create-btn {
+	/* border-top-left-radius: 1em; */
+	border-bottom-left-radius: 1em;
+	border-bottom-right-radius: 1em;
 }
 
 #create-btn:hover,
 #join-btn:hover {
-	transform: scale(1.06);
+	transform: scale(1.01);
 }
 
 .main-banner {
 	height: 100%;
 	display: flex;
 	align-items: center;
-	font-size: 2em;
+	font-size: 3em;
 	/* color: rgb(57, 57, 57); */
 	width: 100%;
-	/* background-color: rgba(87, 87, 87, 0.126); */
-
 }
 
 .landing-banner {
@@ -135,9 +155,10 @@ body {
 	justify-content: center;
 	align-items: center;
 	align-content: center;
-	font-size: 2.5rem;
+	font-size: 2.2rem;
 	/* color: rgb(57, 57, 57); */
 	animation: p-animate 1s ease-in-out infinite alternate;
+
 }
 
 #input-div {
@@ -148,7 +169,12 @@ body {
 	padding: 2em;
 	margin-bottom: 5em;
 	background-color: rgba(0, 0, 0, 0.112);
-	border-radius: .625em;
+	/* border-radius: .625em; */
+
+	/* border-top-left-radius: 1em; */
+	/* border-bottom-left-radius: 2em; */
+	/* border-bottom-right-radius: 2em; */
+	border-radius: 2em;
 }
 
 #landing {
@@ -161,13 +187,6 @@ body {
 
 	background-color: rgb(100, 199, 235);
 
-	/* background-color: rgb(146, 208, 199); */
-
-	/* background: rgb(180, 180, 180);
-	background: linear-gradient(357deg, rgba(180, 180, 180, 1) 19%, rgba(166, 166, 166, 1) 46%, rgb(145, 145, 145) 80%);
- */
-
-	/* background-color: rgb(30, 30, 30); */
 	top: 0;
 	left: 0;
 	height: 100vh;

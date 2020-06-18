@@ -86,7 +86,7 @@ ws.onmessage = (msg) => {
 		numPlayers.count = response.game.clients.length;
 		console.log('resetting numplayers.count on join: ', numPlayers.count);
 
-		console.log('num of players post join: ', numPlayers.count);
+		// console.log('num of players post join: ', numPlayers.count);
 
 		// populateSnakeArray();
 		// console.log('re-populating snake array on rejoin: ', snakes);
@@ -104,7 +104,7 @@ ws.onmessage = (msg) => {
 		console.log('creator has set speed to: ', response.game.speed);
 		setSPEED(response.game.speed);
 		// if (numPlayers.count === 2) { to make it dynamic set 2 to input value by creator
-		// if (response.game.clients.length === numPlayers.count) {
+		// if (response.game.clients.length === response.numPlayers) {
 		if (response.game.clients.length === 2) {
 			//starts the moment there are 2 players
 
@@ -278,11 +278,11 @@ export function start() {
 				game.status = 'pause';
 				pauseScreen();
 			} else {
-				waitMessageSpan.innerText = `No pausing during multiplayer`;
-				const id = setTimeout(() => {
-					waitMessageSpan.innerText = ``;
-					clearInterval(id);
-				}, 500);
+				// waitMessageSpan.innerText = `No pausing during multiplayer`;
+				// const id = setTimeout(() => {
+				// 	waitMessageSpan.innerText = ``;
+				// 	clearInterval(id);
+				// }, 500);
 			}
 			break;
 		case 'pause':
