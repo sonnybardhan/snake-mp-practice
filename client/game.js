@@ -5,7 +5,7 @@ import { SPEED, update as updateSnake, draw as drawSnake, snakes, reset, setSPEE
 import { update as updateFood, draw as drawFood, food, lastConsumer } from './food.js';
 import { directions, numPlayers } from './input.js';
 
-export const nameInput = document.getElementById('name-input');
+// export const nameInput = document.getElementById('name-input');
 export const gameIdInput = document.getElementById('game-id-input');
 export const createBtn = document.getElementById('create-btn');
 export const joinBtn = document.getElementById('join-btn');
@@ -17,6 +17,8 @@ const gameIdSpan = document.getElementById('game-id-span');
 const escapeMessageSpan = document.getElementById('escape-message-span');
 export const speedInput = document.getElementById('speed-input');
 export const playerCountInput = document.getElementById('player-count-input');
+export const speedDisplay = document.getElementById('speed-display');
+export const playerCountDisplay = document.getElementById('player-count-display');
 // const cancelBtn = document.getElementById('cancel-btn');
 // export const overlay = document.getElementById('overlay');
 const gameBoard = document.getElementById('game-board');
@@ -37,8 +39,16 @@ export function setPlayerIndex(value) {
 
 speedInput.addEventListener('change', (e) => {
 	playerSpeedInput = e.target.value * 2;
+	speedDisplay.innerText = playerSpeedInput;
 	setSPEED(playerSpeedInput);
-	// console.log('playerSpeedInput changed: ', playerSpeedInput);
+	speedInput.blur();
+});
+
+playerCountInput.addEventListener('change', (e) => {
+	playerCountDisplay.innerText = e.target.value;
+	console.log('playercount changing');
+	playerCountInput.blur();
+	// console.log('player count changed: ', playerSpeedInput);
 });
 
 export let game = { status: 'landing', mode: 'single' };

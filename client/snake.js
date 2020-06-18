@@ -12,7 +12,8 @@ import {
 	gameIdInput,
 	joinBtn,
 	speedInput,
-	setPlayerIndex
+	setPlayerIndex,
+	speedDisplay
 } from './game.js';
 
 // const SPEED = 11;
@@ -243,7 +244,8 @@ export function reset() {
 	//reset speed
 	//clear input fields
 	setSPEED(10);
-	speedInput.value = SPEED;
+	speedInput.value = SPEED / 2;
+	speedDisplay.innerText = SPEED;
 	gameIdInput.value = '';
 	joinBtn.disabled = false;
 	game.status = 'landing';

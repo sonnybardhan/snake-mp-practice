@@ -36,17 +36,81 @@ body {
 	/* padding: 0; */
 }
 
-#speed-input {
-	/* height: 40px;
-	/* width: 40px; */
+
+.slider-readout {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 2em;
+}
+
+#game-id-input {
+	border: none;
+	outline: none;
+	padding: .4em;
+	font-size: 1.2em;
+	margin: .15em;
+	margin-top: 2em;
 
 }
 
-#input-div * {
+#game-id-input,
+#speed-input,
+#player-count-input {
+	/* margin: .15em; */
 	width: 100%;
-	/* padding: .5em; */
+	transition: all .3s ease-in-out;
+}
 
-	margin: 2px;
+#speed-input,
+#player-count-input {
+	margin: .2em;
+	height: 2em;
+	/* flex: 100%; */
+}
+
+#speed-input:focus,
+#player-count-input:focus {
+	outline: none;
+}
+
+#speed-title,
+#num-players-title {
+	width: 70%;
+	text-align: start;
+}
+
+#speed-display,
+#player-count-display {
+	text-align: end;
+	width: 20%;
+}
+
+#game-id-input:hover,
+#speed-input:hover,
+#player-count-input:hover {
+	transform: scale(1.07);
+}
+
+#create-btn,
+#join-btn {
+	margin: .15em;
+	font-size: 1.2em;
+	color: white;
+	padding: .5em;
+	background-color: rgb(64, 109, 206);
+	border: none;
+	width: 100%;
+	transition: all .3s ease-in-out;
+}
+
+#create-btn:hover,
+#join-btn:hover {
+	transform: scale(1.06);
+}
+
+#input-div {
+	width: 30vw;
 }
 
 #landing {
