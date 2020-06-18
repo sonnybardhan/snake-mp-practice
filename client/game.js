@@ -16,6 +16,7 @@ const waitMessageSpan = document.getElementById('wait-message-span');
 const gameIdSpan = document.getElementById('game-id-span');
 const escapeMessageSpan = document.getElementById('escape-message-span');
 export const speedInput = document.getElementById('speed-input');
+export const playerCountInput = document.getElementById('player-count-input');
 // const cancelBtn = document.getElementById('cancel-btn');
 // export const overlay = document.getElementById('overlay');
 const gameBoard = document.getElementById('game-board');
@@ -24,7 +25,7 @@ export let foodPosition = {};
 
 export let clientId = null;
 export let gameId = null;
-export let playerName = null;
+// export let playerName = null;
 export let playerNum = 1;
 export let playerIndex = 0;
 export let playerSpeedInput = 10;
@@ -35,7 +36,7 @@ export function setPlayerIndex(value) {
 //stop, wait, starting, play, pause, gameOver
 
 speedInput.addEventListener('change', (e) => {
-	playerSpeedInput = e.target.value;
+	playerSpeedInput = e.target.value * 2;
 	setSPEED(playerSpeedInput);
 	// console.log('playerSpeedInput changed: ', playerSpeedInput);
 });
@@ -176,11 +177,11 @@ ws.onmessage = (msg) => {
 };
 
 createBtn.addEventListener('click', () => {
-	playerName = nameInput.value;
+	// playerName = nameInput.value;
 	const payload = {
 		method: 'create',
 		clientId,
-		playerName,
+		// playerName,
 		speed: SPEED
 	};
 	ws.send(JSON.stringify(payload));
@@ -189,7 +190,7 @@ createBtn.addEventListener('click', () => {
 
 joinBtn.addEventListener('click', () => {
 	gameId = gameIdInput.value;
-	playerName = nameInput.value;
+	// playerName = nameInput.value;
 
 	if (!gameId) {
 		return console.log('Please enter a game ID');
@@ -200,8 +201,8 @@ joinBtn.addEventListener('click', () => {
 	const payload = {
 		method: 'join',
 		clientId,
-		gameId,
-		playerName
+		gameId
+		// playerName
 	};
 	ws.send(JSON.stringify(payload));
 	game.mode = 'multi';

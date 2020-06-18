@@ -35,7 +35,7 @@ wss.on('request', (req) => {
 		if (response.method === 'create') {
 			const clientId = response.clientId;
 			const gameId = createId(8);
-			let playerName = response.playerName;
+			// let playerName = response.playerName;
 			const speed = response.speed;
 			// let playerIndex = 0;
 
@@ -50,13 +50,13 @@ wss.on('request', (req) => {
 
 			const game = games[gameId];
 
-			if (!playerName) {
-				playerName = 'Player-1';
-			}
+			// if (!playerName) {
+			// 	playerName = 'Player-1';
+			// }
 
 			game.clients.push({
 				clientId,
-				playerName,
+				// playerName,
 				playerNum: 1,
 				score: 0
 			});
@@ -75,7 +75,7 @@ wss.on('request', (req) => {
 			const clientId = response.clientId;
 			//should have game ID and error handling
 			const gameId = response.gameId;
-			let playerName = response.playerName;
+			// let playerName = response.playerName;
 			let playerIndex = null;
 			const game = games[gameId];
 			const con = clients[clientId].connection;
@@ -119,13 +119,13 @@ wss.on('request', (req) => {
 
 			const playerNum = game.clients.length + 1;
 
-			if (!playerName) {
-				playerName = 'Player-' + playerNum;
-			}
+			// if (!playerName) {
+			// 	playerName = 'Player-' + playerNum;
+			// }
 
 			game.clients.push({
 				clientId,
-				playerName,
+				// playerName,
 				score: 0,
 				playerNum
 			});
