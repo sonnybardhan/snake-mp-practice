@@ -10,7 +10,8 @@ import {
 	p1ScoreDisplay,
 	p2ScoreDisplay,
 	p3ScoreDisplay,
-	p4ScoreDisplay
+	p4ScoreDisplay,
+	foodArray
 } from './game.js';
 import { snakes } from './snake.js';
 
@@ -72,12 +73,42 @@ export function draw(gameBoard) {
 export function newConsumed() {
 	let i = game.mode === 'single' ? 0 : playerIndex;
 
+	let foodItem = foodArray[0];
+
+	if (game.mode === 'single') {
+		i = 0;
+		foodItem = food;
+	} else {
+	}
+
 	let snake = snakes[i];
-	if (snake[0].x === food.x && snake[0].y === food.y) {
+	if (snake[0].x === foodItem[0].x && snake[0].y === foodItem[0].y) {
+		//fix this place
+		foodArray.shift();
+		console.log('foodArray[0] cleared');
+		if (foodArray.length <= 5) {
+			const payload = {
+				method: 'consume',
+				clientId,
+				gameId,
+				lastConsumer,
+				playerScore: scores[playerIndex]
+			};
+			ws.send(JSON.stringify(payload));
+		}
 		return true;
 	}
 	return false;
 }
+// export function newConsumed() {
+// 	let i = game.mode === 'single' ? 0 : playerIndex;
+
+// 	let snake = snakes[i];
+// 	if (snake[0].x === food.x && snake[0].y === food.y) {
+// 		return true;
+// 	}
+// 	return false;
+// }
 
 function randomPosition() {
 	return {

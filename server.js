@@ -132,6 +132,10 @@ wss.on('request', (req) => {
 				newPosition //send array of 10 positions here instead that were stored at the time of game creation
 			};
 
+			game['foodArray'] = randomPositionArray();
+
+			// console.log(game.foodArray);
+
 			game.clients.forEach((client) => {
 				clients[client.clientId].connection.send(JSON.stringify(payload));
 			});
@@ -283,10 +287,10 @@ function randomPosition() {
 	};
 }
 
-// function randomPositionArray(len = 3) {
-// 	const arr = [];
-// 	while (len--) {
-// 		arr.push(randomPosition());
-// 	}
-// 	return arr;
-// }
+function randomPositionArray(len = 10) {
+	const arr = [];
+	while (len--) {
+		arr.push(randomPosition());
+	}
+	return arr;
+}

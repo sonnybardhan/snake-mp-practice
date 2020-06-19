@@ -1,7 +1,7 @@
-let HOST = location.origin.replace(/^http/, 'ws');
+// let HOST = location.origin.replace(/^http/, 'ws');
 
 // for local
-// let HOST = 'ws://localhost:9090';
+let HOST = 'ws://localhost:9090';
 
 export const ws = new WebSocket(HOST);
 import { SPEED, update as updateSnake, draw as drawSnake, snakes, reset, setSPEED, gameOver } from './snake.js';
@@ -47,6 +47,12 @@ export let playerSpeedInput = 10;
 export let playerScore = 0;
 export let scores = { 0: 0, 1: 0, 2: 0, 3: 0 };
 export let multiPlayerCount = 2;
+export let foodArray = [];
+
+export function setFoodArray(value) {
+	//not needed
+	foodArray.push(...value);
+}
 
 export const INIT_SCORES = { 0: 0, 1: 0, 2: 0, 3: 0 };
 // export const playerColors = ['GREEN', 'ORANGE', 'WHITE', 'YELLOW'];
@@ -156,11 +162,15 @@ ws.onmessage = (msg) => {
 		multiPlayerCount = response.game.multiPlayerCount;
 
 		const me = response.game.clients.find((client) => client.clientId === clientId);
-		console.log('response from server: ', response);
+		// console.log('response from server: ', response);
+		// console.log('food array from server: ', response.game.foodArray);
+
+		foodArray.push(...response.game.foodArray);
 		// console.log('me: ', me);
 		// if (!playerIndex) {
 
 		playerIndex = me.playerIndex;
+
 		// }
 		// playerIndex = playerNum - 1;
 		// console.log('joiners player index and num set', playerIndex, playerNum);
