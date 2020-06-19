@@ -56,12 +56,6 @@ wss.on('request', (req) => {
 
 			const game = games[gameId];
 
-			// game.clients.push({
-			// 	clientId,
-			// 	playerNum: 1,
-			// 	score: 0
-			// });
-
 			game.clients.push({
 				clientId,
 				score: 0,
@@ -126,13 +120,13 @@ wss.on('request', (req) => {
 
 			let newPosition = randomPosition();
 
+			game['foodArray'] = randomPositionArray();
+
 			const payload = {
 				method: 'join',
-				game,
-				newPosition //send array of 10 positions here instead that were stored at the time of game creation
+				game
+				// newPosition //send array of 10 positions here instead that were stored at the time of game creation
 			};
-
-			game['foodArray'] = randomPositionArray();
 
 			// console.log(game.foodArray);
 
@@ -150,15 +144,16 @@ wss.on('request', (req) => {
 			client.score = playerScore;
 
 			// console.log('scorer: ', client.clientId, client.score);
-			const newPosition = randomPosition();
+
+			// const newPosition = randomPosition();
 			const payload = {
 				method: 'consume',
 				lastConsumer,
-				newPosition,
+				// newPosition,
 				playerScore
 			};
 
-			console.log('last consumer, score', lastConsumer, playerScore);
+			// console.log('last consumer, score', lastConsumer, playerScore);
 
 			game.clients.forEach((client) => {
 				clients[client.clientId].connection.send(JSON.stringify(payload));
@@ -240,6 +235,18 @@ wss.on('request', (req) => {
 					clients[client.clientId].connection.send(JSON.stringify(payload));
 				}
 			});
+		} else if (response.method === 'requestFood') {
+			const payload = {
+				method: 'requestFood',
+				foodArray: randomPositionArray()
+			};
+
+			const gameId = response.gameId;
+			const game = games[gameId];
+
+			game.clients.forEach((client) => {
+				clients[client.clientId].connection.send(JSON.stringify(payload));
+			});
 		}
 	});
 
@@ -252,11 +259,11 @@ wss.on('request', (req) => {
 		//when any client leaves check which game they were in
 		//remove from game
 
-		if (Object.keys(clients).length) {
-			clientLoop();
-		} else {
-			console.log('No clients online.');
-		}
+		// if (Object.keys(clients).length) {
+		// 	clientLoop();
+		// } else {
+		// 	console.log('No clients online.');
+		// }
 
 		console.log(`client: ${clientId} disconnected.`);
 	});

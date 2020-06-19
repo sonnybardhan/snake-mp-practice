@@ -71,35 +71,29 @@ export function draw(gameBoard) {
 }
 
 export function newConsumed() {
-	let i = game.mode === 'single' ? 0 : playerIndex;
-
-	let foodItem = foodArray[0];
+	let foodItem;
 
 	if (game.mode === 'single') {
-		i = 0;
 		foodItem = food;
 	} else {
+		// i = playerIndex;
+		foodItem = foodArray[0];
 	}
+	let snake = snakes[playerIndex];
 
-	let snake = snakes[i];
-	if (snake[0].x === foodItem[0].x && snake[0].y === foodItem[0].y) {
-		//fix this place
+	if (snake[0].x === foodItem.x && snake[0].y === foodItem.y) {
+		if (game.mode === 'single') return true;
+
 		foodArray.shift();
-		console.log('foodArray[0] cleared');
+		food = foodArray[0];
 		if (foodArray.length <= 5) {
-			const payload = {
-				method: 'consume',
-				clientId,
-				gameId,
-				lastConsumer,
-				playerScore: scores[playerIndex]
-			};
-			ws.send(JSON.stringify(payload));
+			requestFood();
 		}
 		return true;
 	}
 	return false;
 }
+
 // export function newConsumed() {
 // 	let i = game.mode === 'single' ? 0 : playerIndex;
 
@@ -115,4 +109,13 @@ function randomPosition() {
 		x: (Math.random() * 21 + 1) | 0,
 		y: (Math.random() * 21 + 1) | 0
 	};
+}
+
+function requestFood() {
+	console.log('requesting server for food!');
+	const payload = {
+		method: 'requestFood',
+		gameId
+	};
+	ws.send(JSON.stringify(payload));
 }

@@ -113,9 +113,9 @@ speedInput.addEventListener('change', (e) => {
 });
 
 playerCountInput.addEventListener('change', (e) => {
-	console.log(`playerCount input (prev)= ${multiPlayerCount}`);
+	// console.log(`playerCount input (prev)= ${multiPlayerCount}`);
 	multiPlayerCount = parseInt(e.target.value);
-	console.log(`playerCount input = ${multiPlayerCount}`);
+	// console.log(`playerCount input = ${multiPlayerCount}`);
 	playerCountDisplay.innerText = e.target.value;
 	playerCountInput.blur();
 });
@@ -129,9 +129,9 @@ ws.onmessage = (msg) => {
 
 	if (response.method === 'connect') {
 		clientId = response.clientId;
-		console.log(`client ${clientId} successfully added`);
+		// console.log(`client ${clientId} successfully added`);
 	} else if (response.method === 'create') {
-		console.log('server sent a message');
+		// console.log('server sent a message');
 		playerNum = 1;
 		playerIndex = 0;
 		gameId = response.game.id;
@@ -146,7 +146,7 @@ ws.onmessage = (msg) => {
 		waitingScreen('WAITING FOR OPPONENTS ... ', gameId, '[ESC] to quit');
 		// console.log('Creators player index and num set', playerIndex, playerNum);
 		// console.log(`The number of players a request has been made for `, response.game.multiPlayerCount);
-		console.log(playerIndex, playerColors[playerIndex]);
+		// console.log(playerIndex, playerColors[playerIndex]);
 		//generate a time out
 	} else if (response.method === 'join') {
 		// console.log('server sent a message: player joined!', response);
@@ -164,7 +164,7 @@ ws.onmessage = (msg) => {
 		const me = response.game.clients.find((client) => client.clientId === clientId);
 		// console.log('response from server: ', response);
 		// console.log('food array from server: ', response.game.foodArray);
-
+		foodArray = [];
 		foodArray.push(...response.game.foodArray);
 		// console.log('me: ', me);
 		// if (!playerIndex) {
@@ -183,11 +183,18 @@ ws.onmessage = (msg) => {
 		playerInfo.innerText = `PLAYER ${playerIndex + 1}: ${playerColors[playerIndex].toUpperCase()}`;
 		playerInfo.classList.add(playerColors[playerIndex]);
 
-		console.log('I joined, i am Player-', playerIndex + 1);
-		console.log('I am ', playerColors[playerIndex].toUpperCase());
+		// console.log('I joined, i am Player-', playerIndex + 1);
+		// console.log('I am ', playerColors[playerIndex].toUpperCase());
 
-		food.x = response.newPosition.x;
-		food.y = response.newPosition.y;
+		// food.x = response.newPosition.x;
+		// food.y = response.newPosition.y;
+
+		food.x = foodArray[0].x;
+		food.y = foodArray[0].y;
+
+		// console.log(foodArray);
+		// console.log(food.x, food.y, foodArray[0].x, foodArray[0].y);
+		// foodArray.shift();
 
 		// console.log('creator has set speed to: ', response.game.speed);
 		setSPEED(response.game.speed);
@@ -214,12 +221,22 @@ ws.onmessage = (msg) => {
 		} else {
 		}
 	} else if (response.method === 'consume') {
-		food.x = response.newPosition.x;
-		food.y = response.newPosition.y;
+		// food.x = response.newPosition.x;
+		// food.y = response.newPosition.y;
+
+		// console.log(food.x, food.y, foodArray[0].x, foodArray[0].y)
+		if (playerIndex !== response.lastConsumer.id) {
+			foodArray.shift();
+			food.x = foodArray[0].x;
+			food.y = foodArray[0].y;
+		}
+
+		console.log('items remaining ', foodArray.length);
+
 		lastConsumer.id = response.lastConsumer.id;
 		scores[lastConsumer.id] = response.playerScore;
 		// console.log('score update: ', scores);
-		console.log(lastConsumer.id, response.playerScore);
+		// console.log(lastConsumer.id, response.playerScore);
 
 		updateScoresDisplay(lastConsumer.id, response.playerScore);
 	} else if (response.method === 'move') {
@@ -255,9 +272,13 @@ ws.onmessage = (msg) => {
 
 		game.status = 'landing';
 		gameOver(msg);
+	} else if (response.method === 'requestFood') {
+		const sentFood = response.foodArray;
+		foodArray.push(...sentFood);
+		// console.log(`server sent food! new food array len`, foodArray.length);
 	} else if (response.method === 'error') {
 		console.log('There was an error!', response.msg);
-
+		//spring up a message display pop up
 		if (response.type === 'join') {
 			gameIdInput.placeholder = response.msg.toUpperCase();
 			setTimeout(() => {
@@ -270,17 +291,17 @@ ws.onmessage = (msg) => {
 };
 
 createBtn.addEventListener('click', () => {
-	console.log('from create event handler, multiplayer count: ', multiPlayerCount);
-	console.log(typeof multiPlayerCount);
+	// console.log('from create event handler, multiplayer count: ', multiPlayerCount);
+	// console.log(typeof multiPlayerCount);
 	if (multiPlayerCount === 1) {
-		console.log('entered this');
+		// console.log('entered this');
 		game.mode = 'single';
 		game.status = 'landing';
 		initSinglePlayer();
 		start();
 		return;
 	} else {
-		console.log('multiplayer count: ', multiPlayerCount);
+		// console.log('multiplayer count: ', multiPlayerCount);
 		const payload = {
 			method: 'create',
 			clientId,
@@ -339,10 +360,10 @@ export function start() {
 			game.status = 'play';
 			playScreen();
 			break;
-		case 'stop':
-			// stopScreen();
-			console.log('Stop does nothing');
-			break;
+		// case 'stop':
+		// stopScreen();
+		// console.log('Stop does nothing');
+		// break;
 		case 'wait':
 			// waitScreen();
 			break;
