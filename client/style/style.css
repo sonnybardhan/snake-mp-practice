@@ -60,6 +60,7 @@ body {
 	font-size: 1.2em;
 	/* margin: .15em; */
 	margin-top: 2em;
+	border-radius: .25em;
 
 }
 
@@ -117,7 +118,7 @@ body {
 #create-btn,
 #join-btn {
 	/* margin: .15em; */
-	margin-top: .25em;
+	margin-top: .35em;
 	font-size: 1.2em;
 	color: white;
 	padding: .5em;
@@ -127,13 +128,15 @@ body {
 	width: 100%;
 	transition: all .3s ease-in-out;
 	/* border-bottom-right-radius: 10%; */
+	border-radius: .25em;
+	text-transform: uppercase;
 
 }
 
 #create-btn {
-	/* border-top-left-radius: 1em; */
-	border-bottom-left-radius: 1em;
-	border-bottom-right-radius: 1em;
+	color: rgb(99, 103, 96);
+	background-color: rgb(239, 255, 137);
+	/* border: .15em solid rgb(103, 98, 98); */
 }
 
 #create-btn:hover,
@@ -242,6 +245,7 @@ body {
 	color: yellowgreen;
 	/* text-shadow: .2em .2em red, .4em .4em yellow; */
 	font-size: 5rem;
+	box-shadow: .5rem .5rem 1.5rem rgba(0, 0, 0, 0.185);
 
 	/* display: none; */
 }

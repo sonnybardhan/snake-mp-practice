@@ -1,7 +1,7 @@
-let HOST = location.origin.replace(/^http/, 'ws');
+// let HOST = location.origin.replace(/^http/, 'ws');
 
 // for local
-// let HOST = 'ws://localhost:9090';
+let HOST = 'ws://localhost:9090';
 
 export const ws = new WebSocket(HOST);
 import { SPEED, update as updateSnake, draw as drawSnake, snakes, reset, setSPEED, gameOver } from './snake.js';
