@@ -203,7 +203,6 @@ ws.onmessage = (msg) => {
 			}, 750);
 		} else {
 		}
-	} else if (response.method === 'play') {
 	} else if (response.method === 'consume') {
 		food.x = response.newPosition.x;
 		food.y = response.newPosition.y;
@@ -222,11 +221,11 @@ ws.onmessage = (msg) => {
 		//experiment to see if this is quicker,
 		//might have to put this back if snake body is not appearing as it should
 
-		// const oppSnake = snakes[opponentIndex];
-		// const newSnake = response.snake;
-		// for (let i = 0; i < newSnake.length; i++) {
-		// 	oppSnake[i] = { ...newSnake[i] };
-		// }
+		const oppSnake = snakes[opponentIndex];
+		const newSnake = response.snake;
+		for (let i = 0; i < newSnake.length; i++) {
+			oppSnake[i] = { ...newSnake[i] };
+		}
 	} else if (response.method === 'grow') {
 		const opponentIndex = response.playerIndex;
 		const oppSnake = snakes[opponentIndex];
