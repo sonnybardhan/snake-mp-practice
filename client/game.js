@@ -219,8 +219,11 @@ ws.onmessage = (msg) => {
 		directions[opponentIndex].x = response.direction.x;
 		directions[opponentIndex].y = response.direction.y;
 
-		const oppSnake = snakes[opponentIndex];
-		const newSnake = response.snake;
+		//experiment to see if this is quicker,
+		//might have to put this back if snake body is not appearing as it should
+
+		// const oppSnake = snakes[opponentIndex];
+		// const newSnake = response.snake;
 		// for (let i = 0; i < newSnake.length; i++) {
 		// 	oppSnake[i] = { ...newSnake[i] };
 		// }

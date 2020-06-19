@@ -221,6 +221,10 @@ body {
 	/* display: none; */
 }
 
+#wait-message-span {
+	margin-top: 2em;
+}
+
 #crash-screen {
 	position: absolute;
 	background-color: rgb(62, 62, 62);
@@ -337,7 +341,9 @@ body {
 } */
 
 #player-info {
-	margin: .225em;
+	margin: .625em;
+
+	/* margin: 2em; */
 	border-radius: .625em;
 	padding: 1em;
 	font-size: .75em;

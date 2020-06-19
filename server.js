@@ -192,9 +192,9 @@ wss.on('request', (req) => {
 				method: 'move',
 				// clientId, //not needed
 				playerIndex,
-				direction,
+				direction
 				// lastInput, //not needed
-				snake
+				// snake
 				//send snake body
 			};
 
