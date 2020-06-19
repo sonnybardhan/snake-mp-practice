@@ -30,7 +30,7 @@ import {
 } from './game.js';
 
 // const SPEED = 11;
-let SPEED = 2;
+let SPEED = 8;
 
 export function setSPEED(value) {
 	if (value > 0 && value <= 30) {

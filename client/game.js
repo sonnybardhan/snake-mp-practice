@@ -177,7 +177,7 @@ ws.onmessage = (msg) => {
 					playScreen();
 					start();
 				}
-			}, 200);
+			}, 750);
 			// let id = setInterval(() => {
 			// 	waitMessageSpan.innerText = `STARTING IN ${time--}`;
 			// 	// waitMessageSpan()
