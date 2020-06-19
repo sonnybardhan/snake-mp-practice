@@ -24,11 +24,8 @@ export const playerInfo = document.getElementById('player-info');
 
 const gameBoard = document.getElementById('game-board');
 export const crashScreen = document.getElementById('crash-screen');
-// export const gameOverMsg = document.getElementById('game-over-msg');
+export const gameOverMsg = document.getElementById('game-over-msg');
 export const gameOverResultDisplay = document.getElementById('game-over-result-display');
-
-// export const scores1DisplayDiv = document.getElementById('scores1-display-div');
-// export const scores2DisplayDiv = document.getElementById('scores2-display-div');
 
 export const p1ScoreDisplay = document.getElementById('player-1');
 export const p2ScoreDisplay = document.getElementById('player-2');
