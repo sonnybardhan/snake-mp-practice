@@ -1,9 +1,9 @@
 //SNAKE GAME==============
 
-// const PORT = process.env.PORT || 9090;
+const PORT = process.env.PORT || 9090;
 
 // for local
-const PORT = 9090;
+// const PORT = 9090;
 const express = require('express');
 const app = express();
 const http = require('http');
