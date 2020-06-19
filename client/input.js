@@ -1,5 +1,5 @@
 // import { start, ws, clientId, gameId, playerNum, playerIndex, game, p1Div, scores1DisplayDiv } from './game.js';
-import { start, ws, clientId, gameId, playerIndex, game, p1Div } from './game.js';
+import { start, ws, clientId, gameId, playerIndex, game, p1Div, crashScreen } from './game.js';
 import { snakes, reset, setSPEED, hideScoresDisplays, gameOver } from './snake.js';
 export let numPlayers = { count: 2 };
 
@@ -66,8 +66,6 @@ window.addEventListener('keydown', ({ key }) => {
 			break;
 		case 'Escape':
 			if (game.status === 'play' && game.mode === 'multi') {
-				// reset();
-				//send signal to server
 				quitMessage();
 				game.status = 'landing';
 				gameOver('You quit');

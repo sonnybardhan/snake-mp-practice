@@ -141,7 +141,7 @@ export function gameOver(msg = '') {
 		gameOverResultDisplay.innerText = ``;
 
 		return reset();
-	}, 2000);
+	}, 1200);
 }
 
 function outOfBounds(snake, direction) {
