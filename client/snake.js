@@ -26,11 +26,16 @@ import {
 	p4Div,
 	crashScreen,
 	gameOverResultDisplay,
-	playerScore
+	playerScore,
+	playerInfo,
+	setMultiPlayerCount,
+	playerCountInput,
+	playerCountDisplay,
+	createBtn
 } from './game.js';
 
 // const SPEED = 11;
-let SPEED = 8;
+let SPEED = 10;
 
 export function setSPEED(value) {
 	if (value > 0 && value <= 30) {
@@ -184,9 +189,17 @@ export function reset() {
 	homeScreen();
 	//reset speed
 	//clear input fields
-	setSPEED(2);
-	speedInput.value = SPEED / 2;
+	setSPEED(10);
+	speedInput.value = SPEED;
 	speedDisplay.innerText = SPEED;
+
+	//export this to another function
+	playerInfo.innerText = '';
+	playerInfo.classList.remove('green');
+	playerInfo.classList.remove('orange');
+	playerInfo.classList.remove('white');
+	playerInfo.classList.remove('yellow');
+
 	gameIdInput.value = '';
 	joinBtn.disabled = false;
 	game.status = 'landing';
@@ -196,6 +209,12 @@ export function reset() {
 	resetAllScores();
 	resetScoresDisplay();
 	hideScoresDisplays();
+
+	playerCountInput.value = 2;
+	playerCountDisplay.innerText = 2;
+	setMultiPlayerCount(2);
+	playerCountInput.blur();
+	createBtn.blur();
 }
 
 export function resetScoresDisplay() {

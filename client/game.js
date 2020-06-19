@@ -1,12 +1,12 @@
-let HOST = location.origin.replace(/^http/, 'ws');
+// let HOST = location.origin.replace(/^http/, 'ws');
 
 // for local
-// let HOST = 'ws://localhost:9090';
+let HOST = 'ws://localhost:9090';
 
 export const ws = new WebSocket(HOST);
 import { SPEED, update as updateSnake, draw as drawSnake, snakes, reset, setSPEED, gameOver } from './snake.js';
 import { update as updateFood, draw as drawFood, food, lastConsumer, updateScoresDisplay } from './food.js';
-import { directions, numPlayers } from './input.js';
+import { directions, numPlayers, initSinglePlayer } from './input.js';
 
 export const gameIdInput = document.getElementById('game-id-input');
 export const createBtn = document.getElementById('create-btn');
@@ -20,6 +20,8 @@ export const speedInput = document.getElementById('speed-input');
 export const playerCountInput = document.getElementById('player-count-input');
 export const speedDisplay = document.getElementById('speed-display');
 export const playerCountDisplay = document.getElementById('player-count-display');
+export const playerInfo = document.getElementById('player-info');
+
 const gameBoard = document.getElementById('game-board');
 export const crashScreen = document.getElementById('crash-screen');
 // export const gameOverMsg = document.getElementById('game-over-msg');
@@ -50,6 +52,8 @@ export let scores = { 0: 0, 1: 0, 2: 0, 3: 0 };
 export let multiPlayerCount = 2;
 
 export const INIT_SCORES = { 0: 0, 1: 0, 2: 0, 3: 0 };
+// export const playerColors = ['GREEN', 'ORANGE', 'WHITE', 'YELLOW'];
+export const playerColors = [ 'green', 'orange', 'white', 'yellow' ];
 
 export function displayScreens(playerCount) {
 	// for (let i = 0; i < playerCount; i++) {
@@ -83,8 +87,23 @@ export function setMultiPlayerCount(value) {
 }
 //stop, wait, starting, play, pause, gameOver
 
+function onLoad(value = 10) {
+	setSPEED(value);
+
+	speedInput.value = SPEED;
+	speedDisplay.innerText = SPEED;
+	speedInput.blur();
+
+	playerCountInput.value = 2;
+	playerCountDisplay.innerText = 2;
+	multiPlayerCount = 2;
+	playerCountInput.blur();
+}
+
+onLoad();
+
 speedInput.addEventListener('change', (e) => {
-	playerSpeedInput = e.target.value * 2;
+	playerSpeedInput = e.target.value;
 	speedDisplay.innerText = playerSpeedInput;
 	setSPEED(playerSpeedInput);
 	speedInput.blur();
@@ -92,7 +111,7 @@ speedInput.addEventListener('change', (e) => {
 
 playerCountInput.addEventListener('change', (e) => {
 	console.log(`playerCount input (prev)= ${multiPlayerCount}`);
-	multiPlayerCount = e.target.value;
+	multiPlayerCount = parseInt(e.target.value);
 	console.log(`playerCount input = ${multiPlayerCount}`);
 	playerCountDisplay.innerText = e.target.value;
 	playerCountInput.blur();
@@ -110,9 +129,13 @@ ws.onmessage = (msg) => {
 		console.log(`client ${clientId} successfully added`);
 	} else if (response.method === 'create') {
 		console.log('server sent a message');
+		playerNum = 1;
+		playerIndex = 0;
 		gameId = response.game.id;
-
 		gameIdInput.value = gameId;
+		// playerInfo.innerText = `SNAKE COLOR: GREEN`;
+		playerInfo.innerText = `PLAYER 1: GREEN`;
+		playerInfo.classList.add('green');
 
 		// multiPlayerCount = response.game.multiPlayerCount;
 		//install timer here
@@ -120,8 +143,7 @@ ws.onmessage = (msg) => {
 		waitingScreen('WAITING FOR OPPONENTS ... ', gameId, '[ESC] to quit');
 		// console.log('Creators player index and num set', playerIndex, playerNum);
 		// console.log(`The number of players a request has been made for `, response.game.multiPlayerCount);
-		playerNum = 1;
-		playerIndex = 0;
+		console.log(playerIndex, playerColors[playerIndex]);
 		//generate a time out
 	} else if (response.method === 'join') {
 		// console.log('server sent a message: player joined!', response);
@@ -132,26 +154,35 @@ ws.onmessage = (msg) => {
 		//this makes NO SENSE
 		numPlayers.count = response.game.clients.length;
 
-		console.log('resetting numplayers.count on join: ', numPlayers.count);
-
-		// console.log('num of players post join: ', numPlayers.count);
+		// console.log('resetting numplayers.count on join: ', numPlayers.count);
 
 		multiPlayerCount = response.game.multiPlayerCount;
 
-		// populateSnakeArray();
-		// console.log('re-populating snake array on rejoin: ', snakes);
-
-		// if (!playerNum) {
 		const me = response.game.clients.find((client) => client.clientId === clientId);
-		playerNum = me.playerNum;
-		playerIndex = playerNum - 1;
+		console.log('response from server: ', response);
+		// console.log('me: ', me);
+		// if (!playerIndex) {
+
+		playerIndex = me.playerIndex;
+		// }
+		// playerIndex = playerNum - 1;
 		// console.log('joiners player index and num set', playerIndex, playerNum);
 		// }
+
+		// console.log('playerColors: ', playerColors);
+		// console.log('playerIndex: ', playerIndex);
+		// console.log('playerColors[playerIndex]: ', playerColors[playerIndex]);
+
+		playerInfo.innerText = `PLAYER ${playerIndex + 1}: ${playerColors[playerIndex].toUpperCase()}`;
+		playerInfo.classList.add(playerColors[playerIndex]);
+
+		console.log('I joined, i am Player-', playerIndex + 1);
+		console.log('I am ', playerColors[playerIndex].toUpperCase());
 
 		food.x = response.newPosition.x;
 		food.y = response.newPosition.y;
 
-		console.log('creator has set speed to: ', response.game.speed);
+		// console.log('creator has set speed to: ', response.game.speed);
 		setSPEED(response.game.speed);
 		// if (numPlayers.count === 2) { to make it dynamic set 2 to input value by creator
 		// if (response.game.clients.length === response.playerCount) {
@@ -159,9 +190,6 @@ ws.onmessage = (msg) => {
 
 		if (response.game.clients.length === 2) {
 			//starts the moment there are 2 players
-
-			// waitingScreen('GAME STARTING ... ', gameId, '[ESC] to quit');
-
 			let time = 3;
 			let id = setInterval(() => {
 				// waitMessageSpan.innerText = `STARTING IN ${time--}`;
@@ -169,25 +197,13 @@ ws.onmessage = (msg) => {
 
 				if (time < 0) {
 					clearInterval(id);
-					// waitMessageSpan.innerText = 'PAUSED';
-					// waitingScreen();
-					// scores1DisplayDiv.style.display = 'block';
-					// scores2DisplayDiv.style.display = 'block';
+					playerInfo.innerText = ``;
+					playerInfo.classList.remove(playerColors[playerIndex]);
 					displayScreens(2); //make this dynamic to playerCount
 					playScreen();
 					start();
 				}
 			}, 750);
-			// let id = setInterval(() => {
-			// 	waitMessageSpan.innerText = `STARTING IN ${time--}`;
-			// 	// waitMessageSpan()
-
-			// 	if (time < 0) {
-			// 		clearInterval(id);
-			// 		waitMessageSpan.innerText = 'PAUSED';
-			// 		start();
-			// 	}
-			// }, 200);
 		} else {
 		}
 	} else if (response.method === 'play') {
@@ -208,9 +224,9 @@ ws.onmessage = (msg) => {
 
 		const oppSnake = snakes[opponentIndex];
 		const newSnake = response.snake;
-		for (let i = 0; i < newSnake.length; i++) {
-			oppSnake[i] = { ...newSnake[i] };
-		}
+		// for (let i = 0; i < newSnake.length; i++) {
+		// 	oppSnake[i] = { ...newSnake[i] };
+		// }
 	} else if (response.method === 'grow') {
 		const opponentIndex = response.playerIndex;
 		const oppSnake = snakes[opponentIndex];
@@ -221,15 +237,8 @@ ws.onmessage = (msg) => {
 		// console.log('re-laid opp snake GROW: ', oppSnake);
 		// console.log(`opponents number: grew -> player-${opponentIndex + 1}`);
 	} else if (response.method === 'crash') {
-		//display winner
-		// const opponentIndex = response.playerIndex;
-		// console.log(`[Opponent] player-${response.playerIndex + 1} crashed`);
-
 		//check if at least 2 players are remaining
-		const msg = `You win. Player${response.playerIndex + 1} crashed`;
-
-		// reset();
-
+		const msg = `You win! Player ${response.playerIndex + 1} crashed`;
 		gameOver(msg);
 	} else if (response.method === 'quit') {
 		const msg = `You win. Player${response.playerIndex + 1} quit`;
@@ -239,30 +248,50 @@ ws.onmessage = (msg) => {
 		gameOver(msg);
 	} else if (response.method === 'error') {
 		console.log('There was an error!', response.msg);
+
+		if (response.type === 'join') {
+			gameIdInput.placeholder = response.msg.toUpperCase();
+			setTimeout(() => {
+				gameIdInput.placeholder = 'GAME ID';
+			}, 1500);
+		}
+
 		reset();
 	}
 };
 
 createBtn.addEventListener('click', () => {
-	// playerName = nameInput.value;
-	// const playerCount = playerCountInput.value;
-
-	const payload = {
-		method: 'create',
-		clientId,
-		multiPlayerCount,
-		speed: SPEED
-	};
-	ws.send(JSON.stringify(payload));
-	game.mode = 'multi';
+	console.log('from create event handler, multiplayer count: ', multiPlayerCount);
+	console.log(typeof multiPlayerCount);
+	if (multiPlayerCount === 1) {
+		console.log('entered this');
+		game.mode = 'single';
+		game.status = 'landing';
+		initSinglePlayer();
+		start();
+		return;
+	} else {
+		console.log('multiplayer count: ', multiPlayerCount);
+		const payload = {
+			method: 'create',
+			clientId,
+			multiPlayerCount,
+			speed: SPEED
+		};
+		ws.send(JSON.stringify(payload));
+		game.mode = 'multi';
+	}
 });
 
 joinBtn.addEventListener('click', () => {
 	gameId = gameIdInput.value;
-	// playerName = nameInput.value;
 
 	if (!gameId) {
-		return console.log('Please enter a game ID');
+		gameIdInput.placeholder = 'GAME ID REQUIRED!';
+		setTimeout(() => {
+			gameIdInput.placeholder = 'GAME ID';
+		}, 1500);
+		// return console.log('Please enter a game ID');
 	} else {
 		joinBtn.disabled = true;
 	}

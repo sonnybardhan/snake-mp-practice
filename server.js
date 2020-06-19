@@ -1,9 +1,9 @@
 //SNAKE GAME==============
 
-const PORT = process.env.PORT || 9090;
+// const PORT = process.env.PORT || 9090;
 
 // for local
-// const PORT = 9090;
+const PORT = 9090;
 const express = require('express');
 const app = express();
 const http = require('http');
@@ -56,11 +56,16 @@ wss.on('request', (req) => {
 
 			const game = games[gameId];
 
+			// game.clients.push({
+			// 	clientId,
+			// 	playerNum: 1,
+			// 	score: 0
+			// });
+
 			game.clients.push({
 				clientId,
-				// playerName,
-				playerNum: 1,
-				score: 0
+				score: 0,
+				playerIndex: 0
 			});
 
 			const payload = {
@@ -81,7 +86,8 @@ wss.on('request', (req) => {
 			if (!game) {
 				const payload = {
 					method: 'error',
-					msg: '[server]: Invalid game ID'
+					type: 'join',
+					msg: 'Invalid game ID!'
 				};
 				return con.send(JSON.stringify(payload));
 			}
@@ -90,7 +96,8 @@ wss.on('request', (req) => {
 			if (game.clients.length >= 2) {
 				const payload = {
 					method: 'error',
-					msg: 'Sorry max players reached'
+					type: 'join',
+					msg: 'Sorry max players reached!'
 				};
 				return con.send(JSON.stringify(payload));
 			}
@@ -101,17 +108,20 @@ wss.on('request', (req) => {
 			if (playerIndex > -1) {
 				const payload = {
 					method: 'error',
-					msg: 'Invalid request, already in game.'
+					type: 'join',
+					msg: 'Invalid request, already in game!'
 				};
 				return con.send(JSON.stringify(payload));
 			}
 
-			const playerNum = game.clients.length + 1;
+			// const playerNum = game.clients.length + 1;
+			playerIndex = game.clients.length;
 
 			game.clients.push({
 				clientId,
 				score: 0,
-				playerNum
+				playerIndex
+				// playerNum
 			});
 
 			let newPosition = randomPosition();
@@ -119,7 +129,7 @@ wss.on('request', (req) => {
 			const payload = {
 				method: 'join',
 				game,
-				newPosition
+				newPosition //send array of 10 positions here instead that were stored at the time of game creation
 			};
 
 			game.clients.forEach((client) => {
@@ -175,7 +185,7 @@ wss.on('request', (req) => {
 			const game = games[gameId];
 			const snake = response.snake;
 			const direction = response.direction;
-			const lastInput = response.lastInput;
+			// const lastInput = response.lastInput;
 
 			// console.log(`client ${clientId} moved ${lastInput}. New heading: x: ${direction.x} y: ${direction.y}`);
 			const payload = {

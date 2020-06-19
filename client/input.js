@@ -76,7 +76,7 @@ window.addEventListener('keydown', ({ key }) => {
 	}
 });
 
-function initSinglePlayer() {
+export function initSinglePlayer() {
 	snakes.splice(1);
 	hideScoresDisplays();
 	p1Div.style.display = 'block';
@@ -115,7 +115,7 @@ function send(clientId, gameId, direction, lastInput, playerIndex) {
 			clientId,
 			gameId,
 			direction,
-			lastInput,
+			// lastInput,
 			playerIndex,
 			snake: snakes[playerIndex]
 		};
