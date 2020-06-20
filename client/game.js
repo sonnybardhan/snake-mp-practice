@@ -45,7 +45,8 @@ export let playerNum = 1;
 export let playerIndex = 0;
 export let playerSpeedInput = 10;
 export let playerScore = 0;
-export let scores = { 0: 0, 1: 0, 2: 0, 3: 0 };
+// export let scores = { 0: 0, 1: 0, 2: 0, 3: 0 };
+export let scores = [ 0, 0, 0, 0 ];
 export let multiPlayerCount = 2;
 export let foodArray = [];
 
@@ -54,8 +55,8 @@ export function setFoodArray(value) {
 	foodArray.push(...value);
 }
 
-export const INIT_SCORES = { 0: 0, 1: 0, 2: 0, 3: 0 }; //convert to array
-// export const playerColors = ['GREEN', 'ORANGE', 'WHITE', 'YELLOW'];
+export const INIT_SCORES = [ 0, 0, 0, 0 ]; //convert to array
+
 export const playerColors = [ 'green', 'orange', 'white', 'yellow' ];
 
 export function displayScreens(playerCount) {
@@ -74,7 +75,7 @@ export function resetPlayerScore() {
 }
 
 export function resetAllScores() {
-	scores = { ...INIT_SCORES };
+	scores = [ ...INIT_SCORES ];
 }
 
 export function addToScore(value) {
