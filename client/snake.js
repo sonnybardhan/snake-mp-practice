@@ -1,8 +1,8 @@
 import { lastConsumer } from './food.js';
 import { directions, inputReset, numPlayers } from './input.js';
 import {
-	start,
-	playerNum,
+	// start,
+	// playerNum,
 	playerIndex,
 	game,
 	homeScreen,
@@ -105,8 +105,8 @@ function update() {
 			gameOver(msg);
 			// return reset();
 		} else {
-			newHead[0] += directions[i].x;
-			newHead[1] += directions[i].y;
+			newHead[0] += directions[i][0];
+			newHead[1] += directions[i][1];
 		}
 
 		snake.unshift(newHead);
@@ -154,18 +154,17 @@ export function gameOver(msg = '') {
 
 function outOfBounds(snake, direction) {
 	const newHead = snake[0];
-	if (newHead[0] === 1 && direction.x === -1) {
+	if (newHead[0] === 1 && direction[0] === -1) {
 		return true;
-	} else if (newHead[0] === 21 && direction.x === 1) {
-		return true;
-	}
-
-	if (newHead[1] === 1 && direction.y === -1) {
-		return true;
-	} else if (newHead[1] === 21 && direction.y === 1) {
+	} else if (newHead[0] === 21 && direction[0] === 1) {
 		return true;
 	}
 
+	if (newHead[1] === 1 && direction[1] === -1) {
+		return true;
+	} else if (newHead[1] === 21 && direction[1] === 1) {
+		return true;
+	}
 	return false;
 }
 // function outOfBounds(snake, direction) {
@@ -188,8 +187,8 @@ function outOfBounds(snake, direction) {
 function collided(snake, direction) {
 	const head = snake[0];
 
-	const newX = head[0] + direction.x;
-	const newY = head[1] + direction.y;
+	const newX = head[0] + direction[0];
+	const newY = head[1] + direction[1];
 
 	const allSegments = [ ...snake.slice(1) ];
 

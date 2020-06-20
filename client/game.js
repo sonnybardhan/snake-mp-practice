@@ -244,8 +244,11 @@ ws.onmessage = (msg) => {
 	} else if (response.method === 'move') {
 		const opponentIndex = response.playerIndex;
 
-		directions[opponentIndex].x = response.direction.x;
-		directions[opponentIndex].y = response.direction.y;
+		directions[opponentIndex][0] = response.direction[0];
+		directions[opponentIndex][1] = response.direction[1];
+
+		// directions[opponentIndex].x = response.direction.x;
+		// directions[opponentIndex].y = response.direction.y;
 
 		//experiment to see if this is quicker,
 		//might have to put this back if snake body is not appearing as it should
