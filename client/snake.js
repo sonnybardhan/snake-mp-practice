@@ -34,6 +34,7 @@ import {
 	createBtn
 } from './game.js';
 
+const INIT_SPEED = 10;
 let SPEED = 10;
 
 export function setSPEED(value) {
@@ -207,7 +208,7 @@ export function reset() {
 	homeScreen();
 	//reset speed
 	//clear input fields
-	setSPEED(10);
+	setSPEED(INIT_SPEED);
 	speedInput.value = SPEED;
 	speedDisplay.innerText = SPEED;
 

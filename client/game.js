@@ -304,8 +304,25 @@ createBtn.addEventListener('click', () => {
 		// console.log('entered this');
 		game.mode = 'single';
 		game.status = 'landing';
-		initSinglePlayer();
-		start();
+
+		let time = 3;
+		let id = setInterval(() => {
+			waitingScreen(`STARTING IN ${time--}`, '', '[ESC] to quit');
+			playerInfo.innerText = `Color: Green`;
+			playerInfo.classList.add('green');
+			if (time < 0) {
+				clearInterval(id);
+				playerInfo.innerText = ``;
+				playerInfo.classList.remove(playerColors[playerIndex]);
+				initSinglePlayer();
+				// start();
+
+				// playScreen();
+				start();
+				createBtn.blur();
+			}
+		}, 750);
+
 		return;
 	} else {
 		// console.log('multiplayer count: ', multiPlayerCount);
