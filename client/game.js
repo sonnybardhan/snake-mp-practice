@@ -361,15 +361,9 @@ export function start() {
 			game.status = 'play';
 			playScreen();
 			break;
-		// case 'stop':
-		// stopScreen();
-		// console.log('Stop does nothing');
-		// break;
 		case 'wait':
-			// waitScreen();
 			break;
 		case 'starting':
-			// startingScreen();
 			break;
 		case 'play':
 			if (game.mode === 'single') {

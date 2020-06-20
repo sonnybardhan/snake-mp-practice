@@ -294,6 +294,10 @@ function randomPosition() {
 	};
 }
 
+// function randomPosition() {
+// 	return [ (Math.random() * 21 + 1) | 0, (Math.random() * 21 + 1) | 0 ];
+// }
+
 function randomPositionArray(len = 10) {
 	const arr = [];
 	while (len--) {

@@ -34,7 +34,6 @@ import {
 	createBtn
 } from './game.js';
 
-// const SPEED = 11;
 let SPEED = 10;
 
 export function setSPEED(value) {
@@ -44,17 +43,11 @@ export function setSPEED(value) {
 }
 
 const INIT_SNAKES = [
-	[ [ 3, 5 ], [ 3, 4 ], [ 3, 3 ] ], //1]t
-	[ [ 5, 17 ], [ 5, 18 ], [ 5, 19 ] ], //-]1 left
-	[ [ 17, 17 ], [ 17, 18 ], [ 17, 19 ] ], //-]1 left
-	[ [ 15, 5 ], [ 15, 4 ], [ 15, 3 ] ] //y:1 right
+	[ [ 3, 5 ], [ 3, 4 ], [ 3, 3 ] ],
+	[ [ 5, 17 ], [ 5, 18 ], [ 5, 19 ] ],
+	[ [ 17, 17 ], [ 17, 18 ], [ 17, 19 ] ],
+	[ [ 15, 5 ], [ 15, 4 ], [ 15, 3 ] ]
 ];
-// const INIT_SNAKES = [
-// 	[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ], //y: 1 right
-// 	[ { x: 5, y: 17 }, { x: 5, y: 18 }, { x: 5, y: 19 } ], //y: -1 left
-// 	[ { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 } ], //y: -1 left
-// 	[ { x: 15, y: 5 }, { x: 15, y: 4 }, { x: 15, y: 3 } ] //y:1 right
-// ];
 
 let snakes = populateSnakeArray();
 
@@ -85,28 +78,6 @@ function draw(gameBoard) {
 	}
 }
 
-// function draw(gameBoard) {
-// 	for (let [ i, snake ] of snakes.entries()) {
-// 		snake.forEach(({ x, y }, index) => {
-// 			const snakeSegment = document.createElement('div');
-// 			snakeSegment.style.gridRowStart = x;
-// 			snakeSegment.style.gridColumnStart = y;
-
-// 			if (index === 0) {
-// 				snakeSegment.classList.add(`snake-head-${i + 1}`);
-// 			}
-
-// 			snakeSegment.classList.add('snake', `snake-${i + 1}`);
-
-// 			if (index === snake.length - 1) {
-// 				snakeSegment.classList.add('snake-tail');
-// 			}
-
-// 			gameBoard.appendChild(snakeSegment);
-// 		});
-// 	}
-// }
-// let frameCounter = 0;
 function update() {
 	// return;
 
@@ -286,7 +257,7 @@ export function populateSnakeArray() {
 		if (numPlayers.count === 2 && i === 1) i++; //to ensure diagnals are populated
 
 		const newSnake = [];
-		const snake = INIT_SNAKES[i]; //	[ [ 3, 5 ], [ 3, 4 ], [ 3, 3 ] ]
+		const snake = INIT_SNAKES[i];
 
 		for (let segment of snake) {
 			newSnake.push([ ...segment ]);

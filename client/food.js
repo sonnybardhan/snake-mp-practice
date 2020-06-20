@@ -15,7 +15,8 @@ import {
 } from './game.js';
 import { snakes } from './snake.js';
 
-export let food = { x: 3, y: 8 };
+// export let food = { x: 3, y: 8 };
+export let food = [ 3, 8 ];
 
 export let lastConsumer = { id: null };
 
@@ -64,8 +65,8 @@ export function updateScoresDisplay(index, value) {
 
 export function draw(gameBoard) {
 	const foodElement = document.createElement('div');
-	foodElement.style.gridRowStart = food.x;
-	foodElement.style.gridColumnStart = food.y;
+	foodElement.style.gridRowStart = food[0];
+	foodElement.style.gridColumnStart = food[1];
 	foodElement.classList.add('food');
 	gameBoard.appendChild(foodElement);
 }
@@ -74,18 +75,18 @@ export function newConsumed() {
 	let foodItem;
 
 	if (game.mode === 'single') {
-		foodItem = food;
+		foodItem = [ ...food ];
 	} else {
 		// i = playerIndex;
-		foodItem = foodArray[0];
+		foodItem = [ ...foodArray[0] ];
 	}
 	let snake = snakes[playerIndex];
 
-	if (snake[0][0] === foodItem.x && snake[0][1] === foodItem.y) {
+	if (snake[0][0] === foodItem[0] && snake[0][1] === foodItem[1]) {
 		if (game.mode === 'single') return true;
 
 		foodArray.shift();
-		food = foodArray[0];
+		food = [ ...foodArray[0] ];
 		if (foodArray.length <= 5) {
 			requestFood();
 		}
@@ -105,10 +106,7 @@ export function newConsumed() {
 // }
 
 function randomPosition() {
-	return {
-		x: (Math.random() * 21 + 1) | 0,
-		y: (Math.random() * 21 + 1) | 0
-	};
+	return [ (Math.random() * 21 + 1) | 0, (Math.random() * 21 + 1) | 0 ];
 }
 
 function requestFood() {
