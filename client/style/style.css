@@ -116,7 +116,9 @@ body {
 }
 
 #create-btn,
-#join-btn {
+#join-btn,
+#json-latency-test-btn,
+#base64-latency-test-btn {
 	/* margin: .15em; */
 	margin-top: .35em;
 	font-size: 1.2em;
@@ -136,6 +138,18 @@ body {
 #create-btn {
 	color: rgb(99, 103, 96);
 	background-color: rgb(239, 255, 137);
+	/* border: .15em solid rgb(103, 98, 98); */
+}
+
+#json-latency-test-btn {
+	color: rgb(223, 223, 223);
+	background-color: rgb(247, 106, 84);
+	/* border: .15em solid rgb(103, 98, 98); */
+}
+
+#base64-latency-test-btn {
+	color: rgb(223, 223, 223);
+	background-color: rgb(171, 84, 247);
 	/* border: .15em solid rgb(103, 98, 98); */
 }
 

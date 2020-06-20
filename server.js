@@ -247,6 +247,49 @@ wss.on('request', (req) => {
 			game.clients.forEach((client) => {
 				clients[client.clientId].connection.send(JSON.stringify(payload));
 			});
+		} else if (response.method === 'jsonLatencyTest') {
+			// console.log(response.snakes);
+			const payload = {
+				method: 'jsonLatencyTest',
+				firstClick: response.firstClick,
+				serverTime: +new Date(),
+				snakes: response.snakes
+			};
+
+			// const gameId = response.gameId;
+			// const game = games[gameId];
+
+			// game.clients.forEach((client) => {
+			// 	clients[client.clientId].connection.send(JSON.stringify(payload));
+			// });
+
+			for (let client of Object.values(clients)) {
+				if (client) {
+					client.connection.send(JSON.stringify(payload)); //should broadcast message to all clients on the system
+				}
+			}
+			console.log(`client count: `, Object.keys(clients).length);
+		} else if (response.method === 'base64LatencyTest') {
+			// console.log(response.snakes);
+			const payload = {
+				method: 'base64LatencyTest',
+				msg: response.msg
+			};
+
+			// console.log('b64 latency testing', response.msg);
+			// const gameId = response.gameId;
+			// const game = games[gameId];
+
+			// game.clients.forEach((client) => {
+			// 	clients[client.clientId].connection.send(JSON.stringify(payload));
+			// });
+
+			for (let client of Object.values(clients)) {
+				if (client) {
+					client.connection.send(JSON.stringify(payload)); //should broadcast message to all clients on the system
+				}
+			}
+			console.log(`client count: `, Object.keys(clients).length);
 		}
 	});
 

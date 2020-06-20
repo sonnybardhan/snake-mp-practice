@@ -4,6 +4,7 @@
 let HOST = 'ws://localhost:9090';
 
 export const ws = new WebSocket(HOST);
+
 import { SPEED, update as updateSnake, draw as drawSnake, snakes, reset, setSPEED, gameOver } from './snake.js';
 import { update as updateFood, draw as drawFood, food, lastConsumer, updateScoresDisplay } from './food.js';
 import { directions, numPlayers, initSinglePlayer } from './input.js';
@@ -21,6 +22,8 @@ export const playerCountInput = document.getElementById('player-count-input');
 export const speedDisplay = document.getElementById('speed-display');
 export const playerCountDisplay = document.getElementById('player-count-display');
 export const playerInfo = document.getElementById('player-info');
+const jsonLTB = document.getElementById('json-latency-test-btn');
+const base64LTB = document.getElementById('base64-latency-test-btn');
 
 const gameBoard = document.getElementById('game-board');
 export const crashScreen = document.getElementById('crash-screen');
@@ -48,6 +51,7 @@ export let playerScore = 0;
 export let scores = { 0: 0, 1: 0, 2: 0, 3: 0 };
 export let multiPlayerCount = 2;
 export let foodArray = [];
+export let reconnectionAttempts = 0;
 
 export function setFoodArray(value) {
 	//not needed
@@ -122,7 +126,9 @@ playerCountInput.addEventListener('change', (e) => {
 
 export let game = { status: 'landing', mode: 'single' };
 
-ws.onopen = (e) => console.log('connected to server');
+ws.onopen = (e) => {
+	console.log('connected to server');
+};
 
 ws.onmessage = (msg) => {
 	const response = JSON.parse(msg.data);
@@ -130,6 +136,7 @@ ws.onmessage = (msg) => {
 	if (response.method === 'connect') {
 		clientId = response.clientId;
 		// console.log(`client ${clientId} successfully added`);
+		// console.log('Attempts remaining: ', 5 - reconnectionAttempts);
 	} else if (response.method === 'create') {
 		// console.log('server sent a message');
 		playerNum = 1;
@@ -287,6 +294,29 @@ ws.onmessage = (msg) => {
 		}
 
 		reset();
+	} else if (response.method === 'jsonLatencyTest') {
+		const firstClick = response.firstClick;
+		const serverTime = response.serverTime;
+		const currentTime = +new Date();
+		const roundTrip = currentTime - firstClick;
+		const serverToClient = currentTime - serverTime;
+		// console.log('JSON: firstClick: ', firstClick);
+		// console.log('JSON: time at server: ', serverTime);
+		// console.log('JSON: current time: ', currentTime);
+		console.log('JSON: time for round trip: ', roundTrip);
+		// console.log('JSON: time for server to client: ', serverToClient);
+	} else if (response.method === 'base64LatencyTest') {
+		const decoded = JSON.parse(atob(response.msg));
+		const firstClick = decoded.firstClick;
+		const serverTime = decoded.serverTime;
+		const currentTime = +new Date();
+		const roundTrip = currentTime - firstClick;
+		const serverToClient = currentTime - serverTime;
+		// console.log('base64: firstClick: ', firstClick);
+		// console.log('base64: time at server: ', serverTime);
+		// console.log('base64: current time: ', currentTime);
+		console.log('base64: time for round trip: ', roundTrip);
+		// console.log('base64: time for server to client: ', serverToClient);
 	}
 };
 
@@ -313,6 +343,92 @@ createBtn.addEventListener('click', () => {
 	}
 });
 
+jsonLTB.addEventListener('click', () => {
+	const payload = {
+		method: 'jsonLatencyTest',
+		clientId,
+		firstClick: +new Date(),
+		snakes: [
+			[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ],
+			[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ],
+			[ { x: 5, y: 17 }, { x: 5, y: 18 }, { x: 5, y: 19 } ],
+			[ { x: 5, y: 17 }, { x: 5, y: 18 }, { x: 5, y: 19 } ],
+			[ { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 } ],
+			[ { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 } ],
+			[ { x: 15, y: 5 }, { x: 15, y: 4 }, { x: 15, y: 3 } ],
+			[ ({ x: 15, y: 5 }, { x: 15, y: 4 }, { x: 15, y: 3 }) ],
+			[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ],
+			[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ],
+			[ { x: 5, y: 17 }, { x: 5, y: 18 }, { x: 5, y: 19 } ],
+			[ { x: 5, y: 17 }, { x: 5, y: 18 }, { x: 5, y: 19 } ],
+			[ { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 } ],
+			[ { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 } ],
+			[ { x: 15, y: 5 }, { x: 15, y: 4 }, { x: 15, y: 3 } ],
+			[ ({ x: 15, y: 5 }, { x: 15, y: 4 }, { x: 15, y: 3 }) ],
+			[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ],
+			[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ],
+			[ { x: 5, y: 17 }, { x: 5, y: 18 }, { x: 5, y: 19 } ],
+			[ { x: 5, y: 17 }, { x: 5, y: 18 }, { x: 5, y: 19 } ],
+			[ { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 } ],
+			[ { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 } ],
+			[ { x: 15, y: 5 }, { x: 15, y: 4 }, { x: 15, y: 3 } ],
+			[ ({ x: 15, y: 5 }, { x: 15, y: 4 }, { x: 15, y: 3 }) ]
+		]
+	};
+
+	// const encoded = btoa(JSON.stringify(payload));
+
+	ws.send(JSON.stringify(payload));
+
+	jsonLTB.blur();
+});
+
+base64LTB.addEventListener('click', () => {
+	const data = {
+		clientId,
+		firstClick: +new Date(),
+		snakes: [
+			[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ],
+			[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ],
+			[ { x: 5, y: 17 }, { x: 5, y: 18 }, { x: 5, y: 19 } ],
+			[ { x: 5, y: 17 }, { x: 5, y: 18 }, { x: 5, y: 19 } ],
+			[ { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 } ],
+			[ { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 } ],
+			[ { x: 15, y: 5 }, { x: 15, y: 4 }, { x: 15, y: 3 } ],
+			[ ({ x: 15, y: 5 }, { x: 15, y: 4 }, { x: 15, y: 3 }) ],
+			[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ],
+			[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ],
+			[ { x: 5, y: 17 }, { x: 5, y: 18 }, { x: 5, y: 19 } ],
+			[ { x: 5, y: 17 }, { x: 5, y: 18 }, { x: 5, y: 19 } ],
+			[ { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 } ],
+			[ { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 } ],
+			[ { x: 15, y: 5 }, { x: 15, y: 4 }, { x: 15, y: 3 } ],
+			[ ({ x: 15, y: 5 }, { x: 15, y: 4 }, { x: 15, y: 3 }) ],
+			[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ],
+			[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ],
+			[ { x: 5, y: 17 }, { x: 5, y: 18 }, { x: 5, y: 19 } ],
+			[ { x: 5, y: 17 }, { x: 5, y: 18 }, { x: 5, y: 19 } ],
+			[ { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 } ],
+			[ { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 } ],
+			[ { x: 15, y: 5 }, { x: 15, y: 4 }, { x: 15, y: 3 } ],
+			[ ({ x: 15, y: 5 }, { x: 15, y: 4 }, { x: 15, y: 3 }) ]
+		]
+	};
+
+	// const msg = ;
+	// console.log(msg);
+
+	const payload = {
+		method: 'base64LatencyTest',
+		msg: btoa(JSON.stringify(data))
+	};
+
+	// const encoded = btoa(JSON.stringify(payload));
+
+	ws.send(JSON.stringify(payload));
+	base64LTB.blur();
+});
+
 joinBtn.addEventListener('click', () => {
 	gameId = gameIdInput.value;
 
@@ -336,7 +452,18 @@ joinBtn.addEventListener('click', () => {
 	game.mode = 'multi';
 });
 
-ws.onclose = (e) => console.log('disconnected from server');
+ws.onclose = (e) => {
+	console.log('Disconnected from server!');
+
+	// if (reconnectionAttempts < 6) {
+	// 	console.log('Disconnected from server! Attempting to reconnect ...');
+	// 	console.log('Attempts remaining: ', 5 - reconnectionAttempts);
+	// 	location.reload();
+	// 	reconnectionAttempts++;
+	// } else {
+	// 	console.log('Disconnected! Sorry, out of reconnection attempts!');
+	// }
+};
 ws.onerror = (e) => console.log('Oops! ', e); //reset everything here for single player
 
 //game logic=====================
