@@ -66,16 +66,19 @@ body {
 
 #game-id-input,
 #speed-input,
-#player-count-input {
+#player-count-input,
+#session-count-input {
 	/* margin: .15em; */
 	outline: none;
 	width: 100%;
 	transition: all .3s ease-in-out;
 	border: none;
+
 }
 
 #speed-input,
-#player-count-input {
+#player-count-input,
+#session-count-input {
 	margin: .2em;
 	height: 2em;
 	/* width: 100%; */
@@ -87,20 +90,24 @@ body {
 }
 
 #speed-title,
-#num-players-title {
+#num-players-title,
+#session-title {
 	width: 70%;
 	text-align: start;
 }
 
 #speed-display,
-#player-count-display {
+#player-count-display,
+#session-count-display {
 	text-align: end;
 	width: 20%;
 }
 
 #speed-input:hover,
-#player-count-input:hover {
+#player-count-input:hover,
+#session-count-input:hover {
 	cursor: pointer;
+
 }
 
 #game-id-input:hover,
@@ -130,7 +137,6 @@ body {
 	/* border-bottom-right-radius: 10%; */
 	border-radius: .25em;
 	text-transform: uppercase;
-	box-shadow: .5rem .5rem 1.5rem rgba(0, 0, 0, 0.274);
 
 
 }
@@ -144,6 +150,14 @@ body {
 #create-btn:hover,
 #join-btn:hover {
 	transform: scale(1.01);
+}
+
+#create-btn,
+#join-btn,
+#game-id-input {
+	height: 2em;
+	box-shadow: .5rem .5rem 1.5rem rgba(0, 0, 0, 0.274);
+
 }
 
 .main-banner {
