@@ -251,14 +251,15 @@ ws.onmessage = (msg) => {
 		const oppSnake = snakes[opponentIndex];
 		const newSnake = response.snake;
 		for (let i = 0; i < newSnake.length; i++) {
-			oppSnake[i] = { ...newSnake[i] };
+			// oppSnake[i] = { ...newSnake[i] };
+			oppSnake[i] = [ ...newSnake[i] ];
 		}
 	} else if (response.method === 'grow') {
 		const opponentIndex = response.playerIndex;
 		const oppSnake = snakes[opponentIndex];
 		const newSnake = response.snake;
 		for (let i = 0; i < newSnake.length; i++) {
-			oppSnake[i] = { ...newSnake[i] };
+			oppSnake[i] = [ ...newSnake[i] ];
 		}
 		// console.log('re-laid opp snake GROW: ', oppSnake);
 		// console.log(`opponents number: grew -> player-${opponentIndex + 1}`);
