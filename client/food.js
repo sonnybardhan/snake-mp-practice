@@ -81,7 +81,7 @@ export function newConsumed() {
 	}
 	let snake = snakes[playerIndex];
 
-	if (snake[0].x === foodItem.x && snake[0].y === foodItem.y) {
+	if (snake[0][0] === foodItem.x && snake[0][1] === foodItem.y) {
 		if (game.mode === 'single') return true;
 
 		foodArray.shift();

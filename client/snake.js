@@ -44,22 +44,33 @@ export function setSPEED(value) {
 }
 
 const INIT_SNAKES = [
-	[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ], //y: 1 right
-	[ { x: 5, y: 17 }, { x: 5, y: 18 }, { x: 5, y: 19 } ], //y: -1 left
-	[ { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 } ], //y: -1 left
-	[ { x: 15, y: 5 }, { x: 15, y: 4 }, { x: 15, y: 3 } ] //y:1 right
+	[ [ 3, 5 ], [ 3, 4 ], [ 3, 3 ] ], //1]t
+	[ [ 5, 17 ], [ 5, 18 ], [ 5, 19 ] ], //-]1 left
+	[ [ 17, 17 ], [ 17, 18 ], [ 17, 19 ] ], //-]1 left
+	[ [ 15, 5 ], [ 15, 4 ], [ 15, 3 ] ] //y:1 right
 ];
+// const INIT_SNAKES = [
+// 	[ { x: 3, y: 5 }, { x: 3, y: 4 }, { x: 3, y: 3 } ], //y: 1 right
+// 	[ { x: 5, y: 17 }, { x: 5, y: 18 }, { x: 5, y: 19 } ], //y: -1 left
+// 	[ { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 } ], //y: -1 left
+// 	[ { x: 15, y: 5 }, { x: 15, y: 4 }, { x: 15, y: 3 } ] //y:1 right
+// ];
 
 let snakes = populateSnakeArray();
 
 function draw(gameBoard) {
+	// console.log(snakes);
 	for (let [ i, snake ] of snakes.entries()) {
-		snake.forEach(({ x, y }, index) => {
+		// console.log(snake);
+		snake.forEach(([ x, y ], index) => {
+			// console.log(x, y);
 			const snakeSegment = document.createElement('div');
 			snakeSegment.style.gridRowStart = x;
 			snakeSegment.style.gridColumnStart = y;
 
 			if (index === 0) {
+				//
+				// console.log('head: ', x, y);
 				snakeSegment.classList.add(`snake-head-${i + 1}`);
 			}
 
@@ -74,14 +85,35 @@ function draw(gameBoard) {
 	}
 }
 
+// function draw(gameBoard) {
+// 	for (let [ i, snake ] of snakes.entries()) {
+// 		snake.forEach(({ x, y }, index) => {
+// 			const snakeSegment = document.createElement('div');
+// 			snakeSegment.style.gridRowStart = x;
+// 			snakeSegment.style.gridColumnStart = y;
+
+// 			if (index === 0) {
+// 				snakeSegment.classList.add(`snake-head-${i + 1}`);
+// 			}
+
+// 			snakeSegment.classList.add('snake', `snake-${i + 1}`);
+
+// 			if (index === snake.length - 1) {
+// 				snakeSegment.classList.add('snake-tail');
+// 			}
+
+// 			gameBoard.appendChild(snakeSegment);
+// 		});
+// 	}
+// }
+// let frameCounter = 0;
 function update() {
 	// return;
 
 	for (let i = 0; i < snakes.length; i++) {
 		//here check for index form the losersArr (store indexes of players who have dropped out or quit)
 		let snake = snakes[i];
-
-		const newHead = { ...snake[0] }; //first item in array is head
+		const newHead = [ ...snake[0] ]; //first item in array is head
 
 		if (collided(snake, directions[i]) || outOfBounds(snake, directions[i])) {
 			// if (collided(snake, directions[i]) || outOfBounds(snake, directions[i]) || collision(snake, directions[i])) {
@@ -102,8 +134,8 @@ function update() {
 			gameOver(msg);
 			// return reset();
 		} else {
-			newHead.x += directions[i].x;
-			newHead.y += directions[i].y;
+			newHead[0] += directions[i].x;
+			newHead[1] += directions[i].y;
 		}
 
 		snake.unshift(newHead);
@@ -151,26 +183,42 @@ export function gameOver(msg = '') {
 
 function outOfBounds(snake, direction) {
 	const newHead = snake[0];
-	if (newHead.x === 1 && direction.x === -1) {
+	if (newHead[0] === 1 && direction.x === -1) {
 		return true;
-	} else if (newHead.x === 21 && direction.x === 1) {
+	} else if (newHead[0] === 21 && direction.x === 1) {
 		return true;
 	}
 
-	if (newHead.y === 1 && direction.y === -1) {
+	if (newHead[1] === 1 && direction.y === -1) {
 		return true;
-	} else if (newHead.y === 21 && direction.y === 1) {
+	} else if (newHead[1] === 21 && direction.y === 1) {
 		return true;
 	}
 
 	return false;
 }
+// function outOfBounds(snake, direction) {
+// 	const newHead = snake[0];
+// 	if (newHead.x === 1 && direction.x === -1) {
+// 		return true;
+// 	} else if (newHead.x === 21 && direction.x === 1) {
+// 		return true;
+// 	}
+
+// 	if (newHead.y === 1 && direction.y === -1) {
+// 		return true;
+// 	} else if (newHead.y === 21 && direction.y === 1) {
+// 		return true;
+// 	}
+
+// 	return false;
+// }
 
 function collided(snake, direction) {
 	const head = snake[0];
 
-	const newX = head.x + direction.x;
-	const newY = head.y + direction.y;
+	const newX = head[0] + direction.x;
+	const newY = head[1] + direction.y;
 
 	const allSegments = [ ...snake.slice(1) ];
 
@@ -178,8 +226,8 @@ function collided(snake, direction) {
 		allSegments.push(...snakes.filter((_, index) => index !== playerIndex).flat());
 	}
 
-	return allSegments.some((segment) => {
-		return newX === segment.x && newY === segment.y;
+	return allSegments.some(([ x, y ]) => {
+		return newX === x && newY === y;
 	});
 }
 
@@ -233,15 +281,15 @@ export function hideScoresDisplays() {
 
 export function populateSnakeArray() {
 	const newSnakes = [];
-	// console.log('numplayers count in popSnake array func: ', numPlayers.count);
+
 	for (let i = 0; i < numPlayers.count; i++) {
 		if (numPlayers.count === 2 && i === 1) i++; //to ensure diagnals are populated
 
 		const newSnake = [];
-		const snake = INIT_SNAKES[i];
+		const snake = INIT_SNAKES[i]; //	[ [ 3, 5 ], [ 3, 4 ], [ 3, 3 ] ]
 
 		for (let segment of snake) {
-			newSnake.push({ ...segment });
+			newSnake.push([ ...segment ]);
 		}
 		newSnakes.push(newSnake);
 	}
