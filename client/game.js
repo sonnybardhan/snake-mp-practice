@@ -48,6 +48,9 @@ export const p3Div = document.getElementById('p3-display-div');
 export const p4Div = document.getElementById('p4-display-div');
 export const pDivArray = [ p1Div, p2Div, p3Div, p4Div ];
 
+export const matchInputSlider = document.getElementById('match-count-input');
+export const matchCountDisplay = document.getElementById('match-count-display');
+
 export let foodPosition = {};
 export let clientId = null;
 export let gameId = null;
@@ -57,6 +60,11 @@ export let playerSpeedInput = 10;
 export let playerScore = 0;
 export let scores = [ 0, 0, 0, 0 ];
 export let foodArray = [];
+export let matchCount = 1;
+
+export function setMatchCount(value) {
+	matchCount = value;
+}
 
 export function setFoodArray(value) {
 	//not needed
@@ -104,6 +112,9 @@ function onLoad(value = 10) {
 	playerCountInput.value = numPlayers.count;
 	playerCountDisplay.innerText = numPlayers.count;
 	playerCountInput.blur();
+
+	matchInputSlider.value = 3;
+	matchCountDisplay.innerText = 3;
 }
 
 onLoad();
@@ -119,6 +130,13 @@ playerCountInput.addEventListener('change', (e) => {
 	numPlayers.count = parseInt(e.target.value);
 	playerCountDisplay.innerText = e.target.value;
 	playerCountInput.blur();
+});
+
+matchInputSlider.addEventListener('change', (e) => {
+	setMatchCount(parseInt(e.target.value));
+
+	matchCountDisplay.innerText = matchCount;
+	matchInputSlider.blur();
 });
 
 export let game = { status: 'landing', mode: 'single' };
@@ -157,12 +175,10 @@ ws.onmessage = (msg) => {
 
 		setSPEED(response.game.speed);
 		gameId = response.game.id;
-
+		setMatchCount(response.game.matchCount);
 		setSnakes(numPlayers.count);
 		setDirections(numPlayers.count);
 		setLastInputs(numPlayers.count);
-		// update();
-		// draw();
 
 		if (numPlayers.count > 1 && numPlayers.count === response.game.clients.length) {
 			let time = 3;
@@ -267,7 +283,8 @@ createBtn.addEventListener('click', () => {
 			method: 'create',
 			clientId,
 			numPlayers: numPlayers.count,
-			speed: SPEED
+			speed: SPEED,
+			matchCount
 		};
 		ws.send(JSON.stringify(payload));
 		game.mode = 'multi';

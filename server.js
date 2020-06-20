@@ -40,6 +40,7 @@ wss.on('request', (req) => {
 			// let playerName = response.playerName;
 			const speed = response.speed;
 			const numPlayers = response.numPlayers;
+			const matchCount = response.matchCount;
 
 			console.log(`${clientId} wants to make a game for ${numPlayers} players`);
 			// let playerIndex = 0;
@@ -51,7 +52,8 @@ wss.on('request', (req) => {
 				clients: [],
 				state: {},
 				speed,
-				numPlayers
+				numPlayers,
+				matchCount
 			};
 
 			const game = games[gameId];

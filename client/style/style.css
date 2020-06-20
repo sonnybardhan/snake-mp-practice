@@ -67,7 +67,7 @@ body {
 #game-id-input,
 #speed-input,
 #player-count-input,
-#session-count-input {
+#match-count-input {
 	/* margin: .15em; */
 	outline: none;
 	width: 100%;
@@ -78,7 +78,7 @@ body {
 
 #speed-input,
 #player-count-input,
-#session-count-input {
+#match-count-input {
 	margin: .2em;
 	height: 2em;
 	/* width: 100%; */
@@ -91,21 +91,21 @@ body {
 
 #speed-title,
 #num-players-title,
-#session-title {
+#match-title {
 	width: 70%;
 	text-align: start;
 }
 
 #speed-display,
 #player-count-display,
-#session-count-display {
+#match-count-display {
 	text-align: end;
 	width: 20%;
 }
 
 #speed-input:hover,
 #player-count-input:hover,
-#session-count-input:hover {
+#match-count-input:hover {
 	cursor: pointer;
 
 }
@@ -139,6 +139,12 @@ body {
 	text-transform: uppercase;
 
 
+}
+
+#join-btn {
+	color: rgb(255, 255, 255);
+	background-color: rgb(90, 104, 113);
+	/* border: .15em solid rgb(103, 98, 98); */
 }
 
 #create-btn {
