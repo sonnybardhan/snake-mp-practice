@@ -16,7 +16,8 @@ import {
 import { snakes } from './snake.js';
 
 // export let food = { x: 3, y: 8 };
-export let food = [ 3, 8 ];
+// export let food = [ 3, 8 ];
+export let food = randomPosition();
 
 export let lastConsumer = { id: null };
 
