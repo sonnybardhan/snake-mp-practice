@@ -15,7 +15,6 @@ import {
 } from './game.js';
 import { snakes } from './snake.js';
 
-// export let food = { x: 3, y: 8 };
 // export let food = [ 3, 8 ];
 export let food = randomPosition();
 
@@ -78,7 +77,6 @@ export function newConsumed() {
 	if (game.mode === 'single') {
 		foodItem = [ ...food ];
 	} else {
-		// i = playerIndex;
 		foodItem = [ ...foodArray[0] ];
 	}
 	let snake = snakes[playerIndex];
@@ -95,16 +93,6 @@ export function newConsumed() {
 	}
 	return false;
 }
-
-// export function newConsumed() {
-// 	let i = game.mode === 'single' ? 0 : playerIndex;
-
-// 	let snake = snakes[i];
-// 	if (snake[0].x === food.x && snake[0].y === food.y) {
-// 		return true;
-// 	}
-// 	return false;
-// }
 
 function randomPosition() {
 	return [ (Math.random() * 21 + 1) | 0, (Math.random() * 21 + 1) | 0 ];

@@ -4,9 +4,19 @@
 let HOST = 'ws://localhost:9090';
 
 export const ws = new WebSocket(HOST);
-import { SPEED, update as updateSnake, draw as drawSnake, snakes, reset, setSPEED, gameOver } from './snake.js';
+import {
+	SPEED,
+	update as updateSnake,
+	draw as drawSnake,
+	snakes,
+	reset,
+	setSPEED,
+	gameOver,
+	populateSnakeArray,
+	setSnakes
+} from './snake.js';
 import { update as updateFood, draw as drawFood, food, lastConsumer, updateScoresDisplay } from './food.js';
-import { directions, numPlayers, initSinglePlayer } from './input.js';
+import { directions, numPlayers, initSinglePlayer, setDirections, setLastInputs } from './input.js';
 
 export const gameIdInput = document.getElementById('game-id-input');
 export const createBtn = document.getElementById('create-btn');
@@ -45,9 +55,7 @@ export let playerNum = 1;
 export let playerIndex = 0;
 export let playerSpeedInput = 10;
 export let playerScore = 0;
-// export let scores = { 0: 0, 1: 0, 2: 0, 3: 0 };
 export let scores = [ 0, 0, 0, 0 ];
-export let multiPlayerCount = 2;
 export let foodArray = [];
 
 export function setFoodArray(value) {
@@ -55,12 +63,11 @@ export function setFoodArray(value) {
 	foodArray.push(...value);
 }
 
-export const INIT_SCORES = [ 0, 0, 0, 0 ]; //convert to array
+export const INIT_SCORES = [ 0, 0, 0, 0 ];
 
 export const playerColors = [ 'green', 'orange', 'white', 'yellow' ];
 
 export function displayScreens(playerCount) {
-	// for (let i = 0; i < playerCount; i++) {
 	for (let i = 0; i < pDivArray.length; i++) {
 		if (i < playerCount) {
 			pDivArray[i].style.display = 'block';
@@ -86,11 +93,6 @@ export function setPlayerIndex(value) {
 	playerIndex = value;
 }
 
-export function setMultiPlayerCount(value) {
-	multiPlayerCount = value;
-}
-//stop, wait, starting, play, pause, gameOver
-
 function onLoad(value = 10) {
 	setSPEED(value);
 
@@ -98,9 +100,9 @@ function onLoad(value = 10) {
 	speedDisplay.innerText = SPEED;
 	speedInput.blur();
 
-	playerCountInput.value = 2;
-	playerCountDisplay.innerText = 2;
-	multiPlayerCount = 2;
+	numPlayers.count = 1;
+	playerCountInput.value = numPlayers.count;
+	playerCountDisplay.innerText = numPlayers.count;
 	playerCountInput.blur();
 }
 
@@ -114,9 +116,7 @@ speedInput.addEventListener('change', (e) => {
 });
 
 playerCountInput.addEventListener('change', (e) => {
-	// console.log(`playerCount input (prev)= ${multiPlayerCount}`);
-	multiPlayerCount = parseInt(e.target.value);
-	// console.log(`playerCount input = ${multiPlayerCount}`);
+	numPlayers.count = parseInt(e.target.value);
 	playerCountDisplay.innerText = e.target.value;
 	playerCountInput.blur();
 });
@@ -130,134 +130,79 @@ ws.onmessage = (msg) => {
 
 	if (response.method === 'connect') {
 		clientId = response.clientId;
-		// console.log(`client ${clientId} successfully added`);
 	} else if (response.method === 'create') {
-		// console.log('server sent a message');
 		playerNum = 1;
 		playerIndex = 0;
 		gameId = response.game.id;
 		gameIdInput.value = gameId;
-		// playerInfo.innerText = `SNAKE COLOR: GREEN`;
 		playerInfo.innerText = `PLAYER 1: GREEN`;
 		playerInfo.classList.add('green');
-
-		// multiPlayerCount = response.game.multiPlayerCount;
+		numPlayers.count = response.game.numPlayers;
 		//install timer here
-
-		waitingScreen('WAITING FOR OPPONENTS ... ', gameId, '[ESC] to quit');
-		// console.log('Creators player index and num set', playerIndex, playerNum);
-		// console.log(`The number of players a request has been made for `, response.game.multiPlayerCount);
-		// console.log(playerIndex, playerColors[playerIndex]);
+		const remaining = numPlayers.count - response.game.clients.length;
+		const msg = `WAITING FOR ${remaining > 1 ? remaining : 'AN'} OPPONENT${remaining > 1 ? 'S' : ''} ...`;
+		waitingScreen(msg, gameId, '[ESC] to quit');
 		//generate a time out
 	} else if (response.method === 'join') {
-		// console.log('server sent a message: player joined!', response);
-		// console.log('num of players: ', response.game.clients.length);
-
-		// const numPlayers = response.game.clients.length;
-
-		//this makes NO SENSE
-		numPlayers.count = response.game.clients.length;
-
-		// console.log('resetting numplayers.count on join: ', numPlayers.count);
-
-		multiPlayerCount = response.game.multiPlayerCount;
-
+		numPlayers.count = response.game.numPlayers;
 		const me = response.game.clients.find((client) => client.clientId === clientId);
-		// console.log('response from server: ', response);
-		// console.log('food array from server: ', response.game.foodArray);
 		foodArray = [];
 		foodArray.push(...response.game.foodArray);
-		// console.log('me: ', me);
-		// if (!playerIndex) {
-
 		playerIndex = me.playerIndex;
-
-		// }
-		// playerIndex = playerNum - 1;
-		// console.log('joiners player index and num set', playerIndex, playerNum);
-		// }
-
-		// console.log('playerColors: ', playerColors);
-		// console.log('playerIndex: ', playerIndex);
-		// console.log('playerColors[playerIndex]: ', playerColors[playerIndex]);
-
 		playerInfo.innerText = `PLAYER ${playerIndex + 1}: ${playerColors[playerIndex].toUpperCase()}`;
 		playerInfo.classList.add(playerColors[playerIndex]);
 
-		// console.log('I joined, i am Player-', playerIndex + 1);
-		// console.log('I am ', playerColors[playerIndex].toUpperCase());
-
-		// food.x = response.newPosition.x;
-		// food.y = response.newPosition.y;
-
 		food[0] = foodArray[0][0];
 		food[1] = foodArray[0][1];
-		// food.x = foodArray[0].x;
-		// food.y = foodArray[0].y;
 
-		// console.log(foodArray);
-		// console.log(food.x, food.y, foodArray[0].x, foodArray[0].y);
-		// foodArray.shift();
-
-		// console.log('creator has set speed to: ', response.game.speed);
 		setSPEED(response.game.speed);
-		// if (numPlayers.count === 2) { to make it dynamic set 2 to input value by creator
-		// if (response.game.clients.length === response.playerCount) {
 		gameId = response.game.id;
 
-		if (response.game.clients.length === 2) {
-			//starts the moment there are 2 players
+		setSnakes(numPlayers.count);
+		setDirections(numPlayers.count);
+		setLastInputs(numPlayers.count);
+		// update();
+		// draw();
+
+		if (numPlayers.count > 1 && numPlayers.count === response.game.clients.length) {
 			let time = 3;
 			let id = setInterval(() => {
-				// waitMessageSpan.innerText = `STARTING IN ${time--}`;
-				waitingScreen(`STARTING IN ${time--}`, '', '[ESC] to quit');
+				const msg = `STARTING IN ${time--}`;
+				waitingScreen(msg, '', '[ESC] to quit');
 
 				if (time < 0) {
 					clearInterval(id);
 					playerInfo.innerText = ``;
 					playerInfo.classList.remove(playerColors[playerIndex]);
-					displayScreens(2); //make this dynamic to playerCount
+					displayScreens(numPlayers.count);
 					playScreen();
 					start();
 				}
 			}, 750);
 		} else {
+			const remaining = numPlayers.count - response.game.clients.length;
+			const msg = `WAITING FOR ${remaining} MORE OPPONENT${remaining > 1 ? 'S' : ''} ... `;
+			waitingScreen(msg, gameId, '[ESC] to quit');
 		}
 	} else if (response.method === 'consume') {
-		// food.x = response.newPosition.x;
-		// food.y = response.newPosition.y;
-
-		// console.log(food.x, food.y, foodArray[0].x, foodArray[0].y)
 		if (playerIndex !== response.lastConsumer.id) {
 			foodArray.shift();
 			food[0] = foodArray[0][0];
 			food[1] = foodArray[0][1];
 		}
 
-		console.log('items remaining ', foodArray.length);
-
 		lastConsumer.id = response.lastConsumer.id;
 		scores[lastConsumer.id] = response.playerScore;
-		// console.log('score update: ', scores);
-		// console.log(lastConsumer.id, response.playerScore);
-
 		updateScoresDisplay(lastConsumer.id, response.playerScore);
 	} else if (response.method === 'move') {
 		const opponentIndex = response.playerIndex;
 
 		directions[opponentIndex][0] = response.direction[0];
 		directions[opponentIndex][1] = response.direction[1];
-
-		// directions[opponentIndex].x = response.direction.x;
-		// directions[opponentIndex].y = response.direction.y;
-
-		//experiment to see if this is quicker,
-		//might have to put this back if snake body is not appearing as it should
-
 		const oppSnake = snakes[opponentIndex];
 		const newSnake = response.snake;
+
 		for (let i = 0; i < newSnake.length; i++) {
-			// oppSnake[i] = { ...newSnake[i] };
 			oppSnake[i] = [ ...newSnake[i] ];
 		}
 	} else if (response.method === 'grow') {
@@ -267,14 +212,12 @@ ws.onmessage = (msg) => {
 		for (let i = 0; i < newSnake.length; i++) {
 			oppSnake[i] = [ ...newSnake[i] ];
 		}
-		// console.log('re-laid opp snake GROW: ', oppSnake);
-		// console.log(`opponents number: grew -> player-${opponentIndex + 1}`);
 	} else if (response.method === 'crash') {
 		//check if at least 2 players are remaining
-		const msg = `You win! Player ${response.playerIndex + 1} crashed`;
+		const msg = `Player${response.playerIndex + 1} crashed!`;
 		gameOver(msg);
 	} else if (response.method === 'quit') {
-		const msg = `You win. Player${response.playerIndex + 1} quit`;
+		const msg = `Player${response.playerIndex + 1} quit`;
 		//check if at least 2 players are remaining
 
 		game.status = 'landing';
@@ -282,7 +225,6 @@ ws.onmessage = (msg) => {
 	} else if (response.method === 'requestFood') {
 		const sentFood = response.foodArray;
 		foodArray.push(...sentFood);
-		// console.log(`server sent food! new food array len`, foodArray.length);
 	} else if (response.method === 'error') {
 		console.log('There was an error!', response.msg);
 		//spring up a message display pop up
@@ -298,10 +240,7 @@ ws.onmessage = (msg) => {
 };
 
 createBtn.addEventListener('click', () => {
-	// console.log('from create event handler, multiplayer count: ', multiPlayerCount);
-	// console.log(typeof multiPlayerCount);
-	if (multiPlayerCount === 1) {
-		// console.log('entered this');
+	if (numPlayers.count === 1) {
 		game.mode = 'single';
 		game.status = 'landing';
 
@@ -315,7 +254,6 @@ createBtn.addEventListener('click', () => {
 				playerInfo.innerText = ``;
 				playerInfo.classList.remove(playerColors[playerIndex]);
 				initSinglePlayer();
-				// start();
 
 				// playScreen();
 				start();
@@ -325,11 +263,10 @@ createBtn.addEventListener('click', () => {
 
 		return;
 	} else {
-		// console.log('multiplayer count: ', multiPlayerCount);
 		const payload = {
 			method: 'create',
 			clientId,
-			multiPlayerCount,
+			numPlayers: numPlayers.count,
 			speed: SPEED
 		};
 		ws.send(JSON.stringify(payload));
@@ -338,9 +275,9 @@ createBtn.addEventListener('click', () => {
 });
 
 joinBtn.addEventListener('click', () => {
-	gameId = gameIdInput.value;
+	gameId = gameIdInput.value.trim();
 
-	if (!gameId) {
+	if (!gameId || gameId.length < 8) {
 		gameIdInput.placeholder = 'GAME ID REQUIRED!';
 		setTimeout(() => {
 			gameIdInput.placeholder = 'GAME ID';
@@ -348,16 +285,14 @@ joinBtn.addEventListener('click', () => {
 		// return console.log('Please enter a game ID');
 	} else {
 		joinBtn.disabled = true;
+		const payload = {
+			method: 'join',
+			clientId,
+			gameId
+		};
+		ws.send(JSON.stringify(payload));
+		game.mode = 'multi';
 	}
-
-	const payload = {
-		method: 'join',
-		clientId,
-		gameId
-		// playerName
-	};
-	ws.send(JSON.stringify(payload));
-	game.mode = 'multi';
 });
 
 ws.onclose = (e) => console.log('disconnected from server');

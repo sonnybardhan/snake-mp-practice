@@ -39,9 +39,9 @@ wss.on('request', (req) => {
 			const gameId = createId(8);
 			// let playerName = response.playerName;
 			const speed = response.speed;
-			const multiPlayerCount = response.multiPlayerCount;
+			const numPlayers = response.numPlayers;
 
-			console.log(`${clientId} wants to make a game for ${multiPlayerCount} players`);
+			console.log(`${clientId} wants to make a game for ${numPlayers} players`);
 			// let playerIndex = 0;
 
 			console.log(`client ${clientId} wants to create a new game`);
@@ -51,7 +51,7 @@ wss.on('request', (req) => {
 				clients: [],
 				state: {},
 				speed,
-				multiPlayerCount
+				numPlayers
 			};
 
 			const game = games[gameId];
@@ -87,7 +87,7 @@ wss.on('request', (req) => {
 			}
 
 			//check for number of players and start accordingly
-			if (game.clients.length >= 2) {
+			if (game.clients.length >= game.numPlayers) {
 				const payload = {
 					method: 'error',
 					type: 'join',
@@ -115,7 +115,6 @@ wss.on('request', (req) => {
 				clientId,
 				score: 0,
 				playerIndex
-				// playerNum
 			});
 
 			// let newPosition = randomPosition();
@@ -125,7 +124,6 @@ wss.on('request', (req) => {
 			const payload = {
 				method: 'join',
 				game
-				// newPosition //send array of 10 positions here instead that were stored at the time of game creation
 			};
 
 			// console.log(game.foodArray);
@@ -184,17 +182,12 @@ wss.on('request', (req) => {
 			const game = games[gameId];
 			const snake = response.snake;
 			const direction = response.direction;
-			// const lastInput = response.lastInput;
 
-			// console.log(`client ${clientId} moved ${lastInput}. New heading: x: ${direction.x} y: ${direction.y}`);
 			const payload = {
 				method: 'move',
-				// clientId, //not needed
 				playerIndex,
 				direction,
-				// lastInput, //not needed
 				snake
-				//send snake body
 			};
 
 			//send to all but sender

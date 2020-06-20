@@ -1,8 +1,8 @@
 import { lastConsumer } from './food.js';
 import { directions, inputReset, numPlayers } from './input.js';
 import {
-	// start,
-	// playerNum,
+	start,
+	playerNum,
 	playerIndex,
 	game,
 	homeScreen,
@@ -28,7 +28,6 @@ import {
 	gameOverResultDisplay,
 	playerScore,
 	playerInfo,
-	setMultiPlayerCount,
 	playerCountInput,
 	playerCountDisplay,
 	createBtn
@@ -51,6 +50,11 @@ const INIT_SNAKES = [
 ];
 
 let snakes = populateSnakeArray();
+
+export function setSnakes(value) {
+	snakes = populateSnakeArray(value);
+	console.log('re-populating snakes array: ', snakes.length, snakes);
+}
 
 function draw(gameBoard) {
 	// console.log(snakes);
@@ -81,6 +85,7 @@ function draw(gameBoard) {
 
 function update() {
 	// return;
+	// console.log('playerIndex, snakes.length: ', playerIndex, snakes.length);
 
 	for (let i = 0; i < snakes.length; i++) {
 		//here check for index form the losersArr (store indexes of players who have dropped out or quit)
@@ -168,27 +173,12 @@ function outOfBounds(snake, direction) {
 	}
 	return false;
 }
-// function outOfBounds(snake, direction) {
-// 	const newHead = snake[0];
-// 	if (newHead.x === 1 && direction.x === -1) {
-// 		return true;
-// 	} else if (newHead.x === 21 && direction.x === 1) {
-// 		return true;
-// 	}
-
-// 	if (newHead.y === 1 && direction.y === -1) {
-// 		return true;
-// 	} else if (newHead.y === 21 && direction.y === 1) {
-// 		return true;
-// 	}
-
-// 	return false;
-// }
 
 function collided(snake, direction) {
 	const head = snake[0];
 
 	const newX = head[0] + direction[0];
+
 	const newY = head[1] + direction[1];
 
 	const allSegments = [ ...snake.slice(1) ];
@@ -206,8 +196,7 @@ export function reset() {
 	snakes = populateSnakeArray();
 	inputReset();
 	homeScreen();
-	//reset speed
-	//clear input fields
+
 	setSPEED(INIT_SPEED);
 	speedInput.value = SPEED;
 	speedDisplay.innerText = SPEED;
@@ -229,9 +218,10 @@ export function reset() {
 	resetScoresDisplay();
 	hideScoresDisplays();
 
-	playerCountInput.value = 2;
-	playerCountDisplay.innerText = 2;
-	setMultiPlayerCount(2);
+	numPlayers.count = 1;
+	playerCountInput.value = numPlayers.count;
+	playerCountDisplay.innerText = numPlayers.count;
+
 	playerCountInput.blur();
 	createBtn.blur();
 }
@@ -250,11 +240,11 @@ export function hideScoresDisplays() {
 	p4Div.style.display = 'none';
 }
 
-export function populateSnakeArray() {
+export function populateSnakeArray(players = 1) {
 	const newSnakes = [];
 
-	for (let i = 0; i < numPlayers.count; i++) {
-		if (numPlayers.count === 2 && i === 1) i++; //to ensure diagnals are populated
+	for (let i = 0; i < players; i++) {
+		if (players === 2 && i === 1) i++; //to ensure diagnals are populated
 
 		const newSnake = [];
 		const snake = INIT_SNAKES[i];
@@ -264,6 +254,8 @@ export function populateSnakeArray() {
 		}
 		newSnakes.push(newSnake);
 	}
+	// console.log('populating snakes array: ', newSnakes.length, newSnakes);
 	return newSnakes;
 }
+
 export { SPEED, update, draw, snakes };
