@@ -53,7 +53,7 @@ let snakes = populateSnakeArray();
 
 export function setSnakes(value) {
 	snakes = populateSnakeArray(value);
-	console.log('re-populating snakes array: ', snakes.length, snakes);
+	// console.log('re-populating snakes array: ', snakes.length, snakes);
 }
 
 function draw(gameBoard) {
