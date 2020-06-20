@@ -130,6 +130,8 @@ body {
 	/* border-bottom-right-radius: 10%; */
 	border-radius: .25em;
 	text-transform: uppercase;
+	box-shadow: .5rem .5rem 1.5rem rgba(0, 0, 0, 0.274);
+
 
 }
 
@@ -176,7 +178,7 @@ body {
 	margin-bottom: 5em;
 	background-color: rgba(0, 0, 0, 0.112);
 	/* border-radius: .625em; */
-
+	box-shadow: .5rem .5rem 1.5rem rgba(0, 0, 0, 0.205);
 	/* border-top-left-radius: 1em; */
 	/* border-bottom-left-radius: 2em; */
 	/* border-bottom-right-radius: 2em; */
