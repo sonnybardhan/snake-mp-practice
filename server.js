@@ -118,9 +118,9 @@ wss.on('request', (req) => {
 				// playerNum
 			});
 
-			let newPosition = randomPosition();
+			// let newPosition = randomPosition();
 
-			game['foodArray'] = randomPositionArray();
+			game['foodArray'] = randomPositions();
 
 			const payload = {
 				method: 'join',
@@ -238,7 +238,7 @@ wss.on('request', (req) => {
 		} else if (response.method === 'requestFood') {
 			const payload = {
 				method: 'requestFood',
-				foodArray: randomPositionArray()
+				foodArray: randomPositions()
 			};
 
 			const gameId = response.gameId;
@@ -287,21 +287,21 @@ function clientLoop() {
 	}
 }
 
-function randomPosition() {
-	return {
-		x: (Math.random() * 21 + 1) | 0,
-		y: (Math.random() * 21 + 1) | 0
-	};
-}
-
 // function randomPosition() {
-// 	return [ (Math.random() * 21 + 1) | 0, (Math.random() * 21 + 1) | 0 ];
+// 	return {
+// 		x: (Math.random() * 21 + 1) | 0,
+// 		y: (Math.random() * 21 + 1) | 0
+// 	};
 // }
 
-function randomPositionArray(len = 10) {
+function randomPositionGenerator() {
+	return [ (Math.random() * 21 + 1) | 0, (Math.random() * 21 + 1) | 0 ];
+}
+
+function randomPositions(len = 10) {
 	const arr = [];
 	while (len--) {
-		arr.push(randomPosition());
+		arr.push(randomPositionGenerator());
 	}
 	return arr;
 }

@@ -54,7 +54,7 @@ export function setFoodArray(value) {
 	foodArray.push(...value);
 }
 
-export const INIT_SCORES = { 0: 0, 1: 0, 2: 0, 3: 0 };
+export const INIT_SCORES = { 0: 0, 1: 0, 2: 0, 3: 0 }; //convert to array
 // export const playerColors = ['GREEN', 'ORANGE', 'WHITE', 'YELLOW'];
 export const playerColors = [ 'green', 'orange', 'white', 'yellow' ];
 
@@ -189,8 +189,10 @@ ws.onmessage = (msg) => {
 		// food.x = response.newPosition.x;
 		// food.y = response.newPosition.y;
 
-		food.x = foodArray[0].x;
-		food.y = foodArray[0].y;
+		food[0] = foodArray[0][0];
+		food[1] = foodArray[0][1];
+		// food.x = foodArray[0].x;
+		// food.y = foodArray[0].y;
 
 		// console.log(foodArray);
 		// console.log(food.x, food.y, foodArray[0].x, foodArray[0].y);
@@ -227,8 +229,8 @@ ws.onmessage = (msg) => {
 		// console.log(food.x, food.y, foodArray[0].x, foodArray[0].y)
 		if (playerIndex !== response.lastConsumer.id) {
 			foodArray.shift();
-			food.x = foodArray[0].x;
-			food.y = foodArray[0].y;
+			food[0] = foodArray[0][0];
+			food[1] = foodArray[0][1];
 		}
 
 		console.log('items remaining ', foodArray.length);
