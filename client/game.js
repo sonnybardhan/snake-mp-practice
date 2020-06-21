@@ -50,7 +50,6 @@ export const pDivArray = [ p1Div, p2Div, p3Div, p4Div ];
 export const matchInputSlider = document.getElementById('match-count-input');
 export const matchCountDisplay = document.getElementById('match-count-display');
 
-// export let foodPosition = {};
 export let clientId = null;
 export let gameId = null;
 export let playerNum = 1;
@@ -103,21 +102,9 @@ export function setPlayerIndex(value) {
 }
 
 function onLoad(value = 10) {
-	setSPEED(value);
-
-	speedInput.value = SPEED;
-	speedDisplay.innerText = SPEED;
-	speedInput.blur();
-
-	setNumPlayers(1);
-	// numPlayers.count = 1;
-	playerCountInput.value = numPlayers;
-	playerCountDisplay.innerText = numPlayers;
-	playerCountInput.blur();
-
-	setMatchCount(3);
-	matchInputSlider.value = 3;
-	matchCountDisplay.innerText = 3;
+	setSpeedData(value);
+	setPlayersData(1);
+	setMatchData(3);
 }
 
 onLoad();
@@ -440,4 +427,30 @@ export function defaultScreen() {
 	landingScreen.style.zIndex = 3;
 	waitScreen.style.zIndex = 2;
 	gameBoard.style.zIndex = 1;
+}
+
+//MATCH UTILITY FUNCTIONS
+
+export function setMatchData(value) {
+	console.log('using setmatchdata');
+	setMatchCount(value);
+	matchInputSlider.value = value;
+	matchCountDisplay.innerText = value;
+	matchInputSlider.blur();
+}
+
+export function setPlayersData(value) {
+	console.log('using setPlayersData');
+	setNumPlayers(value);
+	playerCountInput.value = value;
+	playerCountDisplay.innerText = value;
+	playerCountInput.blur();
+}
+
+export function setSpeedData(value) {
+	console.log('using setSpeedData');
+	setSPEED(value);
+	speedInput.value = value;
+	speedDisplay.innerText = value;
+	speedInput.blur();
 }

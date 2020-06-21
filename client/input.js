@@ -8,7 +8,6 @@ export let numPlayers = 1;
 
 export function setNumPlayers(value) {
 	numPlayers = value;
-	console.log('numplayers set');
 }
 // const count = document.getElementById('player-count-input');
 
