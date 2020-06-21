@@ -113,6 +113,7 @@ function onLoad(value = 10) {
 	playerCountDisplay.innerText = numPlayers.count;
 	playerCountInput.blur();
 
+	setMatchCount(3);
 	matchInputSlider.value = 3;
 	matchCountDisplay.innerText = 3;
 }
@@ -134,7 +135,7 @@ playerCountInput.addEventListener('change', (e) => {
 
 matchInputSlider.addEventListener('change', (e) => {
 	setMatchCount(parseInt(e.target.value));
-
+	console.log('new matchCount: ', matchCount);
 	matchCountDisplay.innerText = matchCount;
 	matchInputSlider.blur();
 });
@@ -176,6 +177,7 @@ ws.onmessage = (msg) => {
 		setSPEED(response.game.speed);
 		gameId = response.game.id;
 		setMatchCount(response.game.matchCount);
+		console.log('matchCount set by creator: ', matchCount);
 		setSnakes(numPlayers.count);
 		setDirections(numPlayers.count);
 		setLastInputs(numPlayers.count);
@@ -279,6 +281,7 @@ createBtn.addEventListener('click', () => {
 
 		return;
 	} else {
+		console.log('matchCount at the time of creating: ', matchCount);
 		const payload = {
 			method: 'create',
 			clientId,

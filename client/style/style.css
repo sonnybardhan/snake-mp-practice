@@ -268,7 +268,7 @@ body {
 	/* text-shadow: .2em .2em red, .4em .4em yellow; */
 	font-size: 5rem;
 	box-shadow: .5rem .5rem 1.5rem rgba(0, 0, 0, 0.185);
-
+	border-radius: .5em;
 	/* display: none; */
 }
 
@@ -405,6 +405,7 @@ body {
 .player-1 {
 	margin: .625em;
 	border-radius: .625em;
+	/* border-radius: 50%; */
 	color: rgba(19, 88, 28, 0.829);
 	border: .24em solid rgba(19, 88, 28, 0.493);
 	background-color: rgba(215, 236, 176, 0.671);
