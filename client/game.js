@@ -15,7 +15,15 @@ import {
 	setSnakes
 } from './snake.js';
 import { update as updateFood, draw as drawFood, lastConsumer, updateScoresDisplay, setFood } from './food.js';
-import { directions, numPlayers, initSinglePlayer, setDirections, setLastInputs, setNumPlayers } from './input.js';
+import {
+	directions,
+	numPlayers,
+	initSinglePlayer,
+	setDirections,
+	setLastInputs,
+	setNumPlayers,
+	lastInputs
+} from './input.js';
 
 const gameBoard = document.getElementById('game-board');
 export const gameIdInput = document.getElementById('game-id-input');
@@ -110,24 +118,25 @@ function onLoad(value = 10) {
 onLoad();
 
 speedInput.addEventListener('change', (e) => {
-	playerSpeedInput = e.target.value;
-	speedDisplay.innerText = playerSpeedInput;
-	setSPEED(playerSpeedInput);
-	speedInput.blur();
+	setSpeedData(parseInt(e.target.value));
+	// // playerSpeedInput = e.target.value;
+	// setSPEED(playerSpeedInput);
+	// speedDisplay.innerText = playerSpeedInput;
+	// speedInput.blur();
 });
 
 playerCountInput.addEventListener('change', (e) => {
-	// numPlayers.count = parseInt(e.target.value);
-	setNumPlayers(parseInt(e.target.value));
-	playerCountDisplay.innerText = numPlayers;
-	playerCountInput.blur();
+	setPlayersData(parseInt(e.target.value));
+	// setNumPlayers(parseInt(e.target.value));
+	// playerCountDisplay.innerText = numPlayers;
+	// playerCountInput.blur();
 });
 
 matchInputSlider.addEventListener('change', (e) => {
-	setMatchCount(parseInt(e.target.value));
-	// console.log('new matchCount: ', matchCount);
-	matchCountDisplay.innerText = matchCount;
-	matchInputSlider.blur();
+	setMatchData(parseInt(e.target.value));
+	// setMatchCount(parseInt(e.target.value));
+	// matchCountDisplay.innerText = matchCount;
+	// matchInputSlider.blur();
 });
 
 export let game = { status: 'landing', mode: 'single' };
@@ -156,6 +165,7 @@ ws.onmessage = (msg) => {
 		//generate a time out
 	} else if (response.method === 'join') {
 		// numPlayers.count = response.game.numPlayers;
+
 		setNumPlayers(response.game.numPlayers);
 
 		const me = response.game.clients.find((client) => client.clientId === clientId);
@@ -201,6 +211,9 @@ ws.onmessage = (msg) => {
 			const msg = `WAITING FOR ${remaining} MORE OPPONENT${remaining > 1 ? 'S' : ''} ... `;
 			waitingScreen(msg, gameId, '[ESC] to quit');
 		}
+
+		console.log('directions: ', directions);
+		console.log('lastInputs: ', lastInputs);
 	} else if (response.method === 'consume') {
 		if (playerIndex !== response.lastConsumer.id) {
 			foodArray.shift();

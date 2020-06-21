@@ -9,25 +9,15 @@ export let numPlayers = 1;
 export function setNumPlayers(value) {
 	numPlayers = value;
 }
-// const count = document.getElementById('player-count-input');
 
-// export let numPlayers = { count: parseInt(count) };
-
-//dummy code for now////////////////////
-// export let playerCount = 2;
-// export function setPlayerCount(value) {
-// 	playerCount = value;
-// 	console.log('playerCount changed: ', playerCount);
-// }
-////////////////////////////////////////
-
-const S1_DIR = [ 0, 1 ]; // left
-const S2_DIR = [ 0, -1 ]; //right
-const S3_DIR = [ 0, -1 ]; //left
-const S4_DIR = [ 0, 1 ]; //right
+// const S1_DIR = [ 0, 1 ]; // right
+// const S2_DIR = [ 0, -1 ]; //left
+// const S3_DIR = [ 0, -1 ]; //left
+// const S4_DIR = [ 0, 1 ]; //right
 
 const INIT_INPUTS = [ 'ArrowRight', 'ArrowLeft', 'ArrowLeft', 'ArrowRight' ];
-const INIT_DIR = [ [ ...S1_DIR ], [ ...S2_DIR ], [ ...S3_DIR ], [ ...S4_DIR ] ];
+// const INIT_DIR = [ [ ...S1_DIR ], [ ...S2_DIR ], [ ...S3_DIR ], [ ...S4_DIR ] ];
+const INIT_DIR = [ [ 0, 1 ], [ 0, -1 ], [ 0, -1 ], [ 0, 1 ] ];
 
 export let directions = populateDirections();
 export let lastInputs = populateInputs();
@@ -38,7 +28,8 @@ export function setDirections(value) {
 }
 
 export function setLastInputs(value) {
-	lastInputs = populateDirections(value);
+	// lastInputs = populateDirections(value);
+	lastInputs = populateInputs(value);
 	// console.log('Re-populating lastInputs');
 }
 
@@ -82,6 +73,8 @@ window.addEventListener('keydown', ({ key }) => {
 		case ' ':
 			if (game.mode === 'single' && game.status === 'landing') {
 				initSinglePlayer();
+				console.log('directions: ', directions);
+				console.log('lastInputs: ', lastInputs);
 			}
 			start();
 			break;
