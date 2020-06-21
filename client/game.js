@@ -226,8 +226,15 @@ ws.onmessage = (msg) => {
 	} else if (response.method === 'move') {
 		const opponentIndex = response.playerIndex;
 
-		directions[opponentIndex][0] = response.direction[0];
-		directions[opponentIndex][1] = response.direction[1];
+		// directions[opponentIndex][0] = response.direction[0];
+		// directions[opponentIndex][1] = response.direction[1];
+
+		function setPlayerDirection(index, direction) {
+			directions[index] = [ ...direction ];
+			console.log(`set Player-${index + 1}'s direction from new function.'`);
+		}
+		setPlayerDirection(opponentIndex, response.direction);
+
 		const oppSnake = snakes[opponentIndex];
 		const newSnake = response.snake;
 
