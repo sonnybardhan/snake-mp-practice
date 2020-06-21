@@ -15,24 +15,24 @@ import {
 	populateSnakeArray,
 	setSnakes
 } from './snake.js';
-import { update as updateFood, draw as drawFood, food, lastConsumer, updateScoresDisplay } from './food.js';
+import { update as updateFood, draw as drawFood, food, lastConsumer, updateScoresDisplay, setFood } from './food.js';
 import { directions, numPlayers, initSinglePlayer, setDirections, setLastInputs } from './input.js';
 
+const gameBoard = document.getElementById('game-board');
 export const gameIdInput = document.getElementById('game-id-input');
 export const createBtn = document.getElementById('create-btn');
 export const joinBtn = document.getElementById('join-btn');
-const landingScreen = document.getElementById('landing');
-const waitScreen = document.getElementById('wait-screen');
-const waitMessageSpan = document.getElementById('wait-message-span');
-const gameIdSpan = document.getElementById('game-id-span');
-const escapeMessageSpan = document.getElementById('escape-message-span');
+export const landingScreen = document.getElementById('landing');
+export const waitScreen = document.getElementById('wait-screen');
+export const waitMessageSpan = document.getElementById('wait-message-span');
+export const gameIdSpan = document.getElementById('game-id-span');
+export const escapeMessageSpan = document.getElementById('escape-message-span');
 export const speedInput = document.getElementById('speed-input');
 export const playerCountInput = document.getElementById('player-count-input');
 export const speedDisplay = document.getElementById('speed-display');
 export const playerCountDisplay = document.getElementById('player-count-display');
 export const playerInfo = document.getElementById('player-info');
 
-const gameBoard = document.getElementById('game-board');
 export const crashScreen = document.getElementById('crash-screen');
 export const gameOverMsg = document.getElementById('game-over-msg');
 export const gameOverResultDisplay = document.getElementById('game-over-result-display');
@@ -51,7 +51,7 @@ export const pDivArray = [ p1Div, p2Div, p3Div, p4Div ];
 export const matchInputSlider = document.getElementById('match-count-input');
 export const matchCountDisplay = document.getElementById('match-count-display');
 
-export let foodPosition = {};
+// export let foodPosition = {};
 export let clientId = null;
 export let gameId = null;
 export let playerNum = 1;
@@ -66,8 +66,10 @@ export function setMatchCount(value) {
 	matchCount = value;
 }
 
-export function setFoodArray(value) {
-	//not needed
+export function setFoodArray(value, reset = false) {
+	if (reset) {
+		foodArray = [];
+	}
 	foodArray.push(...value);
 }
 
@@ -135,7 +137,7 @@ playerCountInput.addEventListener('change', (e) => {
 
 matchInputSlider.addEventListener('change', (e) => {
 	setMatchCount(parseInt(e.target.value));
-	console.log('new matchCount: ', matchCount);
+	// console.log('new matchCount: ', matchCount);
 	matchCountDisplay.innerText = matchCount;
 	matchInputSlider.blur();
 });
@@ -165,14 +167,19 @@ ws.onmessage = (msg) => {
 	} else if (response.method === 'join') {
 		numPlayers.count = response.game.numPlayers;
 		const me = response.game.clients.find((client) => client.clientId === clientId);
-		foodArray = [];
-		foodArray.push(...response.game.foodArray);
+
+		// foodArray = [];
+		// foodArray.push(...response.game.foodArray);
+		setFoodArray(response.game.foodArray, true);
+
 		playerIndex = me.playerIndex;
 		playerInfo.innerText = `PLAYER ${playerIndex + 1}: ${playerColors[playerIndex].toUpperCase()}`;
 		playerInfo.classList.add(playerColors[playerIndex]);
 
-		food[0] = foodArray[0][0];
-		food[1] = foodArray[0][1];
+		// food[0] = foodArray[0][0];
+		// food[1] = foodArray[0][1];
+
+		setFood(foodArray[0]);
 
 		setSPEED(response.game.speed);
 		gameId = response.game.id;
@@ -205,8 +212,9 @@ ws.onmessage = (msg) => {
 	} else if (response.method === 'consume') {
 		if (playerIndex !== response.lastConsumer.id) {
 			foodArray.shift();
-			food[0] = foodArray[0][0];
-			food[1] = foodArray[0][1];
+			// food[0] = foodArray[0][0];
+			// food[1] = foodArray[0][1];
+			setFood(foodArray[0]);
 		}
 
 		lastConsumer.id = response.lastConsumer.id;
@@ -242,7 +250,8 @@ ws.onmessage = (msg) => {
 		gameOver(msg);
 	} else if (response.method === 'requestFood') {
 		const sentFood = response.foodArray;
-		foodArray.push(...sentFood);
+		// foodArray.push(...sentFood);
+		setFoodArray(sentFood);
 	} else if (response.method === 'error') {
 		console.log('There was an error!', response.msg);
 		//spring up a message display pop up

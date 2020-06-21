@@ -17,6 +17,12 @@ import { snakes } from './snake.js';
 
 // export let food = [ 3, 8 ];
 export let food = randomPosition();
+// export let food = [];
+
+export function setFood(value) {
+	console.log('setting food using new function');
+	food = [ ...value ];
+}
 
 export let lastConsumer = { id: null };
 
@@ -36,7 +42,8 @@ export function update() {
 		ws.send(JSON.stringify(payload));
 	} else if (newConsumed() && game.mode === 'single') {
 		lastConsumer.id = playerIndex;
-		food = randomPosition();
+		// food = randomPosition();
+		setFood(randomPosition());
 		addToScore(10);
 		p1ScoreDisplay.innerText = playerScore;
 	} else {
@@ -85,7 +92,8 @@ export function newConsumed() {
 		if (game.mode === 'single') return true;
 
 		foodArray.shift();
-		food = [ ...foodArray[0] ];
+		// food = [ ...foodArray[0] ];
+		setFood(foodArray[0]);
 		if (foodArray.length <= 5) {
 			requestFood();
 		}
