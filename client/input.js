@@ -73,8 +73,6 @@ window.addEventListener('keydown', ({ key }) => {
 		case ' ':
 			if (game.mode === 'single' && game.status === 'landing') {
 				initSinglePlayer();
-				console.log('directions: ', directions);
-				console.log('lastInputs: ', lastInputs);
 			}
 			start();
 			break;

@@ -68,6 +68,10 @@ export let scores = [ 0, 0, 0, 0 ];
 export let foodArray = [];
 export let matchCount = 1;
 
+export function setGameId(id) {
+	gameId = id;
+}
+
 export function setMatchCount(value) {
 	matchCount = value;
 }
@@ -119,24 +123,14 @@ onLoad();
 
 speedInput.addEventListener('change', (e) => {
 	setSpeedData(parseInt(e.target.value));
-	// // playerSpeedInput = e.target.value;
-	// setSPEED(playerSpeedInput);
-	// speedDisplay.innerText = playerSpeedInput;
-	// speedInput.blur();
 });
 
 playerCountInput.addEventListener('change', (e) => {
 	setPlayersData(parseInt(e.target.value));
-	// setNumPlayers(parseInt(e.target.value));
-	// playerCountDisplay.innerText = numPlayers;
-	// playerCountInput.blur();
 });
 
 matchInputSlider.addEventListener('change', (e) => {
 	setMatchData(parseInt(e.target.value));
-	// setMatchCount(parseInt(e.target.value));
-	// matchCountDisplay.innerText = matchCount;
-	// matchInputSlider.blur();
 });
 
 export let game = { status: 'landing', mode: 'single' };
@@ -149,7 +143,7 @@ ws.onmessage = (msg) => {
 	if (response.method === 'connect') {
 		clientId = response.clientId;
 	} else if (response.method === 'create') {
-		playerNum = 1;
+		// playerNum = 1;
 		playerIndex = 0;
 		gameId = response.game.id;
 		gameIdInput.value = gameId;
@@ -164,32 +158,19 @@ ws.onmessage = (msg) => {
 		waitingScreen(msg, gameId, '[ESC] to quit');
 		//generate a time out
 	} else if (response.method === 'join') {
-		// numPlayers.count = response.game.numPlayers;
-
-		setNumPlayers(response.game.numPlayers);
-
 		const me = response.game.clients.find((client) => client.clientId === clientId);
 
-		// foodArray = [];
-		// foodArray.push(...response.game.foodArray);
+		setPlayerIndex(me.playerIndex);
+
+		setGameData(response.game);
+
 		setFoodArray(response.game.foodArray, true);
 
-		playerIndex = me.playerIndex;
-		playerInfo.innerText = `PLAYER ${playerIndex + 1}: ${playerColors[playerIndex].toUpperCase()}`;
-		playerInfo.classList.add(playerColors[playerIndex]);
-
-		// food[0] = foodArray[0][0];
-		// food[1] = foodArray[0][1];
+		setPlayerDisplayInfo(playerIndex);
 
 		setFood(foodArray[0]);
 
-		setSPEED(response.game.speed);
-		gameId = response.game.id;
-		setMatchCount(response.game.matchCount);
-		// console.log('matchCount set by creator: ', matchCount);
-		setSnakes(numPlayers);
-		setDirections(numPlayers);
-		setLastInputs(numPlayers);
+		setSnakeData(numPlayers);
 
 		if (numPlayers > 1 && numPlayers === response.game.clients.length) {
 			let time = 3;
@@ -211,9 +192,6 @@ ws.onmessage = (msg) => {
 			const msg = `WAITING FOR ${remaining} MORE OPPONENT${remaining > 1 ? 'S' : ''} ... `;
 			waitingScreen(msg, gameId, '[ESC] to quit');
 		}
-
-		console.log('directions: ', directions);
-		console.log('lastInputs: ', lastInputs);
 	} else if (response.method === 'consume') {
 		if (playerIndex !== response.lastConsumer.id) {
 			foodArray.shift();
@@ -231,7 +209,6 @@ ws.onmessage = (msg) => {
 
 		function setPlayerDirection(index, direction) {
 			directions[index] = [ ...direction ];
-			console.log(`set Player-${index + 1}'s direction from new function.'`);
 		}
 		setPlayerDirection(opponentIndex, response.direction);
 
@@ -300,7 +277,6 @@ createBtn.addEventListener('click', () => {
 
 		return;
 	} else {
-		console.log('matchCount at the time of creating: ', matchCount);
 		const payload = {
 			method: 'create',
 			clientId,
@@ -445,7 +421,7 @@ export function defaultScreen() {
 //MATCH UTILITY FUNCTIONS
 
 export function setMatchData(value) {
-	console.log('using setmatchdata');
+	// console.log('using setmatchdata');
 	setMatchCount(value);
 	matchInputSlider.value = value;
 	matchCountDisplay.innerText = value;
@@ -453,7 +429,7 @@ export function setMatchData(value) {
 }
 
 export function setPlayersData(value) {
-	console.log('using setPlayersData');
+	// console.log('using setPlayersData');
 	setNumPlayers(value);
 	playerCountInput.value = value;
 	playerCountDisplay.innerText = value;
@@ -461,9 +437,27 @@ export function setPlayersData(value) {
 }
 
 export function setSpeedData(value) {
-	console.log('using setSpeedData');
+	// console.log('using setSpeedData');
 	setSPEED(value);
 	speedInput.value = value;
 	speedDisplay.innerText = value;
 	speedInput.blur();
+}
+
+export function setPlayerDisplayInfo(index) {
+	playerInfo.innerText = `PLAYER ${index + 1}: ${playerColors[index].toUpperCase()}`;
+	playerInfo.classList.add(playerColors[index]);
+}
+
+export function setGameData(game) {
+	setNumPlayers(game.numPlayers);
+	setSPEED(game.speed);
+	setGameId(game.id);
+	setMatchCount(game.matchCount);
+}
+
+export function setSnakeData(value) {
+	setSnakes(value);
+	setDirections(value);
+	setLastInputs(value);
 }

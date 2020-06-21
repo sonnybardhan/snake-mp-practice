@@ -20,7 +20,7 @@ export let food = randomPosition();
 // export let food = [];
 
 export function setFood(value) {
-	console.log('setting food using new function');
+	// console.log('setting food using new function');
 	food = [ ...value ];
 }
 
