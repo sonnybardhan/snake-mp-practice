@@ -3,7 +3,13 @@ import { start, ws, clientId, gameId, playerIndex, game, p1Div, crashScreen, pla
 import { snakes, reset, setSPEED, hideScoresDisplays, gameOver } from './snake.js';
 // export let numPlayers = { count: 1 };
 
-export let numPlayers = { count: 1 };
+// export let numPlayers = { count: 1 };
+export let numPlayers = 1;
+
+export function setNumPlayers(value) {
+	numPlayers = value;
+	console.log('numplayers set');
+}
 // const count = document.getElementById('player-count-input');
 
 // export let numPlayers = { count: parseInt(count) };
@@ -115,25 +121,6 @@ function populateInputs(players = 1) {
 	}
 	return inputs;
 }
-// function populateDirections() {
-// 	const newDirections = [];
-
-// 	for (let i = 0; i < numPlayers.count; i++) {
-// 		const direction = INIT_DIR[i];
-// 		newDirections.push([ ...direction ]);
-// 	}
-// 	return newDirections;
-// }
-
-// function populateInputs() {
-// 	const inputs = [];
-// 	for (let i = 0; i < numPlayers.count; i++) {
-// 		// for (let i = 0; i < numPlayers; i++) {
-// 		const input = INIT_INPUTS[i];
-// 		inputs.push(input);
-// 	}
-// 	return inputs;
-// }
 
 export function inputReset() {
 	directions = populateDirections();

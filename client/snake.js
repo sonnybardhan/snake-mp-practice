@@ -1,5 +1,5 @@
 import { lastConsumer } from './food.js';
-import { directions, inputReset, numPlayers } from './input.js';
+import { directions, inputReset, numPlayers, setNumPlayers } from './input.js';
 import {
 	start,
 	playerNum,
@@ -218,9 +218,10 @@ export function reset() {
 	resetScoresDisplay();
 	hideScoresDisplays();
 
-	numPlayers.count = 1;
-	playerCountInput.value = numPlayers.count;
-	playerCountDisplay.innerText = numPlayers.count;
+	// numPlayers.count = 1;
+	setNumPlayers(1);
+	playerCountInput.value = numPlayers;
+	playerCountDisplay.innerText = numPlayers;
 
 	playerCountInput.blur();
 	createBtn.blur();

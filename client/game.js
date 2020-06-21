@@ -12,11 +12,10 @@ import {
 	reset,
 	setSPEED,
 	gameOver,
-	populateSnakeArray,
 	setSnakes
 } from './snake.js';
-import { update as updateFood, draw as drawFood, food, lastConsumer, updateScoresDisplay, setFood } from './food.js';
-import { directions, numPlayers, initSinglePlayer, setDirections, setLastInputs } from './input.js';
+import { update as updateFood, draw as drawFood, lastConsumer, updateScoresDisplay, setFood } from './food.js';
+import { directions, numPlayers, initSinglePlayer, setDirections, setLastInputs, setNumPlayers } from './input.js';
 
 const gameBoard = document.getElementById('game-board');
 export const gameIdInput = document.getElementById('game-id-input');
@@ -110,9 +109,10 @@ function onLoad(value = 10) {
 	speedDisplay.innerText = SPEED;
 	speedInput.blur();
 
-	numPlayers.count = 1;
-	playerCountInput.value = numPlayers.count;
-	playerCountDisplay.innerText = numPlayers.count;
+	setNumPlayers(1);
+	// numPlayers.count = 1;
+	playerCountInput.value = numPlayers;
+	playerCountDisplay.innerText = numPlayers;
 	playerCountInput.blur();
 
 	setMatchCount(3);
@@ -130,8 +130,9 @@ speedInput.addEventListener('change', (e) => {
 });
 
 playerCountInput.addEventListener('change', (e) => {
-	numPlayers.count = parseInt(e.target.value);
-	playerCountDisplay.innerText = e.target.value;
+	// numPlayers.count = parseInt(e.target.value);
+	setNumPlayers(parseInt(e.target.value));
+	playerCountDisplay.innerText = numPlayers;
 	playerCountInput.blur();
 });
 
@@ -158,14 +159,18 @@ ws.onmessage = (msg) => {
 		gameIdInput.value = gameId;
 		playerInfo.innerText = `PLAYER 1: GREEN`;
 		playerInfo.classList.add('green');
-		numPlayers.count = response.game.numPlayers;
+		// numPlayers.count = response.game.numPlayers;
+		setNumPlayers(response.game.numPlayers);
 		//install timer here
-		const remaining = numPlayers.count - response.game.clients.length;
+		// const remaining = numPlayers.count - response.game.clients.length;
+		const remaining = numPlayers - response.game.clients.length;
 		const msg = `WAITING FOR ${remaining > 1 ? remaining : 'AN'} OPPONENT${remaining > 1 ? 'S' : ''} ...`;
 		waitingScreen(msg, gameId, '[ESC] to quit');
 		//generate a time out
 	} else if (response.method === 'join') {
-		numPlayers.count = response.game.numPlayers;
+		// numPlayers.count = response.game.numPlayers;
+		setNumPlayers(response.game.numPlayers);
+
 		const me = response.game.clients.find((client) => client.clientId === clientId);
 
 		// foodArray = [];
@@ -184,12 +189,12 @@ ws.onmessage = (msg) => {
 		setSPEED(response.game.speed);
 		gameId = response.game.id;
 		setMatchCount(response.game.matchCount);
-		console.log('matchCount set by creator: ', matchCount);
-		setSnakes(numPlayers.count);
-		setDirections(numPlayers.count);
-		setLastInputs(numPlayers.count);
+		// console.log('matchCount set by creator: ', matchCount);
+		setSnakes(numPlayers);
+		setDirections(numPlayers);
+		setLastInputs(numPlayers);
 
-		if (numPlayers.count > 1 && numPlayers.count === response.game.clients.length) {
+		if (numPlayers > 1 && numPlayers === response.game.clients.length) {
 			let time = 3;
 			let id = setInterval(() => {
 				const msg = `STARTING IN ${time--}`;
@@ -199,21 +204,19 @@ ws.onmessage = (msg) => {
 					clearInterval(id);
 					playerInfo.innerText = ``;
 					playerInfo.classList.remove(playerColors[playerIndex]);
-					displayScreens(numPlayers.count);
+					displayScreens(numPlayers);
 					playScreen();
 					start();
 				}
 			}, 750);
 		} else {
-			const remaining = numPlayers.count - response.game.clients.length;
+			const remaining = numPlayers - response.game.clients.length;
 			const msg = `WAITING FOR ${remaining} MORE OPPONENT${remaining > 1 ? 'S' : ''} ... `;
 			waitingScreen(msg, gameId, '[ESC] to quit');
 		}
 	} else if (response.method === 'consume') {
 		if (playerIndex !== response.lastConsumer.id) {
 			foodArray.shift();
-			// food[0] = foodArray[0][0];
-			// food[1] = foodArray[0][1];
 			setFood(foodArray[0]);
 		}
 
@@ -267,7 +270,7 @@ ws.onmessage = (msg) => {
 };
 
 createBtn.addEventListener('click', () => {
-	if (numPlayers.count === 1) {
+	if (numPlayers === 1) {
 		game.mode = 'single';
 		game.status = 'landing';
 
@@ -294,7 +297,7 @@ createBtn.addEventListener('click', () => {
 		const payload = {
 			method: 'create',
 			clientId,
-			numPlayers: numPlayers.count,
+			numPlayers,
 			speed: SPEED,
 			matchCount
 		};
